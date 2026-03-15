@@ -5,7 +5,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 function statusClass(status) {
   if (status === "Approved") return "bg-emerald-50 text-emerald-700";
   if (status === "Rejected") return "bg-red-50 text-red-700";
-  return "bg-amber-50 text-amber-700";
+  return "bg-[#fff8dc] text-[#8b6400]";
 }
 
 export default function ApprovalsView({ leaveRequests, onDecision }) {
@@ -22,7 +22,7 @@ export default function ApprovalsView({ leaveRequests, onDecision }) {
     return Object.entries(counts).map(([name, value]) => ({
       name,
       value,
-      color: name === "Approved" ? "#2563eb" : name === "Pending" ? "#f59e0b" : "#ef4444",
+      color: name === "Approved" ? "#fbbf24" : name === "Pending" ? "#8b6400" : "#ef4444",
     }));
   }, [leaveRequests]);
 
@@ -59,9 +59,9 @@ export default function ApprovalsView({ leaveRequests, onDecision }) {
               setPage(1);
             }}
             placeholder="Search by staff name, role, leave type or status"
-            className="min-w-[16rem] flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none ring-blue-200 focus:ring"
+            className="min-w-[16rem] flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none ring-[#f7e2a3] focus:ring"
           />
-          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">{filteredRequests.length} requests</span>
+          <span className="rounded-full bg-[#fff8dc] px-3 py-1 text-xs font-semibold text-[#8b6400]">{filteredRequests.length} requests</span>
         </div>
 
         <div className="mt-4 space-y-3">
@@ -134,30 +134,32 @@ export default function ApprovalsView({ leaveRequests, onDecision }) {
       <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         <p className="text-sm text-slate-500">Approval summary</p>
         <h2 className="mt-1 text-xl font-semibold">Current status</h2>
-        <div className="mt-4 space-y-2 text-sm text-slate-600">
-          {summary.map((item) => (
-            <div key={item.name} className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 ring-1 ring-slate-200">
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                <span>
-                  {item.name} {item.name === "Approved" ? "(Blue)" : item.name === "Pending" ? "(Amber)" : "(Red)"}
-                </span>
+        <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="space-y-2 text-sm text-slate-600 sm:flex-1">
+            {summary.map((item) => (
+              <div key={item.name} className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 ring-1 ring-slate-200">
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                  <span>
+                    {item.name} {item.name === "Approved" ? "(Blue)" : item.name === "Pending" ? "(Amber)" : "(Red)"}
+                  </span>
+                </div>
+                <span className="font-semibold text-slate-900">{item.value}</span>
               </div>
-              <span className="font-semibold text-slate-900">{item.value}</span>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 min-w-0 min-h-56 h-56">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie data={summary} dataKey="value" innerRadius={40} outerRadius={72} stroke="none">
-                {summary.map((item) => (
-                  <Cell key={item.name} fill={item.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+            ))}
+          </div>
+          <div className="h-52 w-full shrink-0 sm:h-52 sm:w-52">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={summary} dataKey="value" innerRadius={40} outerRadius={72} stroke="none">
+                  {summary.map((item) => (
+                    <Cell key={item.name} fill={item.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </article>
     </section>

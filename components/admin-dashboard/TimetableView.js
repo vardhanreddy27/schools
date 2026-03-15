@@ -52,17 +52,17 @@ export default function TimetableView({ assignments, onReassign }) {
         <h2 className="mt-1 text-2xl font-semibold">Auto allocation for late or absent teachers</h2>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl bg-amber-50 p-4 ring-1 ring-amber-200">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-amber-700">Late teachers</p>
-            <p className="mt-2 text-3xl font-bold text-amber-800">{lateCount}</p>
+          <div className="rounded-2xl bg-[#fff8dc] p-4 ring-1 ring-[#f7e2a3]">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#8b6400]">Late teachers</p>
+            <p className="mt-2 text-3xl font-bold text-[#6f5221]">{lateCount}</p>
           </div>
           <div className="rounded-2xl bg-rose-50 p-4 ring-1 ring-rose-200">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-rose-700">Absent teachers</p>
             <p className="mt-2 text-3xl font-bold text-rose-800">{absentCount}</p>
           </div>
-          <div className="rounded-2xl bg-blue-50 p-4 ring-1 ring-blue-200">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-blue-700">Principal changes</p>
-            <p className="mt-2 text-3xl font-bold text-blue-800">{reassignedCount}</p>
+          <div className="rounded-2xl bg-[#fff8dc] p-4 ring-1 ring-[#f7e2a3]">
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#8b6400]">Principal changes</p>
+            <p className="mt-2 text-3xl font-bold text-[#6f5221]">{reassignedCount}</p>
           </div>
         </div>
 
@@ -75,9 +75,9 @@ export default function TimetableView({ assignments, onReassign }) {
               setPage(1);
             }}
             placeholder="Search by class, teacher, reason or status"
-            className="min-w-[16rem] flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none ring-blue-200 focus:ring"
+            className="min-w-[16rem] flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none ring-[#f7e2a3] focus:ring"
           />
-          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+          <span className="rounded-full bg-[#fff8dc] px-3 py-1 text-xs font-semibold text-[#8b6400]">
             {filtered.length} records
           </span>
         </div>
@@ -91,10 +91,10 @@ export default function TimetableView({ assignments, onReassign }) {
                   <h3 className="mt-1 text-lg font-semibold text-slate-900">{row.subject}</h3>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className={`rounded-full px-2 py-1 text-xs font-semibold ${row.reasonType === "Late" ? "bg-amber-50 text-amber-700" : "bg-rose-50 text-rose-700"}`}>
+                  <span className={`rounded-full px-2 py-1 text-xs font-semibold ${row.reasonType === "Late" ? "bg-[#fff8dc] text-[#8b6400]" : "bg-rose-50 text-rose-700"}`}>
                     {row.reasonType}
                   </span>
-                  <span className={`rounded-full px-2 py-1 text-xs font-semibold ${row.status === "Reassigned by Principal" ? "bg-blue-50 text-blue-700" : "bg-emerald-50 text-emerald-700"}`}>
+                  <span className={`rounded-full px-2 py-1 text-xs font-semibold ${row.status === "Reassigned by Principal" ? "bg-[#fff8dc] text-[#8b6400]" : "bg-emerald-50 text-emerald-700"}`}>
                     {row.status}
                   </span>
                 </div>
@@ -127,7 +127,7 @@ export default function TimetableView({ assignments, onReassign }) {
                   <button
                     type="button"
                     onClick={() => onReassign(row.id, pendingSelection[row.id] ?? row.replacementTeacher)}
-                    className="mt-2 w-full rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                    className="mt-2 w-full rounded-lg bg-[#f2b705] px-3 py-2 text-xs font-semibold text-white hover:bg-[#d9a300]"
                   >
                     Save change
                   </button>

@@ -52,14 +52,14 @@ export default function AttendanceView() {
               <XAxis dataKey="period" tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
               <YAxis tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
               <Tooltip />
-              <Bar dataKey="studentsPresent" name="Students Present" fill="#2563eb" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="studentsPresent" name="Students Present" fill="#f2b705" radius={[8, 8, 0, 0]} />
               <Bar dataKey="teachersPresent" name="Teachers Present" fill="#0f172a" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-600">
-          <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700">
-            <span className="h-2.5 w-2.5 rounded-full bg-blue-600" />
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#fff8dc] px-3 py-1 text-[#8b6400]">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#f2b705]" />
             Students
           </span>
           <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-slate-700">
@@ -86,8 +86,8 @@ export default function AttendanceView() {
             <p className="font-semibold text-emerald-700">Device readiness</p>
             <p className="mt-1">96% teacher devices are geo-fence ready.</p>
           </div>
-          <div className="rounded-2xl bg-amber-50 p-4 ring-1 ring-amber-200">
-            <p className="font-semibold text-amber-700">Pending setup</p>
+          <div className="rounded-2xl bg-[#fff8dc] p-4 ring-1 ring-[#f7e2a3]">
+            <p className="font-semibold text-[#8b6400]">Pending setup</p>
             <p className="mt-1">2 teachers need location permission update.</p>
           </div>
           <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
@@ -109,9 +109,9 @@ export default function AttendanceView() {
               setPage(1);
             }}
             placeholder="Search by class or section"
-            className="min-w-56 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none ring-blue-200 focus:ring"
+            className="min-w-56 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none ring-[#f7e2a3] focus:ring"
           />
-          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+          <span className="rounded-full bg-[#fff8dc] px-3 py-1 text-xs font-semibold text-[#8b6400]">
             {filteredSections.length} sections
           </span>
         </div>
@@ -134,8 +134,8 @@ export default function AttendanceView() {
                   <tr
                     key={row.id}
                     onClick={() => setActiveSectionId(row.id)}
-                    className={`cursor-pointer border-t border-slate-100 text-slate-700 hover:bg-blue-50/50 ${
-                      activeSectionId === row.id ? "bg-blue-50/60" : ""
+                    className={`cursor-pointer border-t border-slate-100 text-slate-700 hover:bg-[#fff8dc]/50 ${
+                      activeSectionId === row.id ? "bg-[#fff8dc]/60" : ""
                     }`}
                   >
                     <td className="px-3 py-3">{row.className}</td>
@@ -150,19 +150,19 @@ export default function AttendanceView() {
             </table>
           </div>
 
-          <div className="rounded-2xl bg-blue-50 p-4 ring-1 ring-blue-200">
-            <p className="text-sm font-semibold text-blue-700">Selected section details</p>
+          <div className="rounded-2xl bg-[#fff8dc] p-4 ring-1 ring-[#f7e2a3]">
+            <p className="text-sm font-semibold text-[#8b6400]">Selected section details</p>
             {activeSection ? (
               <>
                 <h3 className="mt-1 text-xl font-semibold text-slate-900">{activeSection.className} - Section {activeSection.section}</h3>
                 <p className="text-sm text-slate-600">Click any section row to inspect boys and girls attendance.</p>
                 <div className="mt-3 grid gap-2 text-sm">
-                  <div className="rounded-xl bg-white px-3 py-2 ring-1 ring-blue-100">
+                  <div className="rounded-xl bg-white px-3 py-2 ring-1 ring-[#fff2c7]">
                     <p className="font-semibold text-slate-900">Morning</p>
                     <p className="text-slate-700">Boys: {activeSection.boysMorning}</p>
                     <p className="text-slate-700">Girls: {activeSection.girlsMorning}</p>
                   </div>
-                  <div className="rounded-xl bg-white px-3 py-2 ring-1 ring-blue-100">
+                  <div className="rounded-xl bg-white px-3 py-2 ring-1 ring-[#fff2c7]">
                     <p className="font-semibold text-slate-900">Evening</p>
                     <p className="text-slate-700">Boys: {activeSection.boysEvening}</p>
                     <p className="text-slate-700">Girls: {activeSection.girlsEvening}</p>

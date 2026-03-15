@@ -45,12 +45,9 @@ export default function App({ Component, pageProps }) {
           name="description"
           content="Nagarjuna Model School progressive web app"
         />
-        <meta name="theme-color" content="#0f172a" />
+        <meta name="theme-color" content="#1f2937" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
-        />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
         <meta name="apple-mobile-web-app-title" content={appTitle} />
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="manifest" href={manifestPath} />

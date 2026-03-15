@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 export default function Admin_login() {
   const [userId, setUserId] = useState("");
@@ -24,6 +25,12 @@ export default function Admin_login() {
 
     if (result?.error) {
       setErrorMessage(result.error);
+      Swal.fire({
+        icon: "error",
+        title: "Sign in failed",
+        text: result.error,
+        confirmButtonColor: "#f2b705",
+      });
       return;
     }
 
@@ -36,7 +43,7 @@ export default function Admin_login() {
 
   return (
     <div className="min-h-dvh w-full bg-white md:min-h-screen md:bg-gray-100 md:flex md:items-center md:justify-center md:p-6">
-<div className="w-full min-h-dvh overflow-hidden bg-white shadow-none md:min-h-[650px] md:grid md:max-w-6xl md:grid-cols-2 md:rounded-3xl md:shadow-[0_25px_80px_-28px_rgba(37,99,235,0.45)]">        <div className="relative overflow-hidden bg-gradient-to-b from-blue-700 to-blue-500 px-6 pb-14 pt-10 text-white sm:px-8 md:px-10 md:py-14">
+<div className="w-full min-h-dvh overflow-hidden bg-white shadow-none md:min-h-[650px] md:grid md:max-w-6xl md:grid-cols-2 md:rounded-3xl md:shadow-[0_25px_80px_-28px_rgba(31,41,55,0.35)]">        <div className="relative overflow-hidden bg-gradient-to-b from-[#1f2937] to-[#f2b705] px-6 pb-14 pt-10 text-white sm:px-8 md:px-10 md:py-14">
           <div className="relative z-10 mx-auto max-w-[260px] text-center md:mt-6">
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white/95 shadow-lg overflow-hidden">
               <Image
@@ -50,7 +57,7 @@ export default function Admin_login() {
             </div>
 
             <h1 className="text-4xl font-semibold tracking-tight">Nagarjuna Model School</h1>
-            <p className="mt-4 text-sm/6 text-blue-100">
+            <p className="mt-4 text-sm/6 text-[#fff3bf]">
               Primary and Secondary Education Kadapa, Andhra Pradesh
             </p>
           </div>
@@ -73,7 +80,7 @@ export default function Admin_login() {
                 id="userId"
                 type="text"
                 placeholder="Enter your user id"
-                className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#f2b705] focus:ring-4 focus:ring-[#fff2c7]"
                 autoComplete="username"
                 value={userId}
                 onChange={(event) => setUserId(event.target.value)}
@@ -89,7 +96,7 @@ export default function Admin_login() {
                 id="password"
                 type="password"
                 placeholder="Enter your password"
-                className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#f2b705] focus:ring-4 focus:ring-[#fff2c7]"
                 autoComplete="current-password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
@@ -105,7 +112,7 @@ export default function Admin_login() {
 
             <button
               type="submit"
-              className="w-full rounded-full bg-blue-600 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-blue-400"
+              className="w-full rounded-full bg-[#f2b705] py-3 text-sm font-semibold text-white transition hover:bg-[#d9a300] focus:outline-none focus:ring-4 focus:ring-[#f7e2a3] disabled:cursor-not-allowed disabled:bg-[#f3da84]"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Signing In..." : "Sign In"}

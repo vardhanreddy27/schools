@@ -6,7 +6,7 @@ export function SidebarNav({ activeMenu, onMenuChange }) {
     <aside className="hidden w-72 shrink-0 border-r border-slate-200 bg-slate-950 text-slate-100 lg:flex lg:flex-col">
       <div className="px-7 pb-6 pt-8">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-lg font-bold text-white">N</div>
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f2b705] text-lg font-bold text-white">N</div>
           <div>
             <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
             <p className="text-sm text-slate-400">Principal Dashboard</p>
@@ -20,8 +20,8 @@ export function SidebarNav({ activeMenu, onMenuChange }) {
             key={id}
             type="button"
             onClick={() => onMenuChange(id)}
-            className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium transition ${
-              activeMenu === id ? "bg-blue-600 text-white" : "text-slate-300 hover:bg-slate-900 hover:text-white"
+            className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium transition-all duration-200 active:scale-[0.97] ${
+              activeMenu === id ? "bg-[#f2b705] text-white" : "text-slate-300 hover:bg-slate-900 hover:text-white"
             }`}
           >
             <Icon className="h-5 w-5" />
@@ -34,7 +34,7 @@ export function SidebarNav({ activeMenu, onMenuChange }) {
         <button
           type="button"
           onClick={() => signOut({ callbackUrl: "/Admin_login" })}
-          className="w-full rounded-2xl border border-slate-700 px-4 py-3 text-sm font-semibold text-slate-100 hover:bg-slate-900"
+          className="w-full rounded-2xl border border-slate-700 px-4 py-3 text-sm font-semibold text-slate-100 transition-all duration-200 hover:bg-slate-800 active:scale-[0.97]"
         >
           Logout
         </button>
@@ -47,21 +47,29 @@ export function MobileBottomNav({ activeMenu, onMenuChange, items }) {
   const mobileItems = items || navItems;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur lg:hidden">
-      <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${mobileItems.length}, minmax(0, 1fr))` }}>
-        {mobileItems.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => onMenuChange(id)}
-            className={`flex flex-col items-center justify-center rounded-2xl px-2 py-2 text-[11px] font-medium ${
-              activeMenu === id ? "bg-blue-50 text-blue-700" : "text-slate-500"
-            }`}
-          >
-            <Icon className="mb-1 h-4 w-4" />
-            {label}
-          </button>
-        ))}
+    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-100 bg-white/98 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-1.5 backdrop-blur-xl lg:hidden">
+      <div className="grid" style={{ gridTemplateColumns: `repeat(${mobileItems.length}, minmax(0, 1fr))` }}>
+        {mobileItems.map(({ id, label, icon: Icon }) => {
+          const isActive = activeMenu === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => onMenuChange(id)}
+              className={`flex flex-col items-center gap-0.5 py-1.5 text-[11px] font-medium transition-colors duration-200 active:scale-90 ${
+                isActive ? "text-[#b88600]" : "text-slate-400"
+              }`}
+            >
+              <span
+                className={`mb-0.5 block h-[3px] w-5 rounded-full bg-[#f2b705] transition-all duration-250 ${
+                  isActive ? "opacity-100" : "opacity-0"
+                }`}
+              />
+              <Icon className="h-5 w-5" />
+              <span>{label}</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

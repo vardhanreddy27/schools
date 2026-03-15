@@ -198,8 +198,8 @@ export const metricDrilldown = {
 
 export const highlights = [
   { key: "alerts", title: "Open Alerts", value: 4, subtitle: "Need action", color: "#111827", actionLabel: "Open alerts panel" },
-  { key: "pendingLeaves", title: "Pending Leaves", value: 2, subtitle: "Waiting approval", color: "#d97706", actionLabel: "Go to approvals" },
-  { key: "approved", title: "Approved", value: 1, subtitle: "Completed", color: "#2563eb", actionLabel: "View approved" },
+  { key: "pendingLeaves", title: "Pending Leaves", value: 2, subtitle: "Waiting approval", color: "#8b6400", actionLabel: "Go to approvals" },
+  { key: "approved", title: "Approved", value: 1, subtitle: "Completed", color: "#f2b705", actionLabel: "View approved" },
 ];
 
 export const alerts = [
