@@ -1,13 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Swal from "sweetalert2";
 
 export default function Admin_login() {
+  const router = useRouter();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const unauthorizedMessage = router.query.error === "UnauthorizedEmail"
+    ? "This email is not authorized for admin access."
+    : "";
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+
+    if (router.query.error === "UnauthorizedEmail") {
+      Swal.fire({
+        icon: "error",
+        title: "Access denied",
+        text: unauthorizedMessage,
+        confirmButtonColor: "#f2b705",
+      });
+    }
+  }, [router.isReady, router.query.error, unauthorizedMessage]);
 
   async function handleCredentialsLogin(event) {
     event.preventDefault();
@@ -142,8 +162,8 @@ export default function Admin_login() {
       </div>
 
       <div className="hidden w-full overflow-hidden bg-white shadow-none md:min-h-[650px] md:grid md:max-w-6xl md:grid-cols-2 md:rounded-3xl md:border md:border-slate-200 md:shadow-[0_24px_70px_-44px_rgba(15,23,42,0.22)]">
-        <div className="relative overflow-hidden bg-white px-6 pb-14 pt-10 text-slate-900 sm:px-8 md:px-10 md:py-14">
-          <div className="relative z-10 mx-auto max-w-[280px] text-center md:mt-6">
+        <div className="relative overflow-hidden bg-white px-6 pb-14 pt-10 text-slate-900 sm:px-8 md:flex md:items-center md:px-10 md:py-14">
+          <div className="relative z-10 mx-auto max-w-[280px] text-center">
             <div className="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white shadow-[0_18px_40px_-28px_rgba(15,23,42,0.16)] ring-1 ring-slate-200 overflow-hidden">
               <Image
                 src="/logo.png"
