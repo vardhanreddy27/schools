@@ -185,12 +185,12 @@ export default function AdminDashboard({ user = {} }) {
   }, [activeMenu]);
 
   return (
-    <div className="min-h-dvh bg-[#eef3fb] text-slate-950 lg:flex">
+    <div className="min-h-dvh bg-[#f3f6fb] text-slate-950 lg:flex">
       <SidebarNav activeMenu={activeMenu} onMenuChange={setActiveMenu} />
 
       <main className={`relative flex-1 ${isProfileView ? "pb-24 lg:pb-8" : "pb-28 lg:pb-8"}`}>
         <div className={`mx-auto flex max-w-6xl flex-col px-3 pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6 ${isProfileView ? "min-h-0" : "min-h-dvh"}`}>
-          <section className="rounded-4xl bg-white/80 p-4 shadow-sm ring-1 ring-white/60 backdrop-blur sm:p-5">
+          <section className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3 lg:hidden">
@@ -223,7 +223,7 @@ export default function AdminDashboard({ user = {} }) {
               </div>
             </div>
 
-            <div className="mt-4 flex items-center rounded-3xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <div className="mt-4 flex items-center rounded-3xl bg-slate-50 px-4 py-3">
               <Search className="mr-3 h-5 w-5 text-slate-400" />
               <input
                 type="text"

@@ -104,7 +104,7 @@ const CALENDAR_EVENTS = [
 
 function ProgressBar({ label, value, color = "#f2b705" }) {
   return (
-    <div className="rounded-xl bg-white px-3 py-2 ring-1 ring-slate-200">
+    <div className="rounded-xl bg-white px-3 py-2">
       <div className="mb-1 flex items-center justify-between text-xs font-medium text-slate-700">
         <span>{label}</span>
         <span>{value}%</span>
@@ -242,7 +242,7 @@ export default function CommunicationView({
   if (activeSection === "menu") {
     return (
       <section className="mt-4">
-        <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <p className="text-sm text-slate-500">More</p>
           <h2 className="mt-1 text-2xl font-semibold">School tools and updates</h2>
           <p className="mt-2 text-sm text-slate-500">Open the area you want to review.</p>
@@ -259,9 +259,9 @@ export default function CommunicationView({
                     setTeacherPage(1);
                     setClassPage(1);
                   }}
-                  className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:bg-[#fff8dc]"
+                  className="rounded-3xl bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:bg-[#fff8dc]"
                 >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#fff8dc] text-[#8b6400] ring-1 ring-[#f7e2a3]">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#fff8dc] text-[#8b6400]">
                     <Icon className="h-5 w-5" />
                   </div>
                   <p className="mt-4 font-semibold text-slate-900">{item.title}</p>
@@ -278,11 +278,11 @@ export default function CommunicationView({
   if (activeSection === "alerts") {
     return (
       <section className="mt-4">
-        <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <BackHeader title="Alerts" subtitle="Share notices with teachers, students and parents." onBack={() => setActiveSection("menu")} />
           <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
             <form
-              className="space-y-3 rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200"
+              className="space-y-3 rounded-2xl bg-slate-50 p-4"
               onSubmit={(event) => {
                 event.preventDefault();
                 onBroadcastSend();
@@ -311,11 +311,11 @@ export default function CommunicationView({
               <button type="submit" className="w-full rounded-xl bg-[#f2b705] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#d9a300] active:scale-[0.98]">Send alert</button>
             </form>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-3">
+            <div className="rounded-2xl bg-white p-3">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Recent alerts</p>
               <div className="mt-3 max-h-80 space-y-3 overflow-y-auto pr-1">
                 {broadcastMessages.map((item) => (
-                  <div key={item.id} className="rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200">
+                  <div key={item.id} className="rounded-2xl bg-slate-50 p-3">
                     <div className="flex items-center justify-between gap-2">
                       <p className="rounded-full bg-[#fff8dc] px-2 py-1 text-xs font-semibold text-[#8b6400]">To: {item.audience}</p>
                       <span className="text-xs text-slate-500">{item.time}</span>
@@ -334,7 +334,7 @@ export default function CommunicationView({
   if (activeSection === "teachers") {
     return (
       <section className="mt-4">
-        <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <BackHeader title="Teachers performance" subtitle="Attendance, completion and participation at a glance." onBack={() => setActiveSection("menu")} />
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <input
@@ -352,7 +352,7 @@ export default function CommunicationView({
 
           <div className="mt-4 grid gap-3 xl:grid-cols-2">
             {teacherRows.map((row) => (
-              <div key={row.id} className="rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">
+              <div key={row.id} className="rounded-3xl bg-slate-50 p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xl font-semibold text-slate-900">{row.name}</p>
@@ -399,7 +399,7 @@ export default function CommunicationView({
   if (activeSection === "classes") {
     return (
       <section className="mt-4">
-        <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <BackHeader title="Class performance" subtitle="Progress by class and section for all subjects." onBack={() => setActiveSection("menu")} />
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <input
@@ -417,10 +417,10 @@ export default function CommunicationView({
 
           <div className="mt-4 grid gap-4 xl:grid-cols-2">
             {classRows.map((row) => (
-              <div key={`${row.className}-${row.section}`} className="rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">
+              <div key={`${row.className}-${row.section}`} className="rounded-3xl bg-slate-50 p-4">
                 <div className="flex items-center justify-between">
                   <p className="text-xl font-semibold text-slate-900">{row.className}</p>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">Section {row.section}</span>
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700">Section {row.section}</span>
                 </div>
                 <div className="mt-4 space-y-3">
                   {SUBJECT_PROGRESS.map((subject) => (
@@ -460,14 +460,14 @@ export default function CommunicationView({
   if (activeSection === "calendar") {
     return (
       <section className="mt-4">
-        <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <BackHeader title="Calendar" subtitle="Current month calendar with upcoming school events." onBack={() => setActiveSection("menu")} />
-          <div className="rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">
+          <div className="rounded-3xl bg-slate-50 p-4">
             <div className="flex items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={() => setCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
-                className="rounded-full border border-slate-300 bg-white p-2 text-slate-700 hover:bg-slate-50"
+                className="rounded-full bg-white p-2 text-slate-700 hover:bg-slate-100"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -475,7 +475,7 @@ export default function CommunicationView({
               <button
                 type="button"
                 onClick={() => setCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
-                className="rounded-full border border-slate-300 bg-white p-2 text-slate-700 hover:bg-slate-50"
+                className="rounded-full bg-white p-2 text-slate-700 hover:bg-slate-100"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -500,7 +500,7 @@ export default function CommunicationView({
                   <div
                     key={date.toISOString()}
                     className={`flex h-12 items-center justify-center rounded-xl text-sm font-medium ${
-                      isToday ? "bg-[#f2b705] text-white" : hasEvent ? "bg-[#fff8dc] text-[#8b6400] ring-1 ring-[#f7e2a3]" : "bg-white text-slate-700 ring-1 ring-slate-200"
+                      isToday ? "bg-[#f2b705] text-white" : hasEvent ? "bg-[#fff8dc] text-[#8b6400]" : "bg-white text-slate-700"
                     }`}
                   >
                     {date.getDate()}
@@ -510,11 +510,11 @@ export default function CommunicationView({
             </div>
           </div>
 
-          <div className="mt-5 rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">
+          <div className="mt-5 rounded-3xl bg-slate-50 p-4">
             <p className="text-sm text-slate-500">Upcoming events</p>
             <div className="mt-3 space-y-3">
               {currentMonthEvents.length ? currentMonthEvents.map((item) => (
-                <div key={item.date + item.title} className="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
+                <div key={item.date + item.title} className="rounded-2xl bg-white p-4">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="font-semibold text-slate-900">{item.title}</p>
                     <span className="rounded-full bg-[#fff8dc] px-3 py-1 text-xs font-semibold text-[#8b6400]">
@@ -535,7 +535,7 @@ export default function CommunicationView({
 
   return (
     <section className="mt-4">
-      <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <BackHeader
           title={MORE_ITEMS.find((item) => item.id === activeSection)?.title || "More"}
           subtitle="Important school updates in one place."
@@ -543,7 +543,7 @@ export default function CommunicationView({
         />
         <div className="grid gap-3">
           {selectedCards.map((item) => (
-            <div key={item.title} className="rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">
+            <div key={item.title} className="rounded-3xl bg-slate-50 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-lg font-semibold text-slate-900">{item.title}</p>
                 <span className="rounded-full bg-[#fff8dc] px-3 py-1 text-xs font-semibold text-[#8b6400]">{item.meta}</span>

@@ -46,7 +46,7 @@ export default function ApprovalsView({ leaveRequests, onDecision }) {
 
   return (
     <section className="mt-4 grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-      <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Leave approvals</p>
         <h2 className="mt-1 text-2xl font-semibold">Teachers and non-teaching staff</h2>
 
@@ -66,7 +66,7 @@ export default function ApprovalsView({ leaveRequests, onDecision }) {
 
         <div className="mt-4 space-y-3">
           {pageRows.map((request) => (
-            <div key={request.id} className="rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200">
+            <div key={request.id} className="rounded-3xl bg-slate-50 p-4">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-semibold text-slate-900">{request.name}</p>
@@ -131,13 +131,13 @@ export default function ApprovalsView({ leaveRequests, onDecision }) {
         </div>
       </article>
 
-      <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Approval summary</p>
         <h2 className="mt-1 text-xl font-semibold">Current status</h2>
         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="space-y-2 text-sm text-slate-600 sm:flex-1">
             {summary.map((item) => (
-              <div key={item.name} className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 ring-1 ring-slate-200">
+              <div key={item.name} className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                   <span>{item.name}</span>

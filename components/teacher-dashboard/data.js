@@ -25,12 +25,12 @@ export const weekPlan = [
 ];
 
 export const monthlyCalendarEvents = [
-  { date: "2026-03-09", type: "quiz", title: "Quiz Day" },
-  { date: "2026-03-14", type: "exam", title: "Exam Day" },
-  { date: "2026-03-18", type: "homework", title: "Homework Check" },
-  { date: "2026-03-22", type: "quiz", title: "Vocabulary Quiz" },
-  { date: "2026-03-26", type: "exam", title: "Monthly Exam" },
-  { date: "2026-03-29", type: "meeting", title: "PTM Prep" },
+  { date: "2026-03-18", type: "quiz", title: "9th B - Grammar Quiz" },
+  { date: "2026-03-19", type: "homework", title: "General: Notebook check" },
+  { date: "2026-03-21", type: "meeting", title: "General: Staff meeting" },
+  { date: "2026-03-24", type: "exam", title: "10th A - Unit test" },
+  { date: "2026-03-27", type: "quiz", title: "8th A - Vocabulary quiz" },
+  { date: "2026-03-29", type: "meeting", title: "General: Parent connect prep" },
 ];
 
 export const attendanceClasses = [
@@ -39,63 +39,63 @@ export const attendanceClasses = [
     className: "8th",
     section: "A",
     strength: 42,
-    entries: [
-      { session: "Morning", submittedBy: "You", time: "08:56 AM", present: 39, total: 42, status: "submitted" },
-    ],
+  },
+  {
+    id: "class-5a",
+    className: "5th",
+    section: "A",
+    strength: 38,
   },
   {
     id: "class-9b",
     className: "9th",
     section: "B",
     strength: 44,
-    entries: [
-      { session: "Evening", submittedBy: "Pending", time: "Pending", present: 0, total: 44, status: "pending" },
-    ],
   },
 ];
 
 export const teacherSelfAttendance = {
-  todayStatus: "Present",
-  checkIn: "08:24 AM",
+  morning: { status: "Present", checkIn: "08:24 AM" },
+  afternoon: { status: "Pending", checkIn: "Not marked" },
   monthSummary: "16 / 17 working days",
 };
 
 export const dashboardInsights = [
-  { title: "Attendance to submit", value: "1 session", note: "Evening attendance for 9B is pending", tone: "amber" },
+  { title: "Attendance to submit", value: "2 sessions", note: "9A, 8B", tone: "amber" },
   { title: "Assignments to review", value: "18", note: "Essay set from 9B and 10A", tone: "blue" },
   { title: "Quiz papers ready", value: "3", note: "Grammar + Vocabulary", tone: "emerald" },
   { title: "Parent updates pending", value: "5", note: "Low attendance alerts", tone: "rose" },
 ];
 
 export const moreTools = [
-  { key: "myPerformance", title: "My Performance", subtitle: "Track teaching goals", icon: UserCircle2 },
-  { key: "lessonPlanner", title: "Lesson Planner", subtitle: "Plan weekly delivery", icon: Notebook },
-  { key: "quizCenter", title: "Quiz Center", subtitle: "Schedule and evaluate", icon: FileText },
-  { key: "markAttendance", title: "Mark Attendance", subtitle: "Quick class entry", icon: ClipboardCheck },
+  { key: "sectionPerformance", title: "Section Performance", subtitle: "My subject by class/section", icon: UserCircle2 },
+  { key: "lessonPlanner", title: "Lesson Planner", subtitle: "Plan weekly delivery", icon: ClipboardCheck },
+  { key: "quizCenter", title: "Add Lesson Quiz", subtitle: "Create and review quizzes", icon: FileText },
+  { key: "notesCenter", title: "Class Notes", subtitle: "Add and manage notes", icon: Notebook },
   { key: "announcements", title: "Announcements", subtitle: "Send class updates", icon: Megaphone },
   { key: "learningResources", title: "Learning Resources", subtitle: "Share notes and links", icon: BookOpen },
 ];
 
 export const moreToolDetails = {
-  myPerformance: {
-    title: "My Performance",
-    summary: "Syllabus completion this month: 87%. Student reading outcomes improved in 3 classes.",
+  sectionPerformance: {
+    title: "Section Performance",
+    summary: "View your subject performance section-wise and spot classes that need remediation support.",
   },
   lessonPlanner: {
     title: "Lesson Planner",
-    summary: "You have 4 lessons pending approval for next week. Start with Class 9B literature plan.",
+    summary: "Plan lesson flow by class, set outcomes, and track completion across weekly periods.",
   },
   quizCenter: {
-    title: "Quiz Center",
-    summary: "3 quizzes are active this week. 1 needs rubric update before publish.",
+    title: "Add Lesson Quiz",
+    summary: "Create quiz sets by class and section, then review all active and draft quizzes.",
   },
-  markAttendance: {
-    title: "Mark Attendance",
-    summary: "Open any class from the Attendance tab and submit period-wise attendance from the bottom sheet.",
+  notesCenter: {
+    title: "Class Notes",
+    summary: "Maintain classroom notes per lesson and section with quick edit and archive support.",
   },
   announcements: {
     title: "Announcements",
-    summary: "Draft reminders are ready for Class 8A and 10A parents. Review and send.",
+    summary: "Draft updates for classes and parents, then post announcements section-wise.",
   },
   learningResources: {
     title: "Learning Resources",

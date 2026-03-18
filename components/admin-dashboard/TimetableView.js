@@ -47,20 +47,20 @@ export default function TimetableView({ assignments, onReassign }) {
 
   return (
     <section className="mt-4">
-      <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Timetable and substitution</p>
         <h2 className="mt-1 text-2xl font-semibold">Auto allocation for late or absent teachers</h2>
 
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl bg-[#fff8dc] p-4 ring-1 ring-[#f7e2a3]">
+          <div className="rounded-2xl bg-[#fff8dc] p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#8b6400]">Late teachers</p>
             <p className="mt-2 text-3xl font-bold text-[#6f5221]">{lateCount}</p>
           </div>
-          <div className="rounded-2xl bg-rose-50 p-4 ring-1 ring-rose-200">
+          <div className="rounded-2xl bg-rose-50 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-rose-700">Absent teachers</p>
             <p className="mt-2 text-3xl font-bold text-rose-800">{absentCount}</p>
           </div>
-          <div className="rounded-2xl bg-[#fff8dc] p-4 ring-1 ring-[#f7e2a3]">
+          <div className="rounded-2xl bg-[#fff8dc] p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#8b6400]">Principal changes</p>
             <p className="mt-2 text-3xl font-bold text-[#6f5221]">{reassignedCount}</p>
           </div>
@@ -84,7 +84,7 @@ export default function TimetableView({ assignments, onReassign }) {
 
         <div className="mt-4 space-y-3">
           {paginated.map((row) => (
-            <div key={row.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div key={row.id} className="rounded-2xl bg-slate-50 p-4">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-sm text-slate-500">{row.className} • Section {row.section} • {row.period}</p>
@@ -101,19 +101,19 @@ export default function TimetableView({ assignments, onReassign }) {
               </div>
 
               <div className="mt-3 grid gap-3 text-sm text-slate-600 lg:grid-cols-[1fr_1fr_auto]">
-                <div className="rounded-xl bg-white px-3 py-3 ring-1 ring-slate-200">
+                <div className="rounded-xl bg-white px-3 py-3">
                   <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Original</p>
                   <p className="mt-2 font-semibold text-slate-900">{row.previousTeacher}</p>
                   <p className="mt-1">Subject: {row.previousTeacherSubject}</p>
                   <p>Reason: {row.reason}</p>
                 </div>
-                <div className="rounded-xl bg-white px-3 py-3 ring-1 ring-slate-200">
+                <div className="rounded-xl bg-white px-3 py-3">
                   <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Allocated</p>
                   <p className="mt-2 font-semibold text-slate-900">{row.replacementTeacher}</p>
                   <p className="mt-1">From subject: {row.previousTeacherSubject}</p>
                   <p>To subject: {row.replacementTeacherSubject}</p>
                 </div>
-                <div className="rounded-xl bg-white px-3 py-3 ring-1 ring-slate-200">
+                <div className="rounded-xl bg-white px-3 py-3">
                   <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Principal action</p>
                   <select
                     value={pendingSelection[row.id] ?? row.replacementTeacher}

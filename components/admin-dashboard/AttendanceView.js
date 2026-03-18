@@ -41,11 +41,11 @@ export default function AttendanceView() {
 
   return (
     <section className="mt-4 grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-      <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Daily attendance windows</p>
         <h2 className="mt-1 text-2xl font-semibold">Morning and evening attendance</h2>
 
-        <div className="mt-5 min-w-0 min-h-64 h-64 rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200 sm:h-72">
+        <div className="mt-5 min-w-0 min-h-64 h-64 rounded-3xl bg-slate-50 p-4 sm:h-72">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={attendanceWindows} barGap={14}>
               <CartesianGrid vertical={false} stroke="#e2e8f0" strokeDasharray="4 4" />
@@ -69,7 +69,7 @@ export default function AttendanceView() {
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {attendanceWindows.map((item) => (
-            <div key={item.period} className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
+            <div key={item.period} className="rounded-2xl bg-slate-50 p-4">
               <p className="font-semibold text-slate-900">{item.period}</p>
               <p className="mt-1 text-sm text-slate-600">Students: {item.studentsPresent}/{item.studentsTotal}</p>
               <p className="text-sm text-slate-600">Teachers: {item.teachersPresent}/{item.teachersTotal}</p>
@@ -78,26 +78,26 @@ export default function AttendanceView() {
         </div>
       </article>
 
-      <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Teachers attendance mode</p>
         <h2 className="mt-1 text-xl font-semibold">Geo-fence configuration</h2>
         <div className="mt-4 space-y-3 text-sm text-slate-600">
-          <div className="rounded-2xl bg-emerald-50 p-4 ring-1 ring-emerald-200">
+          <div className="rounded-2xl bg-emerald-50 p-4">
             <p className="font-semibold text-emerald-700">Device readiness</p>
             <p className="mt-1">96% teacher devices are geo-fence ready.</p>
           </div>
-          <div className="rounded-2xl bg-[#fff8dc] p-4 ring-1 ring-[#f7e2a3]">
+          <div className="rounded-2xl bg-[#fff8dc] p-4">
             <p className="font-semibold text-[#8b6400]">Pending setup</p>
             <p className="mt-1">2 teachers need location permission update.</p>
           </div>
-          <div className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
+          <div className="rounded-2xl bg-slate-50 p-4">
             <p className="font-semibold text-slate-700">Logs per day</p>
             <p className="mt-1">Morning once and evening once for both teachers and students.</p>
           </div>
         </div>
       </article>
 
-      <article className="xl:col-span-2 rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <article className="xl:col-span-2 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Section attendance (a/b/c/d)</p>
         <h2 className="mt-1 text-2xl font-semibold">Present count by section</h2>
         <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -150,19 +150,19 @@ export default function AttendanceView() {
             </table>
           </div>
 
-          <div className="rounded-2xl bg-[#fff8dc] p-4 ring-1 ring-[#f7e2a3]">
+            <div className="rounded-2xl bg-[#fff8dc] p-4">
             <p className="text-sm font-semibold text-[#8b6400]">Selected section details</p>
             {activeSection ? (
               <>
                 <h3 className="mt-1 text-xl font-semibold text-slate-900">{activeSection.className} - Section {activeSection.section}</h3>
                 <p className="text-sm text-slate-600">Click any section row to inspect boys and girls attendance.</p>
                 <div className="mt-3 grid gap-2 text-sm">
-                  <div className="rounded-xl bg-white px-3 py-2 ring-1 ring-[#fff2c7]">
+                  <div className="rounded-xl bg-white px-3 py-2">
                     <p className="font-semibold text-slate-900">Morning</p>
                     <p className="text-slate-700">Boys: {activeSection.boysMorning}</p>
                     <p className="text-slate-700">Girls: {activeSection.girlsMorning}</p>
                   </div>
-                  <div className="rounded-xl bg-white px-3 py-2 ring-1 ring-[#fff2c7]">
+                  <div className="rounded-xl bg-white px-3 py-2">
                     <p className="font-semibold text-slate-900">Evening</p>
                     <p className="text-slate-700">Boys: {activeSection.boysEvening}</p>
                     <p className="text-slate-700">Girls: {activeSection.girlsEvening}</p>

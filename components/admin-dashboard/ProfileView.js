@@ -1,7 +1,7 @@
 export default function ProfileView({ profileForm, onProfileChange, onProfileSave, profileSaving, profileMessage, onLogout }) {
   return (
     <section className="mt-4">
-      <article className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+      <article className="rounded-[2rem] bg-white p-6 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)]">
         <p className="text-sm text-slate-500">Profile</p>
         <h2 className="mt-1 text-2xl font-semibold">Editable details</h2>
 

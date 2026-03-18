@@ -28,11 +28,11 @@ export default function HomeTab({ weekDays, today }) {
 
   return (
     <section className="mt-4 space-y-4">
-      <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Present week</p>
         <h2 className="mt-1 text-xl font-semibold">Inline calendar</h2>
 
-        <div className="mt-4 rounded-3xl bg-[#f7f8fb] p-3 ring-1 ring-slate-200">
+        <div className="mt-4 rounded-3xl bg-[#f7f8fb] p-3">
           <div className="grid grid-cols-7 gap-2">
             {weekDays.map((date) => {
               const isToday = dayKey(date) === todayKey;
@@ -43,10 +43,10 @@ export default function HomeTab({ weekDays, today }) {
                     {date.toLocaleDateString("en-IN", { weekday: "short" })}
                   </p>
                   <div
-                    className={`mx-auto mt-1 flex h-11 w-11 items-center justify-center rounded-2xl text-sm font-semibold ring-1 ${
+                    className={`mx-auto mt-1 flex h-11 w-11 items-center justify-center rounded-2xl text-sm font-semibold ${
                       isToday
-                        ? "bg-[#fff8dc] text-[#8b6400] ring-[#f2b705]"
-                        : "bg-white text-slate-700 ring-slate-200"
+                        ? "bg-[#fff8dc] text-[#8b6400] border border-[#f2b705]"
+                        : "bg-white text-slate-700"
                     }`}
                   >
                     {date.getDate()}
@@ -58,9 +58,9 @@ export default function HomeTab({ weekDays, today }) {
         </div>
       </article>
 
-      <div className="grid gap-4 xl:grid-cols-[1fr_1fr]">
-      <div className="flex flex-col gap-4">
-        <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <div className="flex flex-col gap-4 xl:flex-row">
+      <div className="flex flex-1 flex-col gap-4">
+        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <p className="text-sm text-slate-500">Today classes</p>
           <h2 className="mt-1 text-xl font-semibold">Class timings for today</h2>
 
@@ -68,13 +68,13 @@ export default function HomeTab({ weekDays, today }) {
             {todayClasses.map((item) => (
               <div
                 key={`${item.period}-${item.className}-${item.section}`}
-                className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200"
+                className="rounded-2xl bg-slate-50 p-4"
               >
                 <div className="flex items-center justify-between gap-3">
                   <p className="font-semibold text-slate-900">
                     {item.subject} — {item.period}
                   </p>
-                  <span className="rounded-full bg-[#fff8dc] px-2 py-1 text-xs font-semibold text-[#8b6400] ring-1 ring-[#f2b705]/40">
+                  <span className="rounded-full bg-[#fff8dc] px-2 py-1 text-xs font-semibold text-[#8b6400]">
                     {item.time}
                   </span>
                 </div>
@@ -88,26 +88,26 @@ export default function HomeTab({ weekDays, today }) {
           </div>
         </article>
 
-        <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <p className="text-sm text-slate-500">Today overview</p>
           <h2 className="mt-1 text-xl font-semibold">What needs your attention</h2>
 
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:pb-0">
             {dashboardInsights.map((item) => (
               <div
                 key={item.title}
-                className={`rounded-2xl bg-linear-to-br p-4 ring-1 ${insightCardTone(item.tone)}`}
+                className={`min-w-[calc((100%-2.1rem)/3.5)] snap-start rounded-2xl bg-linear-to-br p-3.5 ring-1 sm:min-w-0 sm:p-4 ${insightCardTone(item.tone)}`}
               >
-                <p className="text-xs uppercase tracking-[0.11em] text-slate-500">{item.title}</p>
-                <p className="mt-2 text-2xl font-semibold text-slate-900">{item.value}</p>
-                <p className="mt-1 text-sm text-slate-600">{item.note}</p>
+                <p className="text-[10px] uppercase tracking-[0.09em] text-slate-500 sm:text-xs">{item.title}</p>
+                <p className="mt-1.5 text-xl font-semibold text-slate-900 sm:mt-2 sm:text-2xl">{item.value}</p>
+                <p className="mt-1 text-xs text-slate-600 sm:text-sm">{item.note}</p>
               </div>
             ))}
           </div>
         </article>
       </div>
 
-      <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5 xl:flex-1">
         <p className="text-sm text-slate-500">Notify parents &amp; students</p>
         <h2 className="mt-1 text-xl font-semibold">Today&apos;s homework</h2>
 
@@ -119,7 +119,7 @@ export default function HomeTab({ weekDays, today }) {
             return (
               <div
                 key={key}
-                className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                className="rounded-2xl bg-slate-50 p-4"
               >
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -139,7 +139,7 @@ export default function HomeTab({ weekDays, today }) {
                 </div>
 
                 {state.sent ? (
-                  <div className="mt-3 rounded-xl bg-emerald-50 px-3 py-2.5 ring-1 ring-emerald-200">
+                  <div className="mt-3 rounded-xl bg-emerald-50 px-3 py-2.5">
                     <p className="text-sm text-emerald-800">{state.text}</p>
                     <p className="mt-1 text-xs text-emerald-600">
                       Parents and students have been notified.
@@ -162,7 +162,7 @@ export default function HomeTab({ weekDays, today }) {
                     <button
                       type="button"
                       onClick={() => handleReset(key)}
-                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                      className="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-[0_8px_20px_-16px_rgba(15,23,42,0.25)] hover:bg-slate-50"
                     >
                       Edit &amp; resend
                     </button>

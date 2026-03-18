@@ -29,7 +29,7 @@ function MetricCard({ item, isActive, onOpen }) {
     <button
       type="button"
       onClick={() => onOpen(item.key)}
-      className={`h-28 w-full rounded-3xl bg-white p-4 text-left shadow-sm transition-all duration-300 ${
+      className={`h-28 w-full rounded-3xl bg-white p-4 text-left shadow-[0_12px_28px_-22px_rgba(15,23,42,0.32)] transition-all duration-300 ${
         isActive ? "-translate-y-0.5 ring-2 ring-[#f7e2a3]" : "hover:-translate-y-0.5"
       }`}
     >
@@ -166,7 +166,7 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
 
       <DrilldownPanel activeMetric={activeMetric} />
 
-      <section className="mt-4 rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <section className="mt-4 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm text-slate-500">Attendance trend</p>
@@ -187,7 +187,7 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
           </div>
         </div>
 
-        <div className="mt-5 min-w-0 min-h-64 h-64 rounded-3xl bg-slate-50 p-4 ring-1 ring-slate-200 sm:h-72">
+        <div className="mt-5 min-w-0 min-h-64 h-64 rounded-3xl bg-slate-50 p-4 sm:h-72">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={trend}>
               <defs>
@@ -217,7 +217,7 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
         </div>
       </section>
 
-      <section className="mt-4 rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <section className="mt-4 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Operational highlights</p>
         <h2 className="mt-1 text-2xl font-semibold">Action cards</h2>
         <div className="mt-4 grid gap-3 xl:grid-cols-3">
@@ -244,7 +244,7 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
         {activeHighlight === "alerts" ? (
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             {alerts.map((alert) => (
-              <div key={alert.title} className="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
+              <div key={alert.title} className="rounded-2xl bg-slate-50 p-4">
                 <p className="font-semibold text-slate-900">{alert.title}</p>
                 <p className="mt-1 text-sm text-slate-600">{alert.detail}</p>
                 <p className="mt-2 text-xs font-semibold text-rose-600">{alert.priority} priority</p>
@@ -255,7 +255,7 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
       </section>
 
       <section className="mt-4 grid gap-4 xl:grid-cols-[1fr_1fr]">
-        <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <p className="text-sm text-slate-500">Upcoming modules</p>
           <h2 className="mt-1 text-xl font-semibold">Events, sports and calendar</h2>
           <div className="mt-4 space-y-3">
@@ -267,7 +267,7 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
                   setActiveModule(item.key);
                   onNavigate(item.linkTo);
                 }}
-                className="w-full rounded-2xl bg-slate-50 p-4 text-left ring-1 ring-slate-200 transition hover:bg-[#fff8dc]"
+                className="w-full rounded-2xl bg-slate-50 p-4 text-left transition hover:bg-[#fff8dc]"
               >
                 <p className="font-semibold text-slate-900">{item.title}</p>
                 <p className="mt-1 text-sm text-slate-600">{item.detail}</p>
@@ -276,7 +276,7 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
           </div>
         </article>
 
-        <article className="rounded-4xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <p className="text-sm text-slate-500">Timetable and substitution</p>
           <h2 className="mt-1 text-xl font-semibold">Automation status</h2>
           <div className="mt-4 space-y-3">
@@ -288,7 +288,7 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
                   setActiveModule(item.key);
                   onNavigate(item.linkTo);
                 }}
-                className="w-full rounded-2xl bg-slate-50 p-4 text-left ring-1 ring-slate-200 transition hover:bg-[#fff8dc]"
+                className="w-full rounded-2xl bg-slate-50 p-4 text-left transition hover:bg-[#fff8dc]"
               >
                 <p className="font-semibold text-slate-900">{item.title}</p>
                 <p className="mt-1 text-sm text-slate-600">{item.detail}</p>
