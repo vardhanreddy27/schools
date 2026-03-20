@@ -29,8 +29,8 @@ export default function HomeTab({ weekDays, today }) {
   return (
     <section className="mt-4 space-y-4">
       <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
-        <p className="text-sm text-slate-500">Present week</p>
-        <h2 className="mt-1 text-xl font-semibold">Inline calendar</h2>
+        <p className="text-sm text-slate-500">This week</p>
+        <h2 className="mt-1 text-xl font-semibold">Teacher calendar view</h2>
 
         <div className="mt-4 rounded-3xl bg-[#f7f8fb] p-3">
           <div className="grid grid-cols-7 gap-2">
@@ -89,7 +89,7 @@ export default function HomeTab({ weekDays, today }) {
         </article>
 
         <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
-          <p className="text-sm text-slate-500">Today overview</p>
+          <p className="text-sm text-slate-500">Today&apos;s overview</p>
           <h2 className="mt-1 text-xl font-semibold">What needs your attention</h2>
 
           <div className="mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:pb-0">

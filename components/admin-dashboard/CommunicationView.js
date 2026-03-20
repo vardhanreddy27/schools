@@ -34,8 +34,8 @@ const MORE_ITEMS = [
   },
   {
     id: "calendar",
-    title: "Calendar",
-    description: "Current month and upcoming events",
+    title: "Calendar View",
+    description: "Week-first calendar view with upcoming events",
     icon: CalendarDays,
   },
   {
@@ -461,7 +461,7 @@ export default function CommunicationView({
     return (
       <section className="mt-4">
         <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
-          <BackHeader title="Calendar" subtitle="Current month calendar with upcoming school events." onBack={() => setActiveSection("menu")} />
+          <BackHeader title="Admin calendar view" subtitle="Week-first calendar with upcoming school events." onBack={() => setActiveSection("menu")} />
           <div className="rounded-3xl bg-slate-50 p-4">
             <div className="flex items-center justify-between gap-3">
               <button
@@ -511,7 +511,7 @@ export default function CommunicationView({
           </div>
 
           <div className="mt-5 rounded-3xl bg-slate-50 p-4">
-            <p className="text-sm text-slate-500">Upcoming events</p>
+            <p className="text-sm text-slate-500">Calendar events this month</p>
             <div className="mt-3 space-y-3">
               {currentMonthEvents.length ? currentMonthEvents.map((item) => (
                 <div key={item.date + item.title} className="rounded-2xl bg-white p-4">

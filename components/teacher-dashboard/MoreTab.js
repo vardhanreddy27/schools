@@ -163,9 +163,16 @@ export function ProfileBottomSheet({
 
 export function ToolModal({ activeTool, onClose }) {
   const [selectedClass, setSelectedClass] = useState("9th B");
+  const [selectedSection, setSelectedSection] = useState("8th A");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [leaveReason, setLeaveReason] = useState("");
   const [quizTitle, setQuizTitle] = useState("");
   const [noteText, setNoteText] = useState("");
   const [announcementText, setAnnouncementText] = useState("");
+  const [leaveRequests, setLeaveRequests] = useState([
+    { id: 1, fromDate: "2026-03-22", toDate: "2026-03-23", days: 2, reason: "Medical appointment", status: "Pending" },
+  ]);
   const [quizItems, setQuizItems] = useState([
     { id: 1, classRef: "9th B", title: "Grammar Quiz - Tenses" },
     { id: 2, classRef: "8th A", title: "Vocabulary Quiz - Synonyms" },
@@ -182,24 +189,81 @@ export function ToolModal({ activeTool, onClose }) {
   const details = moreToolDetails[activeTool];
 
   const sectionPerformanceRows = [
-    { classRef: "8th A", completion: "84%", avgScore: "71%" },
-    { classRef: "9th B", completion: "79%", avgScore: "68%" },
-    { classRef: "10th A", completion: "88%", avgScore: "76%" },
+    { classRef: "8th A", completion: 84, avgScore: 71 },
+    { classRef: "9th B", completion: 79, avgScore: 68 },
+    { classRef: "10th A", completion: 88, avgScore: 76 },
   ];
 
-  const subjectMarks = [
-    { subject: "English", marks: 78 },
-    { subject: "Maths", marks: 66 },
-    { subject: "Science", marks: 72 },
-    { subject: "Social", marks: 69 },
-    { subject: "Hindi", marks: 74 },
-    { subject: "Telugu", marks: 81 },
+  const subjectMarksBySection = {
+    "8th A": [
+      { subject: "English", marks: 78 },
+      { subject: "Maths", marks: 66 },
+      { subject: "Science", marks: 72 },
+      { subject: "Social", marks: 69 },
+      { subject: "Hindi", marks: 74 },
+      { subject: "Telugu", marks: 81 },
+    ],
+    "9th B": [
+      { subject: "English", marks: 74 },
+      { subject: "Maths", marks: 64 },
+      { subject: "Science", marks: 70 },
+      { subject: "Social", marks: 66 },
+      { subject: "Hindi", marks: 72 },
+      { subject: "Telugu", marks: 76 },
+    ],
+    "10th A": [
+      { subject: "English", marks: 82 },
+      { subject: "Maths", marks: 71 },
+      { subject: "Science", marks: 78 },
+      { subject: "Social", marks: 75 },
+      { subject: "Hindi", marks: 77 },
+      { subject: "Telugu", marks: 84 },
+    ],
+  };
+
+  const sectionLeaderboard = [
+    { classRef: "8th A", avgScore: 76, attempts: 31, topper: "Aarav (96)" },
+    { classRef: "8th B", avgScore: 72, attempts: 28, topper: "Moksha (93)" },
+    { classRef: "9th A", avgScore: 80, attempts: 34, topper: "Karthik (97)" },
+    { classRef: "9th B", avgScore: 74, attempts: 30, topper: "Diya (95)" },
+    { classRef: "10th A", avgScore: 83, attempts: 33, topper: "Saanvi (98)" },
   ];
+
+  const leaveDays = (() => {
+    if (!fromDate || !toDate) return 0;
+    const start = new Date(fromDate);
+    const end = new Date(toDate);
+    if (end < start) return 0;
+    const dayMs = 24 * 60 * 60 * 1000;
+    return Math.floor((end - start) / dayMs) + 1;
+  })();
+
+  const activeSubjects = subjectMarksBySection[selectedSection] || [];
 
   function addQuiz() {
     if (!quizTitle.trim()) return;
     setQuizItems((prev) => [{ id: Date.now(), classRef: selectedClass, title: quizTitle.trim() }, ...prev]);
     setQuizTitle("");
+  }
+
+  function addLeaveRequest() {
+    if (!fromDate || !toDate || !leaveReason.trim() || !leaveDays) return;
+
+    setLeaveRequests((prev) => [
+      {
+        id: Date.now(),
+        fromDate,
+        toDate,
+        days: leaveDays,
+        reason: leaveReason.trim(),
+        status: "Pending",
+      },
+      ...prev,
+    ]);
+
+    setFromDate("");
+    setToDate("");
+    setLeaveReason("");
   }
 
   function addNote() {
@@ -218,39 +282,119 @@ export function ToolModal({ activeTool, onClose }) {
     setter((prev) => prev.filter((item) => item.id !== id));
   }
 
+  function CircularMetric({ label, value, color }) {
+    const degrees = Math.max(0, Math.min(100, value)) * 3.6;
+    return (
+      <div className="rounded-xl bg-white px-3 py-3 text-center ring-1 ring-slate-200">
+        <div
+          className="mx-auto flex h-20 w-20 items-center justify-center rounded-full"
+          style={{ background: `conic-gradient(${color} ${degrees}deg, #e2e8f0 ${degrees}deg)` }}
+        >
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-xs font-semibold text-slate-700">
+            {value}%
+          </div>
+        </div>
+        <p className="mt-2 text-xs font-semibold text-slate-700">{label}</p>
+      </div>
+    );
+  }
+
   function renderToolContent() {
     if (activeTool === "sectionPerformance") {
       return (
         <div className="mt-4 space-y-2">
           <p className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">Section progress</p>
-          {sectionPerformanceRows.map((row) => (
-            <div key={row.classRef} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-sm font-semibold text-slate-900">{row.classRef}</p>
-                <p className="text-xs font-semibold text-slate-600">{row.completion}</p>
-              </div>
-              <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200">
-                <div className="h-full rounded-full bg-[#f2b705]" style={{ width: row.completion }} />
-              </div>
-              <p className="mt-1 text-xs text-slate-600">Average score: {row.avgScore}</p>
-            </div>
-          ))}
+          <div className="grid gap-2">
+            {sectionPerformanceRows.map((row) => (
+              <button
+                key={row.classRef}
+                type="button"
+                onClick={() => setSelectedSection(row.classRef)}
+                className={`rounded-xl border px-3 py-2.5 text-left ${selectedSection === row.classRef ? "border-[#f2b705] bg-[#fff8dc]" : "border-slate-200 bg-slate-50"}`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-sm font-semibold text-slate-900">{row.classRef}</p>
+                  <p className="text-xs font-semibold text-slate-600">{row.completion}%</p>
+                </div>
+                <p className="mt-1 text-xs text-slate-600">Average score: {row.avgScore}%</p>
+              </button>
+            ))}
+          </div>
 
           <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">All subjects marks</p>
-            <div className="mt-2 space-y-2">
-              {subjectMarks.map((item) => (
-                <div key={item.subject}>
-                  <div className="flex items-center justify-between text-xs text-slate-700">
-                    <span>{item.subject}</span>
-                    <span>{item.marks}/100</span>
-                  </div>
-                  <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
-                    <div className="h-full rounded-full bg-emerald-500" style={{ width: `${item.marks}%` }} />
-                  </div>
-                </div>
+            <p className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">All subjects marks - {selectedSection}</p>
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {activeSubjects.map((item) => (
+                <CircularMetric key={item.subject} label={item.subject} value={item.marks} color="#16a34a" />
               ))}
             </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (activeTool === "leaveRequests") {
+      return (
+        <div className="mt-4 space-y-3">
+          <div className="grid gap-2 sm:grid-cols-2">
+            <div>
+              <label htmlFor="leave-from" className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">From</label>
+              <input
+                id="leave-from"
+                type="date"
+                value={fromDate}
+                onChange={(event) => setFromDate(event.target.value)}
+                className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm"
+              />
+            </div>
+            <div>
+              <label htmlFor="leave-to" className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">To</label>
+              <input
+                id="leave-to"
+                type="date"
+                value={toDate}
+                onChange={(event) => setToDate(event.target.value)}
+                className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm"
+              />
+            </div>
+          </div>
+
+          <div className="rounded-xl bg-[#fff8dc] px-3 py-2 text-sm text-[#8b6400]">
+            Leave days: <span className="font-semibold">{leaveDays || 0}</span>
+          </div>
+
+          <textarea
+            value={leaveReason}
+            onChange={(event) => setLeaveReason(event.target.value)}
+            rows={3}
+            placeholder="Reason for leave"
+            className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm"
+          />
+
+          <button
+            type="button"
+            onClick={addLeaveRequest}
+            disabled={!fromDate || !toDate || !leaveReason.trim() || !leaveDays}
+            className="w-full rounded-xl bg-[#f2b705] px-4 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Submit Leave Request
+          </button>
+
+          <div className="space-y-2">
+            {leaveRequests.map((item) => (
+              <div key={item.id} className="rounded-xl bg-slate-50 px-3 py-2.5 ring-1 ring-slate-200">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-semibold text-slate-800">
+                    {item.fromDate} to {item.toDate}
+                  </p>
+                  <span className="rounded-full bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
+                    {item.status}
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-slate-600">Days: {item.days}</p>
+                <p className="mt-1 text-sm text-slate-700">{item.reason}</p>
+              </div>
+            ))}
           </div>
         </div>
       );
@@ -287,6 +431,23 @@ export function ToolModal({ activeTool, onClose }) {
                 <button type="button" onClick={() => removeItem(setQuizItems, quiz.id)} className="text-xs font-semibold text-rose-600">Remove</button>
               </div>
             ))}
+          </div>
+
+          <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">Quiz leaderboard by section</p>
+            <div className="mt-2 space-y-2">
+              {sectionLeaderboard.map((row, index) => (
+                <div key={row.classRef} className="rounded-xl bg-slate-50 px-3 py-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm font-semibold text-slate-900">#{index + 1} {row.classRef}</p>
+                    <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200">
+                      Avg: {row.avgScore}%
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-600">Attempts: {row.attempts} | Topper: {row.topper}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       );

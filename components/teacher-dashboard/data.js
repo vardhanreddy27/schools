@@ -69,7 +69,7 @@ export const dashboardInsights = [
 
 export const moreTools = [
   { key: "sectionPerformance", title: "Section Performance", subtitle: "My subject by class/section", icon: UserCircle2 },
-  { key: "lessonPlanner", title: "Lesson Planner", subtitle: "Plan weekly delivery", icon: ClipboardCheck },
+  { key: "leaveRequests", title: "Leave Request", subtitle: "Apply leave with date range", icon: ClipboardCheck },
   { key: "quizCenter", title: "Add Lesson Quiz", subtitle: "Create and review quizzes", icon: FileText },
   { key: "notesCenter", title: "Class Notes", subtitle: "Add and manage notes", icon: Notebook },
   { key: "announcements", title: "Announcements", subtitle: "Send class updates", icon: Megaphone },
@@ -81,9 +81,9 @@ export const moreToolDetails = {
     title: "Section Performance",
     summary: "View your subject performance section-wise and spot classes that need remediation support.",
   },
-  lessonPlanner: {
-    title: "Lesson Planner",
-    summary: "Plan lesson flow by class, set outcomes, and track completion across weekly periods.",
+  leaveRequests: {
+    title: "Leave Request",
+    summary: "Pick from and to dates, auto-calculate leave days, and submit reason for approval.",
   },
   quizCenter: {
     title: "Add Lesson Quiz",
