@@ -19,7 +19,7 @@ export function MoreTab({ onOpenToolModal }) {
                 onClick={() => onOpenToolModal(tool.key)}
                 className="aspect-square rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4 text-left transition hover:bg-[var(--app-accent-soft)]"
               >
-                <Icon className="h-5 w-5 text-[#8b6400]" />
+                <Icon className="h-5 w-5 text-[var(--app-accent)]" />
                 <p className="mt-3 text-sm font-semibold text-slate-900">{tool.title}</p>
                 <p className="mt-1 text-xs text-slate-600">{tool.subtitle}</p>
               </button>
@@ -325,7 +325,7 @@ export function ToolModal({ activeTool, onClose }) {
             <p className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">All subjects marks - {selectedSection}</p>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
               {activeSubjects.map((item) => (
-                <CircularMetric key={item.subject} label={item.subject} value={item.marks} color="#16a34a" />
+                <CircularMetric key={item.subject} label={item.subject} value={item.marks} color="var(--app-accent)" />
               ))}
             </div>
           </div>
