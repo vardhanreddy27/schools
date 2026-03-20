@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { teacherSelfAttendance } from "./data";
@@ -36,10 +36,10 @@ function buildDraft(targetClass, session) {
 export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }) {
   const [attendanceDraft, setAttendanceDraft] = useState(null);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [touchStartX, setTouchStartX] = useState(null);
   const [dragStartX, setDragStartX] = useState(null);
   const [dragOffsetX, setDragOffsetX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const activePointerIdRef = useRef(null);
 
   const morningClass = classes[0] || null;
   const eveningClass = classes[1] || classes[0] || null;
@@ -123,39 +123,30 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
     closeAttendanceSheet();
   }
 
-  function handleTouchStart(event) {
-    setTouchStartX(event.changedTouches[0]?.clientX ?? null);
-  }
-
-  function handleTouchEnd(event) {
-    if (touchStartX === null || !attendanceDraft || allMarked) return;
-
-    const endX = event.changedTouches[0]?.clientX ?? touchStartX;
-    const deltaX = endX - touchStartX;
-
-    resolveSwipe(deltaX);
-
-    setTouchStartX(null);
-    setDragOffsetX(0);
-  }
-
   function handlePointerDown(event) {
     if (!attendanceDraft || allMarked) return;
+    activePointerIdRef.current = event.pointerId;
+    if (event.currentTarget.setPointerCapture) {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
     setIsDragging(true);
     setDragStartX(event.clientX);
   }
 
   function handlePointerMove(event) {
+    if (activePointerIdRef.current !== event.pointerId) return;
     if (!isDragging || dragStartX === null) return;
     setDragOffsetX(event.clientX - dragStartX);
   }
 
-  function handlePointerUp() {
+  function handlePointerUp(event) {
+    if (activePointerIdRef.current !== event.pointerId) return;
     if (!isDragging) return;
     resolveSwipe(dragOffsetX);
     setIsDragging(false);
     setDragStartX(null);
     setDragOffsetX(0);
+    activePointerIdRef.current = null;
   }
 
   return (
@@ -291,8 +282,6 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
             {!allMarked && activeStudent ? (
               <div className="mt-3 flex-1 space-y-3">
                 <div
-                  onTouchStart={handleTouchStart}
-                  onTouchEnd={handleTouchEnd}
                   onPointerDown={handlePointerDown}
                   onPointerMove={handlePointerMove}
                   onPointerUp={handlePointerUp}
