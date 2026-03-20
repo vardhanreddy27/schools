@@ -367,7 +367,7 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
                     className="rounded-xl bg-[var(--app-danger-soft)] px-4 py-3 text-sm font-semibold text-[var(--app-danger-text)] ring-1 ring-rose-200"
                     aria-label="Mark absent"
                   >
-                    ← Absent
+                    <span className="text-sm">&lt;</span> Absent
                   </button>
                   <button
                     type="button"
@@ -375,7 +375,7 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
                     className="rounded-xl bg-[var(--app-success-soft)] px-4 py-3 text-sm font-semibold text-[var(--app-success-text)] ring-1 ring-emerald-200"
                     aria-label="Mark present"
                   >
-                    Present →
+                    Present <span className="text-sm">&gt;</span>
                   </button>
                 </div>
               </div>
