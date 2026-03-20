@@ -160,96 +160,6 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
           </div>
         </div>
 
-        {attendanceDraft ? (
-          <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-sm font-semibold text-slate-900">
-                {attendanceDraft.session} attendance - Class {attendanceDraft.className} {attendanceDraft.section}
-              </p>
-              <span className="rounded-full bg-white px-2 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
-                {attendanceDraft.students.filter((student) => student.status).length}/{attendanceDraft.students.length}
-              </span>
-            </div>
-
-            {!allMarked && activeStudent ? (
-              <div className="mt-3 space-y-3">
-                <div
-                  onTouchStart={handleTouchStart}
-                  onTouchEnd={handleTouchEnd}
-                  className="rounded-2xl bg-white px-4 py-5 text-center shadow-[0_12px_24px_-20px_rgba(15,23,42,0.35)]"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-500">
-                    Roll No {activeStudent.rollNo}
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold text-slate-900">{activeStudent.name}</p>
-                  <p className="mt-2 text-sm text-slate-600">
-                    Class {attendanceDraft.className} - Section {attendanceDraft.section}
-                  </p>
-                  <p className="mt-3 text-xs text-slate-500">Swipe right for Present, swipe left for Absent</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => markCurrentStudent("Absent")}
-                    className="rounded-xl bg-rose-100 px-4 py-2.5 text-sm font-semibold text-rose-700"
-                  >
-                    Swipe Left: Absent
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => markCurrentStudent("Present")}
-                    className="rounded-xl bg-emerald-100 px-4 py-2.5 text-sm font-semibold text-emerald-700"
-                  >
-                    Swipe Right: Present
-                  </button>
-                </div>
-              </div>
-            ) : null}
-
-            {allMarked ? (
-              <div className="mt-3 rounded-xl bg-white p-3 ring-1 ring-slate-200">
-                <p className="text-sm font-semibold text-slate-900">Attendance overview</p>
-                <div className="mt-2 space-y-2">
-                  {attendanceDraft.students.map((student) => (
-                    <div key={student.rollNo} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
-                      <p className="text-sm text-slate-700">
-                        {student.rollNo} - {student.name}
-                      </p>
-                      <span
-                        className={`rounded-full px-2 py-1 text-xs font-semibold ring-1 ${
-                          student.status === "Present"
-                            ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
-                            : "bg-rose-50 text-rose-700 ring-rose-200"
-                        }`}
-                      >
-                        {student.status}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                  <p className="rounded-lg bg-emerald-50 px-3 py-2 font-semibold text-emerald-700">
-                    Present: {attendanceDraft.students.filter((student) => student.status === "Present").length}
-                  </p>
-                  <p className="rounded-lg bg-slate-100 px-3 py-2 font-semibold text-slate-700">
-                    Total strength: {attendanceDraft.students.length}
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={submitAttendance}
-                  className="mt-3 w-full rounded-xl bg-[#f2b705] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#d9a300]"
-                >
-                  Submit attendance
-                </button>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-
         <div className="mt-4 space-y-2">
           {todaysRecords.length === 0 ? (
             <p className="rounded-xl bg-slate-50 px-3 py-2 text-sm text-slate-600">
@@ -313,6 +223,110 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
           </button>
         </div>
       </article>
+
+      {attendanceDraft ? (
+        <div className="fixed inset-0 z-50 flex items-end bg-slate-950/40" onClick={() => setAttendanceDraft(null)}>
+          <div
+            className="w-full rounded-t-3xl bg-white p-4 shadow-2xl sm:p-5"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mx-auto h-1.5 w-16 rounded-full bg-slate-200" />
+            <div className="mt-3 flex items-center justify-between gap-2">
+              <p className="text-sm font-semibold text-slate-900">
+                {attendanceDraft.session} attendance - Class {attendanceDraft.className} {attendanceDraft.section}
+              </p>
+              <button
+                type="button"
+                onClick={() => setAttendanceDraft(null)}
+                className="rounded-full border border-slate-300 px-2.5 py-1 text-xs font-semibold text-slate-600"
+              >
+                Close
+              </button>
+            </div>
+
+            <span className="mt-2 inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
+              {attendanceDraft.students.filter((student) => student.status).length}/{attendanceDraft.students.length}
+            </span>
+
+            {!allMarked && activeStudent ? (
+              <div className="mt-3 space-y-3">
+                <div
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                  className="rounded-3xl bg-[linear-gradient(140deg,#ffffff_0%,#f8fafc_100%)] px-5 py-6 text-center shadow-[0_14px_34px_-24px_rgba(15,23,42,0.35)]"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-500">
+                    Roll No {activeStudent.rollNo}
+                  </p>
+                  <p className="mt-2 text-3xl font-semibold text-slate-900">{activeStudent.name}</p>
+                  <p className="mt-2 text-sm text-slate-600">
+                    Class {attendanceDraft.className} - Section {attendanceDraft.section}
+                  </p>
+                  <p className="mt-3 text-xs text-slate-500">Swipe right for Present, swipe left for Absent</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => markCurrentStudent("Absent")}
+                    className="rounded-xl bg-rose-100 px-4 py-2.5 text-sm font-semibold text-rose-700"
+                  >
+                    Left: Absent
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => markCurrentStudent("Present")}
+                    className="rounded-xl bg-emerald-100 px-4 py-2.5 text-sm font-semibold text-emerald-700"
+                  >
+                    Right: Present
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            {allMarked ? (
+              <div className="mt-3 rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200">
+                <p className="text-sm font-semibold text-slate-900">Attendance overview</p>
+                <div className="mt-2 space-y-2">
+                  {attendanceDraft.students.map((student) => (
+                    <div key={student.rollNo} className="flex items-center justify-between rounded-lg bg-white px-3 py-2">
+                      <p className="text-sm text-slate-700">
+                        {student.rollNo} - {student.name}
+                      </p>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-semibold ring-1 ${
+                          student.status === "Present"
+                            ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
+                            : "bg-rose-50 text-rose-700 ring-rose-200"
+                        }`}
+                      >
+                        {student.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                  <p className="rounded-lg bg-emerald-50 px-3 py-2 font-semibold text-emerald-700">
+                    Present: {attendanceDraft.students.filter((student) => student.status === "Present").length}
+                  </p>
+                  <p className="rounded-lg bg-white px-3 py-2 font-semibold text-slate-700">
+                    Total strength: {attendanceDraft.students.length}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={submitAttendance}
+                  className="mt-3 w-full rounded-xl bg-[#f2b705] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#d9a300]"
+                >
+                  Submit attendance
+                </button>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }
