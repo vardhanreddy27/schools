@@ -39,7 +39,8 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
   const [dragStartX, setDragStartX] = useState(null);
   const [dragOffsetX, setDragOffsetX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [swipeDirection, setSwipeDirection] = useState(0);
+  const [cardScale, setCardScale] = useState(1);
+  const [cardTransition, setCardTransition] = useState("transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease");
   const activePointerIdRef = useRef(null);
   const swipeLockRef = useRef(false);
 
@@ -101,17 +102,18 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
   function animateMark(status, direction) {
     if (!attendanceDraft || allMarked || swipeLockRef.current) return;
     swipeLockRef.current = true;
-    setSwipeDirection(direction);
     setIsDragging(false);
     setDragStartX(null);
-    setDragOffsetX(direction * 260);
+    setCardScale(1);
+    setCardTransition("transform 190ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 190ms ease");
+    setDragOffsetX(direction * 340);
 
     setTimeout(() => {
       markCurrentStudent(status);
       setDragOffsetX(0);
-      setSwipeDirection(0);
+      setCardTransition("transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease");
       swipeLockRef.current = false;
-    }, 180);
+    }, 210);
   }
 
   function resolveSwipe(deltaX) {
@@ -150,18 +152,23 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
     }
     setIsDragging(true);
     setDragStartX(event.clientX);
+    setCardScale(1.01);
+    setCardTransition("none");
   }
 
   function handlePointerMove(event) {
     if (activePointerIdRef.current !== event.pointerId) return;
     if (!isDragging || dragStartX === null) return;
-    setDragOffsetX(event.clientX - dragStartX);
+    const deltaX = event.clientX - dragStartX;
+    setDragOffsetX(Math.max(-220, Math.min(220, deltaX * 0.94)));
   }
 
   function handlePointerUp(event) {
     if (activePointerIdRef.current !== event.pointerId) return;
     if (!isDragging) return;
+    setCardScale(1);
     if (Math.abs(dragOffsetX) < 70) {
+      setCardTransition("transform 260ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease");
       setDragOffsetX(0);
     } else {
       resolveSwipe(dragOffsetX);
@@ -324,10 +331,11 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
                     onPointerUp={handlePointerUp}
                     onPointerCancel={handlePointerUp}
                     style={{
-                      transform: `translateX(${dragOffsetX}px) rotate(${Math.max(-14, Math.min(14, dragOffsetX / 12))}deg)`,
-                      transition: isDragging ? "none" : "transform 180ms cubic-bezier(0.22, 1, 0.36, 1)",
+                      transform: `translateX(${dragOffsetX}px) rotate(${Math.max(-12, Math.min(12, dragOffsetX / 14))}deg) scale(${cardScale})`,
+                      transition: cardTransition,
                       touchAction: "pan-y",
-                      opacity: 1 - Math.min(Math.abs(dragOffsetX) / 650, 0.35),
+                      opacity: 1 - Math.min(Math.abs(dragOffsetX) / 700, 0.3),
+                      willChange: "transform, opacity",
                     }}
                     className="relative rounded-3xl bg-[linear-gradient(140deg,#ffffff_0%,#f8fafc_100%)] px-5 py-7 text-center ring-1 ring-slate-200"
                   >
