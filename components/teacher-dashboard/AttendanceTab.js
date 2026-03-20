@@ -37,6 +37,9 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
   const [attendanceDraft, setAttendanceDraft] = useState(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [touchStartX, setTouchStartX] = useState(null);
+  const [dragStartX, setDragStartX] = useState(null);
+  const [dragOffsetX, setDragOffsetX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   const morningClass = classes[0] || null;
   const eveningClass = classes[1] || classes[0] || null;
@@ -92,6 +95,14 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
     });
   }
 
+  function resolveSwipe(deltaX) {
+    if (deltaX > 70) {
+      markCurrentStudent("Present");
+    } else if (deltaX < -70) {
+      markCurrentStudent("Absent");
+    }
+  }
+
   function submitAttendance() {
     if (!attendanceDraft || !allMarked) return;
 
@@ -122,13 +133,29 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
     const endX = event.changedTouches[0]?.clientX ?? touchStartX;
     const deltaX = endX - touchStartX;
 
-    if (deltaX > 40) {
-      markCurrentStudent("Present");
-    } else if (deltaX < -40) {
-      markCurrentStudent("Absent");
-    }
+    resolveSwipe(deltaX);
 
     setTouchStartX(null);
+    setDragOffsetX(0);
+  }
+
+  function handlePointerDown(event) {
+    if (!attendanceDraft || allMarked) return;
+    setIsDragging(true);
+    setDragStartX(event.clientX);
+  }
+
+  function handlePointerMove(event) {
+    if (!isDragging || dragStartX === null) return;
+    setDragOffsetX(event.clientX - dragStartX);
+  }
+
+  function handlePointerUp() {
+    if (!isDragging) return;
+    resolveSwipe(dragOffsetX);
+    setIsDragging(false);
+    setDragStartX(null);
+    setDragOffsetX(0);
   }
 
   return (
@@ -200,7 +227,7 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
         <div className="mt-4 space-y-3">
           <div className="rounded-2xl bg-slate-50 p-4">
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-xl bg-white px-3 py-3 shadow-[0_8px_20px_-16px_rgba(15,23,42,0.25)]">
+              <div className="rounded-xl bg-white px-3 py-3 ring-1 ring-slate-200">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Morning</p>
                   <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200">
@@ -210,7 +237,7 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
                 <p className="mt-2 text-sm text-slate-700">Check in: {teacherSelfAttendance.morning.checkIn}</p>
               </div>
 
-              <div className="rounded-xl bg-white px-3 py-3 shadow-[0_8px_20px_-16px_rgba(15,23,42,0.25)]">
+              <div className="rounded-xl bg-white px-3 py-3 ring-1 ring-slate-200">
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Afternoon</p>
                   <span className="rounded-full bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
@@ -239,7 +266,7 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
           onClick={closeAttendanceSheet}
         >
           <div
-            className={`flex w-full min-h-[55vh] max-h-[90vh] flex-col rounded-t-3xl bg-white p-4 shadow-2xl transition-transform duration-200 sm:p-5 ${sheetOpen ? "translate-y-0" : "translate-y-8"}`}
+            className={`flex w-full min-h-[55vh] max-h-[90vh] flex-col rounded-t-3xl bg-white p-4 transition-transform duration-200 sm:p-5 ${sheetOpen ? "translate-y-0" : "translate-y-8"}`}
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mx-auto h-1.5 w-16 rounded-full bg-slate-200" />
@@ -266,7 +293,12 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
                 <div
                   onTouchStart={handleTouchStart}
                   onTouchEnd={handleTouchEnd}
-                  className="rounded-3xl bg-[linear-gradient(140deg,#ffffff_0%,#f8fafc_100%)] px-5 py-7 text-center shadow-[0_14px_34px_-24px_rgba(15,23,42,0.35)]"
+                  onPointerDown={handlePointerDown}
+                  onPointerMove={handlePointerMove}
+                  onPointerUp={handlePointerUp}
+                  onPointerCancel={handlePointerUp}
+                  style={{ transform: `translateX(${dragOffsetX}px)`, transition: isDragging ? "none" : "transform 160ms ease", touchAction: "pan-y" }}
+                  className="rounded-3xl bg-[linear-gradient(140deg,#ffffff_0%,#f8fafc_100%)] px-5 py-7 text-center ring-1 ring-slate-200"
                 >
                   <div className="mx-auto flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200">
                     <Image src="/logo.png" alt="Student" width={44} height={44} className="object-contain" />
