@@ -300,13 +300,13 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
                   style={{ transform: `translateX(${dragOffsetX}px)`, transition: isDragging ? "none" : "transform 160ms ease", touchAction: "pan-y" }}
                   className="rounded-3xl bg-[linear-gradient(140deg,#ffffff_0%,#f8fafc_100%)] px-5 py-7 text-center ring-1 ring-slate-200"
                 >
-                  <div className="mx-auto w-full overflow-hidden rounded-xl bg-slate-100">
+                  <div className="mx-auto w-full overflow-hidden rounded-xl bg-transparent">
                     <Image
                       src={activeStudent.photo || "/student2.png"}
                       alt={activeStudent.name}
                       width={560}
                       height={360}
-                      className="h-56 w-full object-cover sm:h-64"
+                      className="h-56 w-full bg-transparent object-contain object-top sm:h-64"
                     />
                   </div>
                   <p className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-slate-500">
