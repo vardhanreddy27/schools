@@ -6,18 +6,18 @@ import { dayKey, statusStyles } from "./utils";
 
 const DUMMY_STUDENTS = {
   "class-8a": [
-    { rollNo: "01", name: "Aarav", photo: "/student2.png" },
+    { rollNo: "01", name: "Aarav", photo: "/student1.webp" },
     { rollNo: "02", name: "Diya", photo: "/student2.png" },
     { rollNo: "03", name: "Karthik", photo: "/student4.jpg" },
     { rollNo: "04", name: "Saanvi", photo: "/student5.webp" },
-    { rollNo: "05", name: "Vikram", photo: "/student4.jpg" },
+    { rollNo: "05", name: "Vikram", photo: "/student1.webp" },
   ],
   "class-5a": [
-    { rollNo: "11", name: "Moksha", photo: "/student5.webp" },
+    { rollNo: "11", name: "Moksha", photo: "/student1.webp" },
     { rollNo: "12", name: "Aditya", photo: "/student2.png" },
     { rollNo: "13", name: "Nithya", photo: "/student4.jpg" },
     { rollNo: "14", name: "Rahul", photo: "/student5.webp" },
-    { rollNo: "15", name: "Tara", photo: "/student2.png" },
+    { rollNo: "15", name: "Tara", photo: "/student1.webp" },
   ],
 };
 
