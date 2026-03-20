@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { Heart, X } from "lucide-react";
 import { teacherSelfAttendance } from "./data";
 import { dayKey, statusStyles } from "./utils";
 
@@ -39,7 +39,9 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
   const [dragStartX, setDragStartX] = useState(null);
   const [dragOffsetX, setDragOffsetX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [swipeDirection, setSwipeDirection] = useState(0);
   const activePointerIdRef = useRef(null);
+  const swipeLockRef = useRef(false);
 
   const morningClass = classes[0] || null;
   const eveningClass = classes[1] || classes[0] || null;
@@ -54,6 +56,7 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
   const eveningSubmitted = todaysRecords.some((entry) => entry.session === "Evening");
 
   const activeStudent = attendanceDraft ? attendanceDraft.students[attendanceDraft.currentIndex] : null;
+  const nextStudent = attendanceDraft ? attendanceDraft.students[attendanceDraft.currentIndex + 1] : null;
   const allMarked = attendanceDraft
     ? attendanceDraft.students.every((student) => student.status === "Present" || student.status === "Absent")
     : false;
@@ -95,11 +98,27 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
     });
   }
 
+  function animateMark(status, direction) {
+    if (!attendanceDraft || allMarked || swipeLockRef.current) return;
+    swipeLockRef.current = true;
+    setSwipeDirection(direction);
+    setIsDragging(false);
+    setDragStartX(null);
+    setDragOffsetX(direction * 260);
+
+    setTimeout(() => {
+      markCurrentStudent(status);
+      setDragOffsetX(0);
+      setSwipeDirection(0);
+      swipeLockRef.current = false;
+    }, 180);
+  }
+
   function resolveSwipe(deltaX) {
     if (deltaX > 70) {
-      markCurrentStudent("Present");
+      animateMark("Present", 1);
     } else if (deltaX < -70) {
-      markCurrentStudent("Absent");
+      animateMark("Absent", -1);
     }
   }
 
@@ -124,7 +143,7 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
   }
 
   function handlePointerDown(event) {
-    if (!attendanceDraft || allMarked) return;
+    if (!attendanceDraft || allMarked || swipeLockRef.current) return;
     activePointerIdRef.current = event.pointerId;
     if (event.currentTarget.setPointerCapture) {
       event.currentTarget.setPointerCapture(event.pointerId);
@@ -142,10 +161,13 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
   function handlePointerUp(event) {
     if (activePointerIdRef.current !== event.pointerId) return;
     if (!isDragging) return;
-    resolveSwipe(dragOffsetX);
+    if (Math.abs(dragOffsetX) < 70) {
+      setDragOffsetX(0);
+    } else {
+      resolveSwipe(dragOffsetX);
+    }
     setIsDragging(false);
     setDragStartX(null);
-    setDragOffsetX(0);
     activePointerIdRef.current = null;
   }
 
@@ -281,43 +303,79 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
 
             {!allMarked && activeStudent ? (
               <div className="mt-3 flex-1 space-y-3">
-                <div
-                  onPointerDown={handlePointerDown}
-                  onPointerMove={handlePointerMove}
-                  onPointerUp={handlePointerUp}
-                  onPointerCancel={handlePointerUp}
-                  style={{ transform: `translateX(${dragOffsetX}px)`, transition: isDragging ? "none" : "transform 160ms ease", touchAction: "pan-y" }}
-                  className="rounded-3xl bg-[linear-gradient(140deg,#ffffff_0%,#f8fafc_100%)] px-5 py-7 text-center ring-1 ring-slate-200"
-                >
-                  <div className="mx-auto w-full overflow-hidden rounded-xl bg-transparent">
-                    <Image
-                      src={activeStudent.photo || "/student2.png"}
-                      alt={activeStudent.name}
-                      width={560}
-                      height={360}
-                      className="h-56 w-full bg-transparent object-contain object-top sm:h-64"
-                    />
+                <div className="relative pt-2">
+                  {nextStudent ? (
+                    <div className="pointer-events-none absolute inset-x-2 top-6 rounded-3xl bg-white px-5 py-7 opacity-70 ring-1 ring-slate-200 [transform:scale(0.96)]">
+                      <div className="mx-auto w-full overflow-hidden rounded-xl bg-transparent">
+                        <Image
+                          src={nextStudent.photo || "/student2.png"}
+                          alt={nextStudent.name}
+                          width={560}
+                          height={360}
+                          className="h-52 w-full bg-transparent object-contain object-top"
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  <div
+                    onPointerDown={handlePointerDown}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
+                    onPointerCancel={handlePointerUp}
+                    style={{
+                      transform: `translateX(${dragOffsetX}px) rotate(${Math.max(-14, Math.min(14, dragOffsetX / 12))}deg)`,
+                      transition: isDragging ? "none" : "transform 180ms cubic-bezier(0.22, 1, 0.36, 1)",
+                      touchAction: "pan-y",
+                      opacity: 1 - Math.min(Math.abs(dragOffsetX) / 650, 0.35),
+                    }}
+                    className="relative rounded-3xl bg-[linear-gradient(140deg,#ffffff_0%,#f8fafc_100%)] px-5 py-7 text-center ring-1 ring-slate-200"
+                  >
+                    <div
+                      className="pointer-events-none absolute left-4 top-4 rounded-full border-2 border-rose-500 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-rose-600"
+                      style={{ opacity: dragOffsetX < 0 ? Math.min(Math.abs(dragOffsetX) / 120, 1) : 0 }}
+                    >
+                      Absent
+                    </div>
+                    <div
+                      className="pointer-events-none absolute right-4 top-4 rounded-full border-2 border-emerald-500 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-emerald-600"
+                      style={{ opacity: dragOffsetX > 0 ? Math.min(Math.abs(dragOffsetX) / 120, 1) : 0 }}
+                    >
+                      Present
+                    </div>
+
+                    <div className="mx-auto w-full overflow-hidden rounded-xl bg-transparent">
+                      <Image
+                        src={activeStudent.photo || "/student2.png"}
+                        alt={activeStudent.name}
+                        width={560}
+                        height={360}
+                        className="h-56 w-full bg-transparent object-contain object-top sm:h-64"
+                      />
+                    </div>
+                    <p className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-slate-500">
+                      Roll No {activeStudent.rollNo}
+                    </p>
+                    <p className="mt-2 text-3xl font-semibold text-slate-900">{activeStudent.name}</p>
                   </div>
-                  <p className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-slate-500">
-                    Roll No {activeStudent.rollNo}
-                  </p>
-                  <p className="mt-2 text-3xl font-semibold text-slate-900">{activeStudent.name}</p>
                 </div>
 
-                <div className="sticky bottom-0 mt-auto grid grid-cols-2 gap-2 bg-white/95 pt-2 backdrop-blur">
+                <div className="sticky bottom-0 mt-auto flex items-center justify-center gap-6 bg-white/95 pt-2 backdrop-blur">
                   <button
                     type="button"
-                    onClick={() => markCurrentStudent("Absent")}
-                    className="rounded-xl bg-[var(--app-danger-soft)] px-4 py-2.5 text-sm font-semibold text-[var(--app-danger-text)]"
+                    onClick={() => animateMark("Absent", -1)}
+                    className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--app-danger-soft)] text-[var(--app-danger-text)] ring-1 ring-rose-200"
+                    aria-label="Mark absent"
                   >
-                    ← Absent
+                    <X className="h-6 w-6" />
                   </button>
                   <button
                     type="button"
-                    onClick={() => markCurrentStudent("Present")}
-                    className="rounded-xl bg-[var(--app-success-soft)] px-4 py-2.5 text-sm font-semibold text-[var(--app-success-text)]"
+                    onClick={() => animateMark("Present", 1)}
+                    className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--app-success-soft)] text-[var(--app-success-text)] ring-1 ring-emerald-200"
+                    aria-label="Mark present"
                   >
-                    Present →
+                    <Heart className="h-6 w-6" />
                   </button>
                 </div>
               </div>
