@@ -92,11 +92,11 @@ export default function HomeTab({ weekDays, today }) {
           <p className="text-sm text-slate-500">Today&apos;s overview</p>
           <h2 className="mt-1 text-xl font-semibold">What needs your attention</h2>
 
-          <div className="mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible sm:pb-0">
+          <div className="mt-4 space-y-3">
             {dashboardInsights.map((item) => (
               <div
                 key={item.title}
-                className={`min-w-[calc((100%-2.1rem)/3.5)] snap-start rounded-2xl bg-linear-to-br p-3.5 ring-1 sm:min-w-0 sm:p-4 ${insightCardTone(item.tone)}`}
+                className={`rounded-2xl bg-linear-to-br p-3.5 ring-1 sm:p-4 ${insightCardTone(item.tone)}`}
               >
                 <p className="text-[10px] uppercase tracking-[0.09em] text-slate-500 sm:text-xs">{item.title}</p>
                 <p className="mt-1.5 text-xl font-semibold text-slate-900 sm:mt-2 sm:text-2xl">{item.value}</p>
