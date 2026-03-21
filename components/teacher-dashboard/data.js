@@ -1,9 +1,11 @@
 import {
+  BarChart3,
   BookOpen,
   ClipboardCheck,
   FileText,
   Megaphone,
   Notebook,
+  UserPlus,
   UserCircle2,
 } from "lucide-react";
 
@@ -68,9 +70,11 @@ export const dashboardInsights = [
 ];
 
 export const moreTools = [
-  { key: "sectionPerformance", title: "Section Performance", subtitle: "My subject by class/section", icon: UserCircle2 },
+  { key: "sectionPerformance", title: "Class Performance", subtitle: "My subject by class/section", icon: UserCircle2 },
+  { key: "enrollStudents", title: "Class Enrollment", subtitle: "Enroll and track class strength", icon: UserPlus },
   { key: "leaveRequests", title: "Leave Request", subtitle: "Apply leave with date range", icon: ClipboardCheck },
   { key: "quizCenter", title: "Add Lesson Quiz", subtitle: "Create and review quizzes", icon: FileText },
+  { key: "quizResults", title: "View Quiz Results", subtitle: "Open quiz-wise student scores", icon: BarChart3 },
   { key: "notesCenter", title: "Class Notes", subtitle: "Add and manage notes", icon: Notebook },
   { key: "announcements", title: "Announcements", subtitle: "Send class updates", icon: Megaphone },
   { key: "learningResources", title: "Learning Resources", subtitle: "Share notes and links", icon: BookOpen },
@@ -78,8 +82,12 @@ export const moreTools = [
 
 export const moreToolDetails = {
   sectionPerformance: {
-    title: "Section Performance",
+    title: "Class Performance",
     summary: "View your subject performance section-wise and spot classes that need remediation support.",
+  },
+  enrollStudents: {
+    title: "Class Enrollment",
+    summary: "Enroll students into a class and instantly see the updated class strength.",
   },
   leaveRequests: {
     title: "Leave Request",
@@ -88,6 +96,10 @@ export const moreToolDetails = {
   quizCenter: {
     title: "Add Lesson Quiz",
     summary: "Create quiz sets by class and section, then review all active and draft quizzes.",
+  },
+  quizResults: {
+    title: "View Quiz Results",
+    summary: "Open each quiz and check attempts, score split, and top student performance.",
   },
   notesCenter: {
     title: "Class Notes",

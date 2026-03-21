@@ -164,6 +164,10 @@ export function ProfileBottomSheet({
 export function ToolModal({ activeTool, onClose }) {
   const [selectedClass, setSelectedClass] = useState("9th B");
   const [selectedSection, setSelectedSection] = useState("8th A");
+  const [selectedEnrollClass, setSelectedEnrollClass] = useState("8th A");
+  const [enrollStudentName, setEnrollStudentName] = useState("");
+  const [enrollStudentRoll, setEnrollStudentRoll] = useState("");
+  const [selectedQuizResultId, setSelectedQuizResultId] = useState(null);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [leaveReason, setLeaveReason] = useState("");
@@ -183,6 +187,14 @@ export function ToolModal({ activeTool, onClose }) {
   const [announcements, setAnnouncements] = useState([
     { id: 1, classRef: "General", text: "Parents meeting on Friday at 3:30 PM." },
   ]);
+  const [enrolledByClass, setEnrolledByClass] = useState({
+    "8th A": [
+      { id: 1, name: "Aarav", roll: "01" },
+      { id: 2, name: "Diya", roll: "02" },
+    ],
+    "9th B": [{ id: 3, name: "Karthik", roll: "09" }],
+    "10th A": [{ id: 4, name: "Saanvi", roll: "04" }],
+  });
 
   if (!activeTool) return null;
 
@@ -229,6 +241,42 @@ export function ToolModal({ activeTool, onClose }) {
     { classRef: "10th A", avgScore: 83, attempts: 33, topper: "Saanvi (98)" },
   ];
 
+  const quizResultItems = [
+    {
+      id: 1,
+      classRef: "9th B",
+      title: "Quiz-1",
+      topic: "Tenses",
+      attempted: 29,
+      avgScore: 74,
+      topper: "Diya - 95",
+      pass: 24,
+      fail: 5,
+    },
+    {
+      id: 2,
+      classRef: "8th A",
+      title: "Quiz-2",
+      topic: "Synonyms",
+      attempted: 31,
+      avgScore: 76,
+      topper: "Aarav - 96",
+      pass: 28,
+      fail: 3,
+    },
+    {
+      id: 3,
+      classRef: "10th A",
+      title: "Quiz-1",
+      topic: "Comprehension",
+      attempted: 33,
+      avgScore: 83,
+      topper: "Saanvi - 98",
+      pass: 31,
+      fail: 2,
+    },
+  ];
+
   const leaveDays = (() => {
     if (!fromDate || !toDate) return 0;
     const start = new Date(fromDate);
@@ -239,6 +287,16 @@ export function ToolModal({ activeTool, onClose }) {
   })();
 
   const activeSubjects = subjectMarksBySection[selectedSection] || [];
+  const subjectColors = {
+    English: "#f59e0b",
+    Maths: "#3b82f6",
+    Science: "#16a34a",
+    Social: "#8b5cf6",
+    Hindi: "#ef4444",
+    Telugu: "#06b6d4",
+  };
+  const enrolledStudents = enrolledByClass[selectedEnrollClass] || [];
+  const selectedQuizResult = quizResultItems.find((item) => item.id === selectedQuizResultId) || null;
 
   function addQuiz() {
     if (!quizTitle.trim()) return;
@@ -276,6 +334,19 @@ export function ToolModal({ activeTool, onClose }) {
     if (!announcementText.trim()) return;
     setAnnouncements((prev) => [{ id: Date.now(), classRef: selectedClass, text: announcementText.trim() }, ...prev]);
     setAnnouncementText("");
+  }
+
+  function addEnrollment() {
+    if (!enrollStudentName.trim() || !enrollStudentRoll.trim()) return;
+    setEnrolledByClass((prev) => ({
+      ...prev,
+      [selectedEnrollClass]: [
+        ...(prev[selectedEnrollClass] || []),
+        { id: Date.now(), name: enrollStudentName.trim(), roll: enrollStudentRoll.trim() },
+      ],
+    }));
+    setEnrollStudentName("");
+    setEnrollStudentRoll("");
   }
 
   function removeItem(setter, id) {
@@ -325,9 +396,71 @@ export function ToolModal({ activeTool, onClose }) {
             <p className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">All subjects marks - {selectedSection}</p>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
               {activeSubjects.map((item) => (
-                <CircularMetric key={item.subject} label={item.subject} value={item.marks} color="var(--app-accent)" />
+                <CircularMetric
+                  key={item.subject}
+                  label={item.subject}
+                  value={item.marks}
+                  color={subjectColors[item.subject] || "var(--app-accent)"}
+                />
               ))}
             </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (activeTool === "enrollStudents") {
+      return (
+        <div className="mt-4 space-y-3">
+          <div>
+            <label htmlFor="enroll-class" className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">Class</label>
+            <select
+              id="enroll-class"
+              value={selectedEnrollClass}
+              onChange={(event) => setSelectedEnrollClass(event.target.value)}
+              className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm"
+            >
+              <option>8th A</option>
+              <option>9th B</option>
+              <option>10th A</option>
+            </select>
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            <input
+              value={enrollStudentName}
+              onChange={(event) => setEnrollStudentName(event.target.value)}
+              placeholder="Student name"
+              className="rounded-xl border border-slate-300 px-3 py-2.5 text-sm"
+            />
+            <input
+              value={enrollStudentRoll}
+              onChange={(event) => setEnrollStudentRoll(event.target.value)}
+              placeholder="Roll no"
+              className="rounded-xl border border-slate-300 px-3 py-2.5 text-sm"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={addEnrollment}
+            disabled={!enrollStudentName.trim() || !enrollStudentRoll.trim()}
+            className="w-full rounded-xl bg-[var(--app-accent)] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Enroll Student
+          </button>
+
+          <div className="rounded-xl bg-[var(--app-accent-soft)] px-3 py-2 text-sm text-[#8b6400]">
+            Total students in {selectedEnrollClass}: <span className="font-semibold">{enrolledStudents.length}</span>
+          </div>
+
+          <div className="space-y-2">
+            {enrolledStudents.map((student) => (
+              <div key={student.id} className="rounded-xl bg-slate-50 px-3 py-2.5 ring-1 ring-slate-200">
+                <p className="text-sm font-semibold text-slate-900">{student.name}</p>
+                <p className="text-xs text-slate-600">Roll: {student.roll}</p>
+              </div>
+            ))}
           </div>
         </div>
       );
@@ -453,6 +586,41 @@ export function ToolModal({ activeTool, onClose }) {
       );
     }
 
+    if (activeTool === "quizResults") {
+      return (
+        <div className="mt-4 space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.09em] text-slate-500">Tap a quiz to view results</p>
+          <div className="space-y-2">
+            {quizResultItems.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setSelectedQuizResultId(item.id)}
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-left"
+              >
+                <p className="text-sm font-semibold text-slate-900">{item.classRef} - {item.title}</p>
+                <p className="text-xs text-slate-600">Topic: {item.topic}</p>
+              </button>
+            ))}
+          </div>
+
+          {selectedQuizResult ? (
+            <div className="rounded-xl border border-slate-200 bg-white p-3">
+              <p className="text-sm font-semibold text-slate-900">{selectedQuizResult.classRef} - {selectedQuizResult.title}</p>
+              <p className="mt-1 text-xs text-slate-600">Topic: {selectedQuizResult.topic}</p>
+              <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
+                <p className="rounded-lg bg-slate-50 px-3 py-2 text-slate-700">Attempted: {selectedQuizResult.attempted}</p>
+                <p className="rounded-lg bg-slate-50 px-3 py-2 text-slate-700">Average: {selectedQuizResult.avgScore}%</p>
+                <p className="rounded-lg bg-emerald-50 px-3 py-2 text-emerald-700">Pass: {selectedQuizResult.pass}</p>
+                <p className="rounded-lg bg-rose-50 px-3 py-2 text-rose-700">Fail: {selectedQuizResult.fail}</p>
+              </div>
+              <p className="mt-2 text-sm text-slate-700">Topper: <span className="font-semibold">{selectedQuizResult.topper}</span></p>
+            </div>
+          ) : null}
+        </div>
+      );
+    }
+
     if (activeTool === "notesCenter") {
       return (
         <div className="mt-4">
@@ -535,14 +703,9 @@ export function ToolModal({ activeTool, onClose }) {
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4"
-      onClick={onClose}
-    >
-      <div
-        className="w-full max-w-md rounded-3xl bg-white p-5 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="fixed inset-0 z-50 flex items-end bg-slate-950/40" onClick={onClose}>
+      <div className="w-full rounded-t-3xl bg-white p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="mx-auto mb-3 h-1.5 w-16 rounded-full bg-slate-200" />
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-xl font-semibold text-slate-900">{details?.title || "Tool"}</h3>
           <button
