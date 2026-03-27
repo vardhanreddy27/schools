@@ -4,10 +4,16 @@ import Image from "next/image";
 import Swal from "sweetalert2";
 import { signIn, useSession } from "next-auth/react";
 
-export default function StudentLogin() {
+const roleTabs = [
+  { id: "student", label: "Student" },
+  { id: "parent", label: "Parent" },
+];
+
+export default function FamilyLogin() {
   const router = useRouter();
   const { data: session } = useSession();
-  const [studentId, setStudentId] = useState("");
+  const [activeRole, setActiveRole] = useState("student");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -18,17 +24,24 @@ export default function StudentLogin() {
     }
     if (session?.user?.userType === "admin") {
       router.push("/Admindashboard");
+      return;
+    }
+    if (session?.user?.userType === "parent") {
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("familyDashboardRole", "parent");
+      }
+      router.push("/Studentdashboard");
     }
   }, [session, router]);
 
   async function handleLogin(event) {
     event.preventDefault();
 
-    if (!studentId.trim() || !password.trim()) {
+    if (!userId.trim() || !password.trim()) {
       Swal.fire({
         icon: "warning",
         title: "Enter details",
-        text: "Please enter student ID and password.",
+        text: `Please enter ${activeRole} ID and password.`,
         confirmButtonColor: "#c79216",
       });
       return;
@@ -36,17 +49,32 @@ export default function StudentLogin() {
 
     setIsSubmitting(true);
 
-    const profile = {
-      name: `Student ${studentId.trim().slice(-2) || "01"}`,
+    const studentProfile = {
+      name: `Student ${userId.trim().slice(-2) || "01"}`,
       className: "8th",
       section: "A",
-      rollNumber: studentId.trim(),
+      rollNumber: userId.trim(),
       parentName: "Parent",
       contact: "+91 9XXXXXXXXX",
     };
 
+    const parentProfile = {
+      parentName: `Parent ${userId.trim().slice(-2) || "01"}`,
+      contact: "+91 9XXXXXXXXX",
+      childName: "Arjun Kumar",
+      childClass: "8th",
+      childSection: "A",
+      childRollNumber: userId.trim(),
+    };
+
     if (typeof window !== "undefined") {
-      window.localStorage.setItem("studentProfile", JSON.stringify(profile));
+      window.localStorage.setItem("familyDashboardRole", activeRole);
+
+      if (activeRole === "student") {
+        window.localStorage.setItem("studentProfile", JSON.stringify(studentProfile));
+      } else {
+        window.localStorage.setItem("parentProfile", JSON.stringify(parentProfile));
+      }
     }
 
     setIsSubmitting(false);
@@ -55,6 +83,10 @@ export default function StudentLogin() {
 
   async function handleGoogleLogin() {
     setIsSubmitting(true);
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("familyDashboardRole", activeRole);
+    }
 
     const googleResult = await signIn("google", {
       redirect: false,
@@ -85,35 +117,52 @@ export default function StudentLogin() {
               <Image src="/logo.png" alt="School Logo" width={60} height={60} className="object-contain" priority />
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-slate-950">Nagarjuna Model School</h1>
-            <p className="mt-4 text-sm/6 text-slate-600">Student app access for class schedule, attendance and academics.</p>
+            <p className="mt-4 text-sm/6 text-slate-600">Single family access for both student and parent.</p>
           </div>
         </div>
 
         <div className="px-5 pb-8 pt-6 sm:px-7 md:flex md:items-center md:px-10 md:py-12">
           <form className="w-full space-y-4" onSubmit={handleLogin}>
             <div className="mb-1">
-              <h2 className="text-2xl font-semibold text-slate-900">Student Sign In</h2>
-              <p className="mt-1 text-sm text-slate-500">Welcome back.</p>
+              <h2 className="text-2xl font-semibold text-slate-900">Family Sign In</h2>
+              <p className="mt-1 text-sm text-slate-500">One login for student and parent.</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1">
+              {roleTabs.map((roleItem) => (
+                <button
+                  key={roleItem.id}
+                  type="button"
+                  onClick={() => setActiveRole(roleItem.id)}
+                  className={`rounded-xl px-3 py-2 text-sm font-semibold transition-all ${
+                    activeRole === roleItem.id ? "bg-[#c79216] text-white" : "text-slate-600"
+                  }`}
+                >
+                  {roleItem.label}
+                </button>
+              ))}
             </div>
 
             <div>
-              <label htmlFor="student-id" className="text-sm font-medium text-slate-600">Student ID</label>
+              <label htmlFor="family-id" className="text-sm font-medium text-slate-600">
+                {activeRole === "student" ? "Student ID" : "Parent ID"}
+              </label>
               <input
-                id="student-id"
+                id="family-id"
                 type="text"
-                placeholder="Enter student ID"
+                placeholder={activeRole === "student" ? "Enter student ID" : "Enter parent ID"}
                 className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
                 autoComplete="username"
-                value={studentId}
-                onChange={(event) => setStudentId(event.target.value)}
+                value={userId}
+                onChange={(event) => setUserId(event.target.value)}
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="student-password" className="text-sm font-medium text-slate-600">Password</label>
+              <label htmlFor="family-password" className="text-sm font-medium text-slate-600">Password</label>
               <input
-                id="student-password"
+                id="family-password"
                 type="password"
                 placeholder="Enter password"
                 className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
@@ -153,7 +202,7 @@ export default function StudentLogin() {
               Sign in with Google
             </button>
 
-            <p className="text-center text-xs text-slate-500 md:text-sm">Secure access for students.</p>
+            <p className="text-center text-xs text-slate-500 md:text-sm">Single secure family access.</p>
           </form>
         </div>
       </div>
@@ -164,32 +213,49 @@ export default function StudentLogin() {
             <div className="mx-auto flex h-24 w-24 items-center justify-center overflow-hidden rounded-4xl bg-white shadow-[0_18px_40px_-28px_rgba(15,23,42,0.16)] ring-1 ring-slate-200">
               <Image src="/logo.png" alt="School Logo" width={58} height={58} className="object-contain" priority />
             </div>
-            <h1 className="mt-5 text-[2rem] font-semibold tracking-tight text-slate-950">NMS Student Login</h1>
-            <p className="mt-2 text-sm text-slate-500">Secure sign in for students</p>
+            <h1 className="mt-5 text-[2rem] font-semibold tracking-tight text-slate-950">NMS Family Login</h1>
+            <p className="mt-2 text-sm text-slate-500">One login for student and parent</p>
           </div>
         </div>
 
         <div className="flex items-start justify-center">
           <form className="w-full max-w-sm rounded-4xl bg-white p-5" onSubmit={handleLogin}>
             <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1">
+                {roleTabs.map((roleItem) => (
+                  <button
+                    key={roleItem.id}
+                    type="button"
+                    onClick={() => setActiveRole(roleItem.id)}
+                    className={`rounded-xl px-3 py-2 text-sm font-semibold transition-all ${
+                      activeRole === roleItem.id ? "bg-[#c79216] text-white" : "text-slate-600"
+                    }`}
+                  >
+                    {roleItem.label}
+                  </button>
+                ))}
+              </div>
+
               <div>
-                <label htmlFor="student-id-mobile" className="text-sm font-medium text-slate-600">Student ID</label>
+                <label htmlFor="family-id-mobile" className="text-sm font-medium text-slate-600">
+                  {activeRole === "student" ? "Student ID" : "Parent ID"}
+                </label>
                 <input
-                  id="student-id-mobile"
+                  id="family-id-mobile"
                   type="text"
-                  placeholder="Enter student ID"
+                  placeholder={activeRole === "student" ? "Enter student ID" : "Enter parent ID"}
                   className="mt-1.5 w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
                   autoComplete="username"
-                  value={studentId}
-                  onChange={(event) => setStudentId(event.target.value)}
+                  value={userId}
+                  onChange={(event) => setUserId(event.target.value)}
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="student-password-mobile" className="text-sm font-medium text-slate-600">Password</label>
+                <label htmlFor="family-password-mobile" className="text-sm font-medium text-slate-600">Password</label>
                 <input
-                  id="student-password-mobile"
+                  id="family-password-mobile"
                   type="password"
                   placeholder="Enter password"
                   className="mt-1.5 w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
@@ -234,32 +300,4 @@ export default function StudentLogin() {
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps(context) {
-  const { getServerSession } = await import("next-auth/next");
-  const { authOptions } = await import("@/lib/auth");
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (session?.user?.userType === "teacher") {
-    return {
-      redirect: {
-        destination: "/Teacherdashboard",
-        permanent: false,
-      },
-    };
-  }
-
-  if (session?.user?.userType === "admin") {
-    return {
-      redirect: {
-        destination: "/Admindashboard",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
 }

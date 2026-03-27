@@ -16,7 +16,6 @@ export const parentMenuItems = [
   { id: "attendance", label: "Attendance", icon: ClipboardCheck },
   { id: "timetable", label: "Timetable", icon: CalendarDays },
   { id: "academics", label: "Academics", icon: GraduationCap },
-  { id: "reports", label: "Reports", icon: TrendingDown },
 ];
 
 export const parentSummary = [
@@ -81,12 +80,12 @@ export const attendanceLog = [
 
 // Child's timetable
 export const childTimetable = [
-  { day: "Mon", periods: ["English", "Math", "Science", "Telugu", "Social", "Games"] },
-  { day: "Tue", periods: ["Math", "English", "Hindi", "Science", "Computer", "Library"] },
-  { day: "Wed", periods: ["Science", "Math", "English", "Social", "Telugu", "Art"] },
-  { day: "Thu", periods: ["English", "Science", "Math", "Hindi", "Social", "Games"] },
-  { day: "Fri", periods: ["Math", "English", "Computer", "Science", "Social", "Club"] },
-  { day: "Sat", periods: ["Assembly", "English", "Math", "Science", "Activity", "PT"] },
+  { day: "Mon", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
+  { day: "Tue", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
+  { day: "Wed", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
+  { day: "Thu", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
+  { day: "Fri", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
+  { day: "Sat", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
 ];
 
 // Upcoming tests

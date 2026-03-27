@@ -11,7 +11,7 @@ export default function Home() {
         <h1 className="mt-5 text-center text-3xl font-semibold text-slate-950 sm:text-4xl">Nagarjuna Model School</h1>
         <p className="mt-2 text-center text-sm text-slate-500">Choose your portal to continue.</p>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link href="/Admin_login" className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left transition hover:bg-[#fff4d6]">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Admin</p>
             <p className="mt-2 text-xl font-semibold text-slate-900">Admin login</p>
@@ -25,15 +25,9 @@ export default function Home() {
           </Link>
 
           <Link href="/Student_login" className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left transition hover:bg-[#fff4d6]">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Student</p>
-            <p className="mt-2 text-xl font-semibold text-slate-900">Student login</p>
-            <p className="mt-1 text-sm text-slate-600">Schedule, attendance and academic progress.</p>
-          </Link>
-
-          <Link href="/Parent_login" className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left transition hover:bg-[#fff4d6]">
-            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Parent</p>
-            <p className="mt-2 text-xl font-semibold text-slate-900">Parent login</p>
-            <p className="mt-1 text-sm text-slate-600">Monitor child's progress and performance.</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Family</p>
+            <p className="mt-2 text-xl font-semibold text-slate-900">Student/Parent login</p>
+            <p className="mt-1 text-sm text-slate-600">Single login for student access and parent monitoring.</p>
           </Link>
         </div>
       </section>

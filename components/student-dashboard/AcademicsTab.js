@@ -1,8 +1,61 @@
+import { useState } from "react";
 import { studentAssignments, subjectProgress, upcomingTests } from "@/components/student-dashboard/data";
 
+const quizSubjects = ["Math", "Telugu", "English", "Science", "Social", "Games"];
+
+function openQuizApp(subject) {
+  const quizUrl = new URL("https://rizzrunner.vercel.app/");
+  quizUrl.searchParams.set("subject", subject);
+  quizUrl.searchParams.set("source", "nms-student");
+
+  // Use same-window navigation to keep the transition app-like in PWA mode.
+  window.location.assign(quizUrl.toString());
+}
+
 export default function AcademicsTab() {
+  const [selectedQuizSubject, setSelectedQuizSubject] = useState(quizSubjects[0]);
+
   return (
     <section className="mt-4 grid gap-4 xl:grid-cols-[1fr_1fr]">
+      <article className="xl:col-span-2 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
+        <p className="text-sm text-slate-500">Practice quizzes</p>
+        <h2 className="mt-1 text-2xl font-semibold">Select subject and start quiz</h2>
+
+        <div className="mt-4 grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
+          {quizSubjects.map((subject) => {
+            const active = selectedQuizSubject === subject;
+
+            return (
+              <button
+                key={subject}
+                type="button"
+                onClick={() => setSelectedQuizSubject(subject)}
+                className={`rounded-2xl border px-3 py-3 text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
+                  active
+                    ? "border-[#c79216] bg-[#fff4d6] text-[#8b6400]"
+                    : "border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 hover:bg-white"
+                }`}
+              >
+                {subject}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-slate-50 p-3">
+          <p className="text-sm text-slate-700">
+            Selected: <span className="font-semibold text-slate-950">{selectedQuizSubject}</span>
+          </p>
+          <button
+            type="button"
+            onClick={() => openQuizApp(selectedQuizSubject)}
+            className="rounded-full bg-[#c79216] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_-18px_rgba(199,146,22,0.8)] transition-all duration-200 hover:bg-[#b07e10] active:scale-[0.98]"
+          >
+            Start {selectedQuizSubject} Quiz
+          </button>
+        </div>
+      </article>
+
       <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Subject performance</p>
         <h2 className="mt-1 text-2xl font-semibold">Syllabus and score</h2>
