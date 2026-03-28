@@ -3,12 +3,14 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function Admin_login() {
   const router = useRouter();
   const { data: session } = useSession();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const unauthorizedMessage = router.query.error === "UnauthorizedEmail"
@@ -52,11 +54,17 @@ export default function Admin_login() {
     setIsSubmitting(false);
 
     if (result?.error) {
-      setErrorMessage(result.error);
+      const authError = String(result.error || "");
+      const invalidCredentialsMessage = "Incorrect user id or password";
+      const normalizedMessage = authError === "CredentialsSignin" || authError.toLowerCase().includes("invalid user id or password")
+        ? invalidCredentialsMessage
+        : authError;
+
+      setErrorMessage(normalizedMessage);
       Swal.fire({
         icon: "error",
         title: "Sign in failed",
-        text: result.error,
+        text: normalizedMessage,
         confirmButtonColor: "#c79216",
       });
       return;
@@ -117,16 +125,26 @@ export default function Admin_login() {
                 <label htmlFor="password" className="text-sm font-medium text-slate-600">
                   Password
                 </label>
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  className="mt-1.5 w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  required
-                />
+                <div className="relative mt-1.5">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 pr-11 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    className="absolute inset-y-0 right-3 inline-flex items-center text-slate-500 hover:text-slate-700"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                  </button>
+                </div>
               </div>
 
               {errorMessage ? (
@@ -216,16 +234,26 @@ export default function Admin_login() {
               <label htmlFor="password-desktop" className="text-sm font-medium text-slate-600">
                 Password
               </label>
-              <input
-                id="password-desktop"
-                type="password"
-                placeholder="Enter your password"
-                className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
-                autoComplete="current-password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-              />
+              <div className="relative mt-1.5">
+                <input
+                  id="password-desktop"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 pr-11 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                  className="absolute inset-y-0 right-3 inline-flex items-center text-slate-500 hover:text-slate-700"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
             </div>
 
             {errorMessage ? (

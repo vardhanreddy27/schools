@@ -8,15 +8,26 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
   const isAdminInstallContext = router.pathname === "/Admin_login";
   const isTeacherInstallContext = router.pathname === "/Teacher_login" || router.pathname === "/Teacherdashboard";
+  const isParentInstallContext = router.pathname === "/Parent_login" || router.pathname === "/Parentdashboard";
+  const isStudentInstallContext =
+    router.pathname === "/Student_login" ||
+    router.pathname === "/Studentdashboard" ||
+    router.pathname === "/Student_quiz";
   const appTitle = isAdminInstallContext
     ? "NMS ADMIN"
     : isTeacherInstallContext
       ? "NMS TEACHERS"
+      : isParentInstallContext || isStudentInstallContext
+        ? "NMS Parents"
       : "Nagarjuna Model School";
   const manifestPath = isAdminInstallContext
     ? "/manifest-admin.webmanifest"
     : isTeacherInstallContext
       ? "/manifest-teacher.webmanifest"
+      : isParentInstallContext
+        ? "/manifest-parent.webmanifest"
+        : isStudentInstallContext
+          ? "/manifest-student.webmanifest"
       : "/manifest.webmanifest";
 
   useEffect(() => {

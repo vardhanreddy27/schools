@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { signIn, useSession } from "next-auth/react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const roleTabs = [
   { id: "student", label: "Student" },
@@ -15,6 +16,7 @@ export default function FamilyLogin() {
   const [activeRole, setActiveRole] = useState("student");
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -161,16 +163,26 @@ export default function FamilyLogin() {
 
             <div>
               <label htmlFor="family-password" className="text-sm font-medium text-slate-600">Password</label>
-              <input
-                id="family-password"
-                type="password"
-                placeholder="Enter password"
-                className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
-                autoComplete="current-password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-              />
+              <div className="relative mt-1.5">
+                <input
+                  id="family-password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter password"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 pr-11 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                  className="absolute inset-y-0 right-3 inline-flex items-center text-slate-500 hover:text-slate-700"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
             </div>
 
             <button
@@ -254,16 +266,26 @@ export default function FamilyLogin() {
 
               <div>
                 <label htmlFor="family-password-mobile" className="text-sm font-medium text-slate-600">Password</label>
-                <input
-                  id="family-password-mobile"
-                  type="password"
-                  placeholder="Enter password"
-                  className="mt-1.5 w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  required
-                />
+                <div className="relative mt-1.5">
+                  <input
+                    id="family-password-mobile"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter password"
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 pr-11 text-sm text-slate-900 outline-none focus:border-[#c79216] focus:ring-4 focus:ring-[#fff4d6]"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    className="absolute inset-y-0 right-3 inline-flex items-center text-slate-500 hover:text-slate-700"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <button

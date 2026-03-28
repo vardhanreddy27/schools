@@ -1,10 +1,16 @@
-const CACHE_NAME = "nms-pwa-v1";
+const CACHE_NAME = "nms-pwa-v2";
 const STATIC_ASSETS = [
   "/",
   "/Admin_login",
+  "/Teacher_login",
+  "/Student_login",
+  "/Parent_login",
   "/logo.png",
   "/manifest.webmanifest",
-  "/manifest-admin.webmanifest"
+  "/manifest-admin.webmanifest",
+  "/manifest-teacher.webmanifest",
+  "/manifest-parent.webmanifest",
+  "/manifest-student.webmanifest"
 ];
 
 self.addEventListener("install", (event) => {
@@ -28,7 +34,15 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+
   if (event.request.method !== "GET") {
+    return;
+  }
+
+  // Never cache auth/api responses to avoid stale sessions and CSRF tokens in PWA mode.
+  if (url.origin === self.location.origin && (url.pathname.startsWith("/api/") || url.pathname.startsWith("/_next/"))) {
+    event.respondWith(fetch(event.request));
     return;
   }
 
@@ -42,7 +56,7 @@ self.addEventListener("fetch", (event) => {
             return cachedResponse;
           }
 
-          return caches.match("/Admin_login");
+          return caches.match("/");
         })
     );
     return;
@@ -50,6 +64,16 @@ self.addEventListener("fetch", (event) => {
 
   // Only cache http/https requests
   if (!event.request.url.startsWith("http://") && !event.request.url.startsWith("https://")) {
+    return;
+  }
+
+  const isStaticAssetRequest =
+    url.origin === self.location.origin
+    && (STATIC_ASSETS.includes(url.pathname)
+      || /\.(?:js|css|png|jpg|jpeg|svg|webp|ico|woff2?|ttf|eot|json)$/i.test(url.pathname));
+
+  if (!isStaticAssetRequest) {
+    event.respondWith(fetch(event.request));
     return;
   }
 
