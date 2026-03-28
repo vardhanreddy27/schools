@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { signOut } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { UserCircle2 } from "lucide-react";
 import { authOptions } from "@/lib/auth";
 import { TeacherSidebar, TeacherBottomNav } from "@/components/teacher-dashboard/TeacherNav";
@@ -148,7 +149,9 @@ export default function TeacherDashboard({ user }) {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3 lg:hidden">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#c79216] text-base font-bold text-white">N</div>
+                    <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
+                      <Image src="/logo.png" alt="NMS Logo" width={34} height={34} className="object-contain" priority />
+                    </div>
                     <div>
                       <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
                       <p className="text-sm text-slate-500">Teacher Workspace</p>

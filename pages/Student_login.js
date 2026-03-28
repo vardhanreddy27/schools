@@ -113,7 +113,7 @@ export default function FamilyLogin() {
       <div className="hidden w-full overflow-hidden bg-white shadow-none md:grid md:min-h-162.5 md:max-w-6xl md:grid-cols-2 md:rounded-3xl md:border md:border-slate-200 md:shadow-[0_24px_70px_-44px_rgba(15,23,42,0.22)]">
         <div className="relative overflow-hidden bg-white px-6 pb-14 pt-10 text-slate-900 sm:px-8 md:flex md:items-center md:px-10 md:py-14">
           <div className="relative z-10 mx-auto max-w-70 text-center">
-            <div className="mx-auto mb-5 flex h-24 w-24 items-center justify-center overflow-hidden rounded-4xl bg-white shadow-[0_18px_40px_-28px_rgba(15,23,42,0.16)] ring-1 ring-slate-200">
+            <div className="mx-auto mb-5 flex h-24 w-24 items-center justify-center overflow-hidden rounded-4xl bg-white">
               <Image src="/logo.png" alt="School Logo" width={60} height={60} className="object-contain" priority />
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-slate-950">Nagarjuna Model School</h1>
@@ -210,7 +210,7 @@ export default function FamilyLogin() {
       <div className="grid min-h-dvh w-full grid-rows-[0.92fr_1.08fr] bg-white px-6 pb-[calc(env(safe-area-inset-bottom)+1.75rem)] pt-[calc(env(safe-area-inset-top)+1.75rem)] md:hidden">
         <div className="flex items-center justify-center">
           <div className="w-full max-w-xs text-center">
-            <div className="mx-auto flex h-24 w-24 items-center justify-center overflow-hidden rounded-4xl bg-white shadow-[0_18px_40px_-28px_rgba(15,23,42,0.16)] ring-1 ring-slate-200">
+            <div className="mx-auto flex h-24 w-24 items-center justify-center overflow-hidden rounded-4xl bg-white">
               <Image src="/logo.png" alt="School Logo" width={58} height={58} className="object-contain" priority />
             </div>
             <h1 className="mt-5 text-[2rem] font-semibold tracking-tight text-slate-950">NMS Family Login</h1>

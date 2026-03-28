@@ -1,6 +1,7 @@
 import { signOut } from "next-auth/react";
 import { Search } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
+import Image from "next/image";
 import Swal from "sweetalert2";
 import AttendanceView from "@/components/admin-dashboard/AttendanceView";
 import CommunicationView from "@/components/admin-dashboard/CommunicationView";
@@ -194,7 +195,9 @@ export default function AdminDashboard({ user = {} }) {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3 lg:hidden">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f2b705] text-base font-bold text-white">N</div>
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
+                    <Image src="/logo.png" alt="NMS Logo" width={34} height={34} className="object-contain" priority />
+                  </div>
                   <div>
                     <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
                     <p className="text-sm text-slate-500">Principal Dashboard</p>

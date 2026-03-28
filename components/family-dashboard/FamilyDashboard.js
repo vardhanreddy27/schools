@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { UserCircle2, X } from "lucide-react";
+import Image from "next/image";
 import HomeTab from "@/components/student-dashboard/HomeTab";
 import AttendanceTab from "@/components/student-dashboard/AttendanceTab";
 import TimetableTab from "@/components/student-dashboard/TimetableTab";
@@ -67,7 +68,9 @@ function FamilySidebar({ activeRole, activeMenu, onRoleChange, onMenuChange, onL
     <aside className="hidden w-72 shrink-0 bg-slate-950 text-slate-100 lg:flex lg:flex-col">
       <div className="px-7 pb-4 pt-8">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-(--app-accent) text-lg font-bold text-white">N</div>
+          <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
+            <Image src="/logo.png" alt="NMS Logo" width={42} height={42} className="object-contain" priority />
+          </div>
           <div>
             <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
             <p className="text-sm text-slate-400">Family App</p>
@@ -256,7 +259,9 @@ export default function FamilyDashboard({ initialRole = "student" }) {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3 lg:hidden">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#c79216] text-base font-bold text-white">N</div>
+                    <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
+                      <Image src="/logo.png" alt="NMS Logo" width={34} height={34} className="object-contain" priority />
+                    </div>
                     <div>
                       <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
                       <p className="text-sm text-slate-500">{roleConfig[activeRole].title}</p>
