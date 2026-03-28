@@ -4,12 +4,9 @@ import { studentAssignments, subjectProgress, upcomingTests } from "@/components
 const quizSubjects = ["Math", "Telugu", "English", "Science", "Social", "Games"];
 
 function openQuizApp(subject) {
-  const quizUrl = new URL("https://rizzrunner.vercel.app/");
-  quizUrl.searchParams.set("subject", subject);
-  quizUrl.searchParams.set("source", "nms-student");
-
-  // Use same-window navigation to keep the transition app-like in PWA mode.
-  window.location.assign(quizUrl.toString());
+  const quizShellUrl = new URL("/Student_quiz", window.location.origin);
+  quizShellUrl.searchParams.set("subject", subject);
+  window.location.assign(quizShellUrl.toString());
 }
 
 export default function AcademicsTab() {
