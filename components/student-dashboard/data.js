@@ -142,12 +142,12 @@ export const attendanceLog = [
 ];
 
 export const studentTimetable = [
-  { day: "Mon", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
-  { day: "Tue", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
-  { day: "Wed", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
-  { day: "Thu", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
-  { day: "Fri", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
-  { day: "Sat", periods: ["Math", "Telugu", "English", "Science", "Social", "Games"] },
+  { day: "Mon", periods: ["Math", "Telugu", "English", "Science", "Social", "Games", "Hindi"] },
+  { day: "Tue", periods: ["Math", "Telugu", "English", "Science", "Social", "Games", "Hindi"] },
+  { day: "Wed", periods: ["Math", "Telugu", "English", "Science", "Social", "Games", "Hindi"] },
+  { day: "Thu", periods: ["Math", "Telugu", "English", "Science", "Social", "Games", "Hindi"] },
+  { day: "Fri", periods: ["Math", "Telugu", "English", "Science", "Social", "Games", "Hindi"] },
+  { day: "Sat", periods: ["Math", "Telugu", "English", "Science", "Social", "Games", "Hindi"] },
 ];
 
 export const upcomingTests = [
