@@ -25,14 +25,14 @@ export const studentSummary = [
 
 export const studentTodaySchedule = [
   { period: "P1", time: "08:40 AM", subject: "English", teacher: "Ms. Sowmya" },
-  { period: "P2", time: "09:35 AM", subject: "Mathematics", teacher: "Mr. Rakesh" },
+  { period: "P2", time: "09:35 AM", subject: "Maths", teacher: "Mr. Rakesh" },
   { period: "P3", time: "10:30 AM", subject: "Science", teacher: "Ms. Nisha" },
   { period: "P5", time: "12:45 PM", subject: "Social", teacher: "Mr. Harish" },
 ];
 
 export const studentAssignments = [
   { id: 1, subject: "English", title: "Essay writing", dueDate: "2026-03-28", status: "Pending" },
-  { id: 2, subject: "Mathematics", title: "Algebra worksheet", dueDate: "2026-03-29", status: "Pending" },
+  { id: 2, subject: "Maths", title: "Algebra worksheet", dueDate: "2026-03-29", status: "Pending" },
   { id: 3, subject: "Science", title: "Digestive system diagram", dueDate: "2026-03-30", status: "Pending" },
   { id: 4, subject: "Telugu", title: "Poem reading", dueDate: "2026-03-27", status: "Submitted" },
 ];
@@ -70,7 +70,7 @@ export const studentTimetable = [
 ];
 
 export const upcomingTests = [
-  { id: 1, subject: "Mathematics", chapter: "Linear Equations", date: "2026-03-28", syllabus: "Exercises 5.1 to 5.3" },
+  { id: 1, subject: "Maths", chapter: "Linear Equations", date: "2026-03-28", syllabus: "Exercises 5.1 to 5.3" },
   { id: 2, subject: "Science", chapter: "Nutrition in Animals", date: "2026-03-31", syllabus: "Chapter 7 full" },
   { id: 3, subject: "English", chapter: "Prose + Grammar", date: "2026-04-03", syllabus: "Lesson 4 and tenses" },
 ];

@@ -37,7 +37,7 @@ export const childInfo = {
 // Pending homework - shows what's due when
 export const pendingHomework = [
   { id: 1, subject: "English", title: "Essay writing on 'My School'", dueDate: "2026-03-28", priority: "high", description: "Write 500 words essay" },
-  { id: 2, subject: "Mathematics", title: "Algebra worksheet - Equations", dueDate: "2026-03-29", priority: "high", description: "Complete exercises 5.1 to 5.3" },
+  { id: 2, subject: "Maths", title: "Algebra worksheet - Equations", dueDate: "2026-03-29", priority: "high", description: "Complete exercises 5.1 to 5.3" },
   { id: 3, subject: "Science", title: "Digestive system diagram", dueDate: "2026-03-30", priority: "medium", description: "Labeled diagram with explanation" },
   { id: 4, subject: "Social", title: "Chapter notes - Climate", dueDate: "2026-03-31", priority: "medium", description: "Complete chapter 12 handwritten notes" },
 ];
@@ -45,7 +45,7 @@ export const pendingHomework = [
 // Subject performance - SHOWS WHERE CHILD IS LACKING
 export const subjectPerformance = [
   { subject: "English", score: 78, target: 85, completion: 82, trend: "up", status: "good" },
-  { subject: "Mathematics", score: 62, target: 80, completion: 76, trend: "down", status: "weak" }, // WEAK
+  { subject: "Maths", score: 62, target: 80, completion: 76, trend: "down", status: "weak" }, // WEAK
   { subject: "Science", score: 81, target: 85, completion: 80, trend: "up", status: "good" },
   { subject: "Social", score: 68, target: 80, completion: 73, trend: "down", status: "weak" }, // WEAK
   { subject: "Hindi", score: 80, target: 85, completion: 84, trend: "stable", status: "good" },
@@ -54,7 +54,7 @@ export const subjectPerformance = [
 
 // Performance alerts for parent
 export const performanceAlerts = [
-  { type: "weak-subject", subject: "Mathematics", score: 62, message: "Math score dropped 8 points. Focus needed.", severity: "high" },
+  { type: "weak-subject", subject: "Maths", score: 62, message: "Math score dropped 8 points. Focus needed.", severity: "high" },
   { type: "weak-subject", subject: "Social", score: 68, message: "Social Science is below average. Review notes.", severity: "high" },
   { type: "pending-homework", subject: "English", message: "Essay due tomorrow - not yet submitted", severity: "medium" },
   { type: "attendance", message: "2 absences this month - monitor carefully", severity: "medium" },
@@ -90,7 +90,7 @@ export const childTimetable = [
 
 // Upcoming tests
 export const upcomingTests = [
-  { id: 1, subject: "Mathematics", chapter: "Linear Equations", date: "2026-03-28", syllabus: "Exercises 5.1 to 5.3", difficulty: "High", needsAttention: true },
+  { id: 1, subject: "Maths", chapter: "Linear Equations", date: "2026-03-28", syllabus: "Exercises 5.1 to 5.3", difficulty: "High", needsAttention: true },
   { id: 2, subject: "Science", chapter: "Nutrition in Animals", date: "2026-03-31", syllabus: "Chapter 7 full", difficulty: "Medium" },
   { id: 3, subject: "English", chapter: "Prose + Grammar", date: "2026-04-03", syllabus: "Lesson 4 and tenses", difficulty: "Medium" },
 ];
@@ -100,7 +100,7 @@ export const performanceInsights = [
   {
     title: "Areas Needing Improvement",
     items: [
-      "Mathematics: Score dropped from 70 to 62 - focus on equations and algebra",
+      "Maths: Score dropped from 70 to 62 - focus on equations and algebra",
       "Social Studies: Consistent underperformance (68%) - needs structured study plan",
     ],
     severity: "high",

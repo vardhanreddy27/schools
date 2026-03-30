@@ -53,7 +53,7 @@ export default function AdminDashboard({ user = {} }) {
       { tab: "approvals", title: "Leave Approvals", text: "start date end date approve reject" },
       { tab: "communication", title: "More", text: "alerts teachers performance class performance calendar events results sports competitions" },
       { tab: "communication", title: "Teachers Performance", text: "attendance syllabus activity participation" },
-      { tab: "communication", title: "Class Performance", text: "telugu english hindi mathematics science social progress" },
+      { tab: "communication", title: "Class Performance", text: "telugu english hindi Maths science social progress" },
       { tab: "communication", title: "Calendar", text: "month upcoming events dates" },
       { tab: "profile", title: "Profile", text: "name email number role" },
     ];

@@ -1,5 +1,7 @@
-import { studentAssignments, studentAnnouncements, studentTodaySchedule, subjectProgress } from "@/components/student-dashboard/data";
+import { studentAssignments, studentAnnouncements, subjectProgress } from "@/components/student-dashboard/data";
+import Image from "next/image";
 import { PiLightbulbFilamentBold } from "react-icons/pi";
+import { useState } from "react";
 
 function HalfProgressGauge({ value }) {
   const clamped = Math.max(0, Math.min(100, value));
@@ -38,6 +40,7 @@ function HalfProgressGauge({ value }) {
 }
 
 export default function HomeTab() {
+  const [scheduleWindow, setScheduleWindow] = useState("morning");
   const pendingHomework = studentAssignments.filter((item) => item.status !== "Submitted");
   const homeworkPreviewItems = pendingHomework.slice(0, 3);
   const announcementsPreviewItems = [
@@ -48,7 +51,7 @@ export default function HomeTab() {
   const averageScore = Math.round(
     subjectProgress.reduce((sum, item) => sum + item.score, 0) / Math.max(subjectProgress.length, 1)
   );
-  const orderedSubjects = ["Telugu", "Hindi", "English", "Mathematics", "Science", "Social"];
+  const orderedSubjects = ["Telugu", "Hindi", "English", "Maths", "Science", "Social"];
   const subjectScoreMap = subjectProgress.reduce((map, item) => {
     map[item.subject] = item.score;
     return map;
@@ -69,6 +72,111 @@ export default function HomeTab() {
     { subject: "Maths", score: 52, tip: "Revise formulas and solve 5 mixed problems daily." },
     { subject: "Science", score: 48, tip: "Read one concept summary and practice one diagram." },
   ];
+  const scheduleTimeline = [
+    {
+      id: "p1",
+      timeLabel: "09:00 AM",
+      endTimeLabel: "10:00 AM",
+      classLabel: "7th A",
+      periodLabel: "Period 1",
+      subject: "Hindi",
+      chapter: "Ch.9 Force & Law",
+      progress: 85,
+      totalChapters: 15,
+      completed: 8,
+      window: "morning",
+      cardTone: "bg-sky-50",
+      iconTone: "bg-sky-100 text-sky-700",
+      icon: null,
+      imageSrc: "/hindi.webp",
+    },
+    {
+      id: "p2",
+      timeLabel: "10:00 AM",
+      endTimeLabel: "11:00 AM",
+      classLabel: "7th A",
+      periodLabel: "Period 2",
+      subject: "Social",
+      chapter: "Ch.6 Poetry and meaning",
+      progress: 76,
+      totalChapters: 12,
+      completed: 6,
+      window: "morning",
+      cardTone: "bg-emerald-50",
+      iconTone: "bg-emerald-100 text-emerald-700",
+      icon: null,
+      imageSrc: "/social.png",
+    },
+    {
+      id: "p3",
+      timeLabel: "11:00 AM",
+      endTimeLabel: "12:00 PM",
+      classLabel: "7th A",
+      periodLabel: "Period 3",
+      subject: "Maths",
+      chapter: "Ch.9 Force & Law",
+      progress: 85,
+      totalChapters: 15,
+      completed: 8,
+      window: "morning",
+      cardTone: "bg-rose-50",
+      iconTone: "bg-rose-100 text-rose-700",
+      icon: null,
+      imageSrc: "/maths.png",
+    },
+    {
+      id: "p4",
+      timeLabel: "12:00 PM",
+      endTimeLabel: "01:00 PM",
+      classLabel: "7th A",
+      periodLabel: "Period 4",
+      subject: "English",
+      chapter: "Ch.9 Force & Law",
+      progress: 85,
+      totalChapters: 15,
+      completed: 8,
+      window: "afternoon",
+      cardTone: "bg-amber-50",
+      iconTone: "bg-amber-100 text-amber-700",
+      icon: null,
+      imageSrc: "/english.png",
+    },
+    {
+      id: "p5",
+      timeLabel: "01:00 PM",
+      endTimeLabel: "02:00 PM",
+      classLabel: "7th A",
+      periodLabel: "Period 5",
+      subject: "Science",
+      chapter: "Ch.9 Force & Law",
+      progress: 85,
+      totalChapters: 15,
+      completed: 8,
+      window: "afternoon",
+      cardTone: "bg-orange-50",
+      iconTone: "bg-orange-100 text-orange-700",
+      icon: null,
+      imageSrc: "/science.png",
+    },
+    {
+      id: "p6",
+      timeLabel: "02:00 PM",
+      endTimeLabel: "03:00 PM",
+      classLabel: "7th A",
+      periodLabel: "Period 6",
+      subject: "Telugu",
+      chapter: "Ch.9 Force & Law",
+      progress: 85,
+      totalChapters: 15,
+      completed: 8,
+      window: "afternoon",
+      cardTone: "bg-teal-50",
+      iconTone: "bg-teal-100 text-teal-700",
+      icon: null,
+      imageSrc: "/telugu.png",
+    },
+  ];
+  const visibleSchedule = scheduleTimeline.filter((slot) => slot.window === scheduleWindow);
 
   return (
     <>
@@ -191,38 +299,72 @@ export default function HomeTab() {
         </div>
       </section>
 
-      <section className="mt-4 grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+      <section className="mt-4">
         <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
           <p className="text-sm text-slate-500">Today schedule</p>
-          <h2 className="mt-1 text-2xl font-semibold">Classes and rooms</h2>
-          <div className="mt-4 space-y-3">
-            {studentTodaySchedule.map((slot) => (
-              <div key={`${slot.period}-${slot.subject}`} className="rounded-2xl bg-slate-50 p-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="font-semibold text-slate-900">{slot.period} • {slot.subject}</p>
-                  <p className="text-xs font-semibold text-slate-500">{slot.time}</p>
-                </div>
-                <p className="mt-1 text-sm text-slate-600">{slot.teacher}</p>
-              </div>
-            ))}
+          <div className="mt-1 flex items-center justify-between gap-3">
+            <h2 className="text-2xl font-semibold">Classes</h2>
+            <div className="inline-flex rounded-2xl bg-slate-100 p-1">
+              <button
+                type="button"
+                onClick={() => setScheduleWindow("morning")}
+                className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                  scheduleWindow === "morning" ? "bg-[#c79216] text-white shadow-sm" : "text-slate-600"
+                }`}
+              >
+                Morning
+              </button>
+              <button
+                type="button"
+                onClick={() => setScheduleWindow("afternoon")}
+                className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                  scheduleWindow === "afternoon" ? "bg-[#c79216] text-white shadow-sm" : "text-slate-600"
+                }`}
+              >
+                Afternoon
+              </button>
+            </div>
           </div>
-        </article>
+          <div className="mt-4 space-y-4">
+            {visibleSchedule.map((slot) => {
+              const Icon = slot.icon;
 
-        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
-          <p className="text-sm text-slate-500">Homework tracker</p>
-          <h2 className="mt-1 text-2xl font-semibold">Pending and submitted</h2>
-          <div className="mt-4 space-y-2">
-            {studentAssignments.slice(0, 4).map((work) => (
-              <div key={work.id} className="flex items-center justify-between gap-2 rounded-xl bg-slate-50 px-3 py-2.5">
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">{work.subject}: {work.title}</p>
-                  <p className="text-xs text-slate-500">Due: {work.dueDate}</p>
+              return (
+                <div key={slot.id} className="grid min-w-0 grid-cols-[4.75rem_1fr] gap-3">
+                  <div className="pt-1">
+                    <p className="text-xs font-semibold text-slate-500">{slot.timeLabel} - {slot.endTimeLabel}</p>
+                    <p className="mt-2 text-[11px] font-medium text-slate-500">{slot.periodLabel}</p>
+                  </div>
+
+                  <article className={`min-w-0 overflow-hidden rounded-3xl ${slot.cardTone}`}>
+                    <div className="flex min-h-20.5 items-stretch">
+                      <div className={`relative flex shrink-0 items-center justify-center bg-white/30 ${slot.imageSrc ? "w-20" : "w-14"}`}>
+                        {slot.imageSrc ? (
+                          <Image
+                            src={slot.imageSrc}
+                            alt={`${slot.subject} icon`}
+                            fill
+                            sizes="80px"
+                            className="object-contain p-0.5"
+                          />
+                        ) : (
+                          <Icon className="h-7 w-7 text-slate-700" />
+                        )}
+                      </div>
+                      <div className="flex min-w-0 flex-1 items-center justify-center px-4">
+                        <p className="truncate text-center text-xl font-semibold leading-tight text-slate-900 sm:text-2xl">
+                          {slot.subject}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
                 </div>
-                <span className={`rounded-full px-2 py-1 text-xs font-semibold ${work.status === "Submitted" ? "bg-emerald-50 text-emerald-700" : "bg-[#fff4d6] text-[#8b6400]"}`}>
-                  {work.status}
-                </span>
-              </div>
-            ))}
+              );
+            })}
+
+            {visibleSchedule.length === 0 && (
+              <p className="rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">No classes in this time window.</p>
+            )}
           </div>
         </article>
       </section>

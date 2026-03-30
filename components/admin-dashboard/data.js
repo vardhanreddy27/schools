@@ -133,7 +133,7 @@ export const metricDrilldown = {
     subtitle: "Subject, class ownership and attendance",
     columns: ["Teacher", "Subject", "Classes", "Today"],
     rows: [
-      ["Ms. Kavya", "Mathematics", "9th-a, 10th-a", "Present"],
+      ["Ms. Kavya", "Maths", "9th-a, 10th-a", "Present"],
       ["Mr. Rakesh", "Science", "8th-b, 9th-b", "Present"],
       ["Ms. Sowmya", "English", "7th-a, 8th-a", "Present"],
       ["Mr. Harish", "Social", "9th-c, 10th-c", "On Leave"],
@@ -248,7 +248,7 @@ const staffNames = [
   "Ms. Bhavya", "Mr. Chandra", "Ms. Sushma", "Mr. Arvind", "Ms. Tejaswi", "Mr. Sai",
 ];
 
-const subjects = ["Telugu", "English", "Hindi", "Mathematics", "Science", "Social"];
+const subjects = ["Telugu", "English", "Hindi", "Maths", "Science", "Social"];
 
 export const teacherPerformance = staffNames.map((name, index) => {
   const attendancePresent = 20 + (index % 4);
@@ -294,7 +294,7 @@ export const syllabusBySection = gradeSectionMap.flatMap((item, gradeIndex) => {
       section: sectionName,
       Telugu: Math.min(base + 8, 94),
       Hindi: Math.min(base + 9, 95),
-      Mathematics: Math.min(base + 10, 95),
+      Maths: Math.min(base + 10, 95),
       Science: Math.min(base + 7, 95),
       English: Math.min(base + 12, 96),
       Social: Math.min(base + 6, 93),
@@ -325,7 +325,7 @@ export const initialTimetableUpdates = [
     period: "P6",
     subject: "Math",
     previousTeacher: "Ms. Kavya",
-    previousTeacherSubject: "Mathematics",
+    previousTeacherSubject: "Maths",
     reasonType: "Absent",
     reason: "Medical leave",
     replacementTeacher: "Mr. Praveen",

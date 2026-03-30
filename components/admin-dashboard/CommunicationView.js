@@ -68,7 +68,7 @@ const SUBJECT_PROGRESS = [
   { key: "Telugu", label: "Telugu", color: "#f59e0b" },
   { key: "English", label: "English", color: "#16a34a" },
   { key: "Hindi", label: "Hindi", color: "#ec4899" },
-  { key: "Mathematics", label: "Mathematics", color: "#8b5cf6" },
+  { key: "Maths", label: "Maths", color: "#8b5cf6" },
   { key: "Science", label: "Science", color: "#14b8a6" },
   { key: "Social", label: "Social", color: "#ef4444" },
 ];
@@ -215,7 +215,7 @@ export default function CommunicationView({
         row.Telugu,
         row.English,
         row.Hindi,
-        row.Mathematics,
+        row.Maths,
         row.Science,
         row.Social,
       ]

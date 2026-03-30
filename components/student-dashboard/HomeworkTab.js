@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import {
   AlertCircle,
   Atom,
@@ -16,10 +17,16 @@ import { studentAssignments } from "./data";
 
 export default function HomeworkTab() {
   const [activeSegment, setActiveSegment] = useState("homework");
+  const trackedSubjects = new Set(["science", "telugu", "english"]);
+  const subjectImageMap = {
+    science: "/science.png",
+    telugu: "/telugu.png",
+    english: "/english.png",
+  };
 
   const subjectIconMap = {
     english: Languages,
-    mathematics: Sigma,
+    Maths: Sigma,
     math: Sigma,
     physics: Atom,
     chemistry: FlaskConical,
@@ -37,11 +44,13 @@ export default function HomeworkTab() {
     const isComplete = item.status === "Submitted";
     return {
       ...item,
+      normalized,
       Icon,
+      imageSrc: subjectImageMap[normalized] || null,
       isComplete,
       marks: "10 marks",
     };
-  });
+  }).filter((item) => trackedSubjects.has(item.normalized));
 
   const pendingAssignments = withMeta.filter((hw) => !hw.isComplete);
   const completedAssignments = withMeta.filter((hw) => hw.isComplete);
@@ -128,8 +137,12 @@ export default function HomeworkTab() {
               <article key={`${activeSegment}-${hw.id}`} className={`rounded-3xl border p-4 ${getCardTone(hw.isComplete)}`}>
                 <div className="mb-2 flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-slate-700 ring-1 ring-slate-200">
-                      <SubjectIcon className="h-6 w-6" />
+                    <span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-slate-700 ring-1 ring-slate-200">
+                      {hw.imageSrc ? (
+                        <Image src={hw.imageSrc} alt={`${hw.subject} icon`} fill sizes="48px" className="object-contain p-1" />
+                      ) : (
+                        <SubjectIcon className="h-6 w-6" />
+                      )}
                     </span>
                     <h4 className="text-3xl font-semibold text-slate-900">{hw.subject}</h4>
                   </div>
@@ -147,7 +160,7 @@ export default function HomeworkTab() {
                   )}
                 </div>
 
-                <p className="text-base text-slate-600">{hw.title}</p>
+                <p className={`text-base text-slate-600 ${hw.isComplete ? "line-through text-slate-400" : ""}`}>{hw.title}</p>
 
                 <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-slate-600">
                   <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1">
