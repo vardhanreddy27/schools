@@ -375,34 +375,39 @@ export default function HomeTab() {
               const Icon = slot.icon;
 
               return (
-                <div key={slot.id} className="grid min-w-0 grid-cols-[4.75rem_1fr] gap-3">
-                  <div className="pt-1">
-                    <p className="text-xs font-semibold text-slate-500">{slot.timeLabel} - {slot.endTimeLabel}</p>
-                    <p className="mt-2 text-[11px] font-medium text-slate-500">{slot.periodLabel}</p>
+                <div key={slot.id} className={`grid min-w-0 grid-cols-[2fr_1fr_1fr] gap-3 rounded-3xl ${slot.cardTone}`}>
+                  {/* Subject image and name (50%) - now on the left */}
+                  <div className="flex min-h-20.5 items-center col-start-1 col-end-2">
+                    <div className={`flex shrink-0 items-center justify-center bg-white/30 ${slot.imageSrc ? "px-1.5 sm:px-2" : "px-2"}`}>
+                      {slot.imageSrc ? (
+                        <Image
+                          src={slot.imageSrc}
+                          alt={`${slot.subject} icon`}
+                          width={60}
+                          height={60}
+                          sizes="60px"
+                          className="h-15 w-15 object-contain"
+                        />
+                      ) : (
+                        <Icon className="h-7 w-7 text-slate-700" />
+                      )}
+                    </div>
+                    <div className="flex min-w-0 flex-1 items-center justify-center px-1 sm:justify-start sm:px-2">
+                      <p className="truncate text-center text-xl font-semibold leading-tight text-slate-900 sm:text-left sm:text-2xl">
+                        {slot.subject}
+                      </p>
+                    </div>
                   </div>
 
-                  <article className={`min-w-0 overflow-hidden rounded-3xl ${slot.cardTone}`}>
-                    <div className="flex min-h-20.5 items-stretch">
-                      <div className={`relative flex shrink-0 items-center justify-end bg-white/30 ${slot.imageSrc ? "w-14 sm:w-16" : "w-12"}`}>
-                        {slot.imageSrc ? (
-                          <Image
-                            src={slot.imageSrc}
-                            alt={`${slot.subject} icon`}
-                            fill
-                            sizes="64px"
-                            className="object-contain object-right"
-                          />
-                        ) : (
-                          <Icon className="h-7 w-7 text-slate-700" />
-                        )}
-                      </div>
-                      <div className="-ml-1 flex min-w-0 flex-1 items-center justify-start px-0 sm:px-1">
-                        <p className="truncate text-left text-xl font-semibold leading-tight text-slate-900 sm:text-2xl">
-                          {slot.subject}
-                        </p>
-                      </div>
-                    </div>
-                  </article>
+                  {/* Period label (25%) - center */}
+                  <div className="flex min-h-20.5 flex-col justify-center pt-1 col-start-2 col-end-3">
+                    <p className="text-xs font-semibold text-slate-500">{slot.periodLabel}</p>
+                  </div>
+
+                  {/* Time (25%) - now on the right */}
+                  <div className="flex min-h-20.5 flex-col justify-center pt-1 col-start-3 col-end-4">
+                    <p className="text-xs font-semibold text-slate-500">{slot.timeLabel} - {slot.endTimeLabel}</p>
+                  </div>
                 </div>
               );
             })}

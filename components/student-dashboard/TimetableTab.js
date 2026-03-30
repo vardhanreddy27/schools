@@ -32,16 +32,16 @@ export default function TimetableTab() {
             <thead className="bg-slate-50 text-left text-slate-500">
               <tr>
                 <th className="px-3 py-2 font-medium">Period</th>
-                <th className="px-3 py-2 font-medium">Time</th>
                 <th className="px-3 py-2 font-medium">Subject</th>
+                <th className="px-3 py-2 font-medium">Time</th>
               </tr>
             </thead>
             <tbody>
               {morningPeriods.map((period) => (
                 <tr key={`morning-${period.label}`} className="border-t border-slate-100 text-slate-700 hover:bg-[#fff4d6]/40">
                   <td className="px-3 py-3 font-semibold text-slate-900">{period.label}</td>
-                  <td className="px-3 py-3 text-slate-600">{period.time}</td>
                   <td className="px-3 py-3">{period.subject}</td>
+                  <td className="px-3 py-3 text-slate-600">{period.time}</td>
                 </tr>
               ))}
             </tbody>
@@ -58,16 +58,16 @@ export default function TimetableTab() {
             <thead className="bg-slate-50 text-left text-slate-500">
               <tr>
                 <th className="px-3 py-2 font-medium">Period</th>
-                <th className="px-3 py-2 font-medium">Time</th>
                 <th className="px-3 py-2 font-medium">Subject</th>
+                <th className="px-3 py-2 font-medium">Time</th>
               </tr>
             </thead>
             <tbody>
               {afternoonPeriods.map((period) => (
                 <tr key={`afternoon-${period.label}`} className="border-t border-slate-100 text-slate-700 hover:bg-[#fff4d6]/40">
                   <td className="px-3 py-3 font-semibold text-slate-900">{period.label}</td>
-                  <td className="px-3 py-3 text-slate-600">{period.time}</td>
                   <td className="px-3 py-3">{period.subject}</td>
+                  <td className="px-3 py-3 text-slate-600">{period.time}</td>
                 </tr>
               ))}
             </tbody>
