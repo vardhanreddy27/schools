@@ -30,7 +30,7 @@ function AttendanceTooltip({ active, payload, label }) {
   );
 }
 
-export default function AttendanceTab() {
+export default function AttendanceTab({ selectedDate }) {
   const totalPresent = attendanceMonthly.reduce((sum, week) => sum + week.present, 0);
   const totalAbsent = attendanceMonthly.reduce((sum, week) => sum + week.absent, 0);
   const overallAttendance = Math.round((totalPresent / Math.max(1, totalPresent + totalAbsent)) * 100);
@@ -38,6 +38,11 @@ export default function AttendanceTab() {
     ...week,
     attendancePct: Math.round((week.present / Math.max(1, week.present + week.absent)) * 100),
   }));
+
+  // Filter attendance log based on selected date
+  const filteredLog = selectedDate
+    ? attendanceLog.filter((row) => row.date === selectedDate.toISOString().split("T")[0])
+    : attendanceLog;
 
   return (
     <section className="mt-4 grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
@@ -106,20 +111,28 @@ export default function AttendanceTab() {
 
       <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Daily log</p>
-        <h2 className="mt-1 text-2xl font-semibold">Recent attendance</h2>
+        <h2 className="mt-1 text-2xl font-semibold">
+          {selectedDate ? `Attendance for ${selectedDate.toLocaleDateString("en-IN", { weekday: "short", day: "2-digit", month: "short" })}` : "Recent attendance"}
+        </h2>
         <div className="mt-4 space-y-2">
-          {attendanceLog.map((row) => (
-            <div key={row.date} className="rounded-2xl bg-slate-50 p-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-slate-900">{row.date}</p>
-                <span className={`rounded-full px-2 py-1 text-xs font-semibold ${row.status === "Present" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
-                  {row.status}
-                </span>
+          {filteredLog.length > 0 ? (
+            filteredLog.map((row) => (
+              <div key={row.date} className="rounded-2xl bg-slate-50 p-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-slate-900">{row.date}</p>
+                  <span className={`rounded-full px-2 py-1 text-xs font-semibold ${row.status === "Present" ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
+                    {row.status}
+                  </span>
+                </div>
+                <p className="mt-1 text-sm text-slate-600">Check-in: {row.checkIn}</p>
+                <p className="text-xs text-slate-500">{row.note}</p>
               </div>
-              <p className="mt-1 text-sm text-slate-600">Check-in: {row.checkIn}</p>
-              <p className="text-xs text-slate-500">{row.note}</p>
+            ))
+          ) : (
+            <div className="rounded-2xl bg-slate-50 p-4 text-center">
+              <p className="text-sm text-slate-500">No attendance record for this date</p>
             </div>
-          ))}
+          )}
         </div>
       </article>
     </section>

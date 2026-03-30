@@ -60,25 +60,25 @@ export default function ParentAcademicsTab() {
       {weakSubjects.length > 0 && (
         <section>
           <h3 className="text-sm font-semibold text-slate-600 mb-3 flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-rose-600" />
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
             AREAS NEEDING IMPROVEMENT
           </h3>
           <div className="space-y-3">
             {weakSubjects.map((subject) => (
-              <div key={subject.subject} className="rounded-2xl border-2 border-rose-200 bg-rose-50 p-4">
+              <div key={subject.subject} className="rounded-2xl border-2 border-amber-200 bg-amber-50 p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
                     <h4 className="font-semibold text-slate-950">{subject.subject}</h4>
                     <p className="mt-1 text-sm text-slate-700">
-                      Current Score: <span className="font-bold text-rose-700">{subject.score}%</span> | Target: {subject.target}%
+                      Current Score: <span className="font-bold text-amber-700">{subject.score}%</span> | Target: {subject.target}%
                     </p>
-                    <div className="mt-3 w-full bg-rose-200 rounded-full h-2">
+                    <div className="mt-3 w-full bg-amber-200 rounded-full h-2">
                       <div
-                        className="bg-rose-600 h-2 rounded-full"
+                        className="bg-amber-500 h-2 rounded-full"
                         style={{ width: `${(subject.score / 100) * 100}%` }}
                       ></div>
                     </div>
-                    <p className="mt-2 text-xs text-rose-700 font-semibold">
+                    <p className="mt-2 text-xs text-amber-700 font-semibold">
                       Gap: {subject.target - subject.score} points to reach target
                     </p>
                   </div>
