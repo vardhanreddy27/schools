@@ -38,6 +38,12 @@ function HalfProgressGauge({ value }) {
 
 export default function HomeTab() {
   const pendingHomework = studentAssignments.filter((item) => item.status !== "Submitted");
+  const homeworkPreviewItems = pendingHomework.slice(0, 3);
+  const announcementsPreviewItems = [
+    "Maths - Mr. Rakesh: Submit algebra worksheet by tomorrow.",
+    "Science - Ms. Nisha: Bring lab record for correction.",
+    "Principal - Mrs. Kavitha (Principal): Parents meeting this Friday at 10:00 AM.",
+  ];
   const averageScore = Math.round(
     subjectProgress.reduce((sum, item) => sum + item.score, 0) / Math.max(subjectProgress.length, 1)
   );
@@ -117,8 +123,18 @@ export default function HomeTab() {
 
           <article className="grid min-h-52 grid-rows-[auto_1fr_auto] overflow-hidden rounded-3xl bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
             <p className="text-sm text-slate-500">Homework Due</p>
-            <div className="flex items-center">
-              <p className="text-4xl font-semibold leading-none text-slate-950 sm:text-5xl">{pendingHomework.length}</p>
+            <div className="grid h-full grid-cols-[auto_1fr] items-center gap-3">
+              <p className="text-4xl font-semibold leading-none text-slate-950 sm:text-5xl">{homeworkPreviewItems.length}</p>
+              <ul className="min-w-0 space-y-1 rounded-xl bg-amber-50/90 p-2 ring-1 ring-amber-100">
+                {homeworkPreviewItems.map((item) => (
+                  <li key={item.id} className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden="true" />
+                    <span className="block min-w-0 truncate text-[11px] font-medium text-slate-700" title={`${item.subject}: ${item.title}`}>
+                      {item.subject}: {item.title}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
             <p className="inline-flex self-start rounded-full bg-[#fff4d6] px-3 py-1 text-xs font-semibold text-[#8b6400]">
               Pending Tasks 
@@ -127,8 +143,18 @@ export default function HomeTab() {
 
           <article className="grid min-h-52 grid-rows-[auto_1fr_auto] overflow-hidden rounded-3xl bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
             <p className="text-sm text-slate-500">Announcements</p>
-            <div className="flex items-center">
-              <p className="text-4xl font-semibold leading-none text-slate-950 sm:text-5xl">{studentAnnouncements.length}</p>
+            <div className="grid h-full grid-cols-[auto_1fr] items-center gap-3">
+              <p className="text-4xl font-semibold leading-none text-slate-950 sm:text-5xl">{announcementsPreviewItems.length}</p>
+              <ul className="min-w-0 space-y-1 rounded-xl bg-rose-50/90 p-2 ring-1 ring-rose-100">
+                {announcementsPreviewItems.map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500" aria-hidden="true" />
+                    <span className="block min-w-0 truncate text-[11px] font-medium text-slate-700" title={item}>
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
             <p className="inline-flex self-start rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700">
               Latest school updates
