@@ -186,9 +186,7 @@ export default function HomeTab() {
                 </div>
               ))}
             </div>
-            <p className="inline-flex self-start rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-              Need extra focus
-            </p>
+
           </article>
         </div>
       </section>
