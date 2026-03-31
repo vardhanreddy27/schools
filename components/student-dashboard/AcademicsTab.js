@@ -140,7 +140,7 @@ export default function AcademicsTab() {
                 </div>
                 <div className="text-center">
                   <div className="text-xs text-slate-500">Syllabus: {item.completion}%</div>
-                  <div className="text-xs text-[#c79216] font-bold">Score: {item.score}%</div>
+                  <div className="text-xs text-[#c79216] font-bold">Performance: {item.score}%</div>
                 </div>
               </div>
             );
