@@ -1,5 +1,5 @@
 import { studentProfileDefaults, studentResources, attendanceMonthly, attendanceLog } from "@/components/student-dashboard/data";
-import { X } from "lucide-react";
+import { X, BookOpen } from "lucide-react"; // Added BookOpen for consistency if you add icons later
 
 export default function MoreTab({ profile, onProfileChange, onProfileSave, profileSaving }) {
   const currentMonth = new Date().toLocaleString("en-US", { month: "long", year: "numeric" });
@@ -21,12 +21,12 @@ export default function MoreTab({ profile, onProfileChange, onProfileSave, profi
             </div>
             <button
               type="button"
-              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm hover:bg-white"
-              // onClick={handleAcademicCalendar}
+              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm hover:bg-white transition-colors"
             >
               View Calendar
             </button>
           </article>
+
           {/* Leave Request Card */}
           <article className="rounded-3xl bg-linear-to-br from-yellow-400 to-amber-500 p-6 shadow-lg flex flex-col gap-2 text-white relative overflow-hidden">
             <div className="flex items-center gap-3">
@@ -37,12 +37,12 @@ export default function MoreTab({ profile, onProfileChange, onProfileSave, profi
             </div>
             <button
               type="button"
-              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-amber-700 shadow-sm hover:bg-white"
-              // onClick={handleLeaveRequest}
+              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-amber-700 shadow-sm hover:bg-white transition-colors"
             >
               Request Leave
             </button>
           </article>
+
           {/* Report Card */}
           <article className="rounded-3xl bg-linear-to-br from-blue-500 to-indigo-700 p-6 shadow-lg flex flex-col gap-2 text-white relative overflow-hidden">
             <div className="flex items-center gap-3">
@@ -53,12 +53,12 @@ export default function MoreTab({ profile, onProfileChange, onProfileSave, profi
             </div>
             <button
               type="button"
-              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-white"
-              // onClick={handleReportCard}
+              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-white transition-colors"
             >
               View Report Card
             </button>
           </article>
+
           {/* Exams Card */}
           <article className="rounded-3xl bg-linear-to-br from-pink-500 to-rose-500 p-6 shadow-lg flex flex-col gap-2 text-white relative overflow-hidden">
             <div className="flex items-center gap-3">
@@ -69,13 +69,29 @@ export default function MoreTab({ profile, onProfileChange, onProfileSave, profi
             </div>
             <button
               type="button"
-              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-white"
-              // onClick={handleViewExams}
+              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-white transition-colors"
             >
               View Exams
             </button>
           </article>
+
+          {/* NEW: Syllabus Card */}
+          <article className="rounded-3xl bg-linear-to-br from-purple-500 to-violet-700 p-6 shadow-lg flex flex-col gap-2 text-white relative overflow-hidden">
+            <div className="flex items-center gap-3">
+              <div>
+                <p className="text-base font-semibold">Syllabus</p>
+                <p className="text-xs opacity-90 mt-1">Track your curriculum and subject topics.</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-violet-700 shadow-sm hover:bg-white transition-colors"
+            >
+              View Syllabus
+            </button>
+          </article>
         </div>
+
         {/* Notes and Resources Card */}
         <article className="rounded-3xl bg-white p-6 shadow-lg mt-6">
           <p className="text-sm text-slate-500">Notes and resources</p>

@@ -123,7 +123,7 @@ export default function FamilyLogin() {
           </div>
         </div>
 
-        <div className="px-5 pb-8 pt-6 sm:px-7 md:flex md:items-center md:px-10 md:py-12">
+        <div className="pb-8 pt-6 md:flex md:items-center md:py-12">
           <form className="w-full space-y-4" onSubmit={handleLogin}>
             <div className="mb-1">
               <h2 className="text-2xl font-semibold text-slate-900">Family Sign In</h2>

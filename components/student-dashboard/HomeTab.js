@@ -81,7 +81,6 @@ export default function HomeTab() {
     { id: "principal", label: "Principal", icon: School },
     { id: "teacher", label: "Teacher", icon: UserRound },
     { id: "pet", label: "PET", icon: Trophy },
-    { id: "transport", label: "Transport", icon: Bus },
     { id: "high", label: "High", icon: Bell },
   ];
 

@@ -165,36 +165,6 @@ export default function AcademicsTab() {
         </div>
       </article>
 
-      {/* ASSIGNMENTS TABLE */}
-      <article className="xl:col-span-2 rounded-4xl bg-white shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5 w-full overflow-x-hidden">
-        <h2 className="text-2xl font-semibold text-slate-900 pt-4 ps-4">Assignments</h2>
-        <div className="mt-4 overflow-x-auto  w-full">
-          <table className="min-w-full text-sm w-full">
-            <thead className="bg-slate-50 text-left text-slate-500">
-              <tr>
-                <th className="px-4 py-3 font-semibold">Subject</th>
-                <th className="px-4 py-3 font-semibold">Title</th>
-                <th className="px-4 py-3 font-semibold text-center">Due date</th>
-                <th className="px-4 py-3 text-right">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {studentAssignments.map((item) => (
-                <tr key={item.id} className="text-slate-700 hover:bg-slate-50 transition-colors">
-                  <td className="px-4 py-4 font-medium">{item.subject}</td>
-                  <td className="px-4 py-4">{item.title}</td>
-                  <td className="px-4 py-4 text-center text-slate-500">{item.dueDate}</td>
-                  <td className="px-4 py-4 text-right">
-                    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold ${item.status === "Submitted" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>
-                      {item.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </article>
     </section>
   );
 }
