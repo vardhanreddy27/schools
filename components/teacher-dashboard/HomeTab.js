@@ -1,11 +1,11 @@
 import { useState, useRef } from "react";
 import { CheckCircle2, Send, Camera, Paperclip, Eye, Edit2 } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
-import { todayClasses, dashboardInsights } from "./data";
-import { insightCardTone, dayKey } from "./utils";
+import { todayClasses, dashboardInsights, teacherSections } from "./data";
+import { insightCardTone } from "./utils";
 
-export default function HomeTab({ weekDays, today }) {
-  const todayKey = dayKey(today);
+export default function HomeTab() {
   const fileInputRef = useRef({});
   const cameraInputRef = useRef({});
 
@@ -103,71 +103,147 @@ export default function HomeTab({ weekDays, today }) {
     setHomeworkState((prev) => ({ ...prev, [key]: { ...prev[key], sent: false } }));
   }
 
+  function getPeriodNote(period) {
+    const periodNotes = {
+      P1: "Continue Force chapter",
+      P2: "Recap previous class",
+      P3: "Continue Motion chapter",
+      P4: "Numericals practice",
+      P5: "Continue Light chapter",
+      P6: "Concept check",
+      P7: "Continue Electricity chapter",
+      P8: "Quick revision",
+    };
+
+    return periodNotes[period] || "Continue chapter";
+  }
+
+  function getTimingTone(index) {
+    const tones = [
+      {
+        card: "border-sky-200 bg-sky-50/80",
+        period: "bg-white text-sky-700 ring-1 ring-sky-200",
+        note: "text-sky-700",
+        dot: "bg-sky-500",
+        time: "bg-sky-100 text-sky-800",
+        room: "text-sky-900/80",
+      },
+      {
+        card: "border-emerald-200 bg-emerald-50/80",
+        period: "bg-white text-emerald-700 ring-1 ring-emerald-200",
+        note: "text-emerald-700",
+        dot: "bg-emerald-500",
+        time: "bg-emerald-100 text-emerald-800",
+        room: "text-emerald-900/80",
+      },
+      {
+        card: "border-amber-200 bg-amber-50/80",
+        period: "bg-white text-amber-700 ring-1 ring-amber-200",
+        note: "text-amber-700",
+        dot: "bg-amber-500",
+        time: "bg-amber-100 text-amber-800",
+        room: "text-amber-900/80",
+      },
+      {
+        card: "border-violet-200 bg-violet-50/80",
+        period: "bg-white text-violet-700 ring-1 ring-violet-200",
+        note: "text-violet-700",
+        dot: "bg-violet-500",
+        time: "bg-violet-100 text-violet-800",
+        room: "text-violet-900/80",
+      },
+    ];
+
+    return tones[index % tones.length];
+  }
+
   return (
-    <section className="mt-4 space-y-4">
-      <article className=" bg-[var(--app-surface)] p-4 sm:p-5">
-        <p className="text-sm text-slate-500">This week</p>
-        <h2 className="mt-1 text-xl font-semibold">Teacher calendar view</h2>
+    <section className="page-enter space-y-4 pb-24">
+      <article className="stagger-item bg-[var(--app-surface)] p-4 sm:p-5" style={{ "--stagger-delay": "40ms" }}>
+        <h2 className="mt-1 text-l font-semibold">My Classes</h2>
 
-        <div className="mt-4 rounded-3xl border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-3">
-          <div className="grid grid-cols-7 gap-2">
-            {weekDays.map((date) => {
-              const isToday = dayKey(date) === todayKey;
+        <div className="-mx-1 mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-1 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 xl:grid-cols-4">
+          {teacherSections.map((section) => {
+            return (
+              <Link
+                key={section.id}
+                href={`/teacher-section/${section.id}`}
+                className="min-w-[240px] snap-start rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-3 text-left transition active:scale-[0.99] hover:border-[var(--app-accent)] md:min-w-0"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">
+                      Class {section.className} - {section.section}
+                    </p>
+                    <p className="mt-1 text-xs text-slate-600">
+                      Students: {section.totalStudents}
+                    </p>
+                  </div>
+                  {section.isClassTeacher ? (
+                    <span className="rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
+                      Class Teacher
+                    </span>
+                  ) : null}
+                </div>
 
-              return (
-                <div key={date.toISOString()} className="text-center">
-                  <p className="text-xs text-slate-500">
-                    {date.toLocaleDateString("en-IN", { weekday: "short" })}
-                  </p>
-                  <div
-                    className={`mx-auto mt-1 flex h-11 w-11 items-center justify-center rounded-2xl text-sm font-semibold ${
-                      isToday
-                        ? "border border-[var(--app-accent)] bg-[var(--app-accent-soft)] text-[#8b6400]"
-                        : "bg-white text-slate-700"
-                    }`}
-                  >
-                    {date.getDate()}
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <div className="rounded-xl bg-amber-50 px-2.5 py-2 ring-1 ring-amber-200">
+                    <p className="text-[10px] uppercase tracking-[0.09em] text-amber-700">Attendance</p>
+                    <p className="text-sm font-semibold text-amber-800">{section.attendancePercent}%</p>
+                  </div>
+                  <div className="rounded-xl bg-emerald-50 px-2.5 py-2 ring-1 ring-emerald-200">
+                    <p className="text-[10px] uppercase tracking-[0.09em] text-emerald-700">Performance</p>
+                    <p className="text-sm font-semibold text-emerald-800">{section.performancePercent}%</p>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </Link>
+            );
+          })}
         </div>
       </article>
 
       <div className="flex flex-col gap-4 xl:flex-row">
       <div className="flex flex-1 flex-col gap-4">
-        <article className="bg-[var(--app-surface)] p-4 sm:p-5">
+        <article className="stagger-item bg-[var(--app-surface)] p-4 sm:p-5" style={{ "--stagger-delay": "90ms" }}>
           <p className="text-sm text-slate-500">Today classes</p>
-          <h2 className="mt-1 text-xl font-semibold">Class timings for today</h2>
+          <h2 className="mt-1 text-l font-semibold">Class timings for today</h2>
 
           <div className="mt-4 space-y-3">
-            {todayClasses.map((item) => (
+            {todayClasses.map((item, index) => {
+              const tone = getTimingTone(index);
+              return (
               <div
                 key={`${item.period}-${item.className}-${item.section}`}
-                className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4"
+                className={`rounded-2xl border p-4 shadow-[0_8px_20px_-16px_rgba(15,23,42,0.28)] ${tone.card}`}
               >
-                <div className="flex items-center justify-between gap-3">
-                  <p className="font-semibold text-slate-900">
-                    {item.subject} — {item.period}
-                  </p>
-                  <span className="rounded-full bg-[var(--app-accent-soft)] px-2 py-1 text-xs font-semibold text-[#8b6400]">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-lg font-semibold text-slate-900 leading-tight">
+                      Class {item.className} - Section {item.section}
+                    </p>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <span className={`inline-flex rounded-lg px-2.5 py-1 text-sm font-semibold ${tone.period}`}>
+                        {item.period}
+                      </span>
+                      <span className={`inline-flex items-center gap-1 text-xs font-medium ${tone.note}`}>
+                        <span className={`h-2 w-2 rounded-full ${tone.dot}`} />
+                        {getPeriodNote(item.period)}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="shrink-0 text-sm font-semibold text-slate-900 sm:text-base">
                     {item.time}
                   </span>
                 </div>
-                <div className="min-w-0">
-                  <p className="mt-1 text-sm text-slate-600">
-                    Class {item.className} | Section {item.section} | Room {item.room}
-                  </p>
-                </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </article>
 
-        <article className=" bg-[var(--app-surface)] p-4 sm:p-5">
+        <article className="stagger-item bg-[var(--app-surface)] p-4 sm:p-5" style={{ "--stagger-delay": "130ms" }}>
           <p className="text-sm text-slate-500">Today&apos;s overview</p>
-          <h2 className="mt-1 text-xl font-semibold">What needs your attention</h2>
+          <h2 className="mt-1 text-l font-semibold">What needs your attention</h2>
 
           <div className="mt-4 space-y-3">
             {dashboardInsights.map((item) => (
@@ -176,7 +252,7 @@ export default function HomeTab({ weekDays, today }) {
                 className={`rounded-2xl bg-linear-to-br p-3.5 ring-1 sm:p-4 ${insightCardTone(item.tone)}`}
               >
                 <p className="text-[10px] uppercase tracking-[0.09em] text-slate-500 sm:text-xs">{item.title}</p>
-                <p className="mt-1.5 text-xl font-semibold text-slate-900 sm:mt-2 sm:text-2xl">{item.value}</p>
+                <p className="mt-1.5 text-l font-semibold text-slate-900 sm:mt-2 sm:text-2xl">{item.value}</p>
                 <p className="mt-1 text-xs text-slate-600 sm:text-sm">{item.note}</p>
               </div>
             ))}
@@ -184,9 +260,9 @@ export default function HomeTab({ weekDays, today }) {
         </article>
       </div>
 
-      <article className=" bg-[var(--app-surface)] p-4 sm:p-5 xl:flex-1">
+      <article className="stagger-item bg-[var(--app-surface)] p-4 sm:p-5 xl:flex-1" style={{ "--stagger-delay": "170ms" }}>
         <p className="text-sm text-slate-500">Notify parents &amp; students</p>
-        <h2 className="mt-1 text-xl font-semibold">Today&apos;s homework</h2>
+        <h2 className="mt-1 text-l font-semibold">Today&apos;s homework</h2>
 
         <div className="mt-4 space-y-4">
           {todayClasses.map((cls) => {
@@ -204,7 +280,7 @@ export default function HomeTab({ weekDays, today }) {
                       Class {cls.className} — Section {cls.section}
                     </p>
                     <p className="text-xs text-slate-500">
-                      {cls.subject} · {cls.period} · {cls.time}
+                      {cls.period} · {cls.time}
                     </p>
                   </div>
                   {state.sent ? (

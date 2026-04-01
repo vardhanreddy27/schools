@@ -1,13 +1,14 @@
 import { getServerSession } from "next-auth/next";
 import { signOut } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
-import { UserCircle2 } from "lucide-react";
 import { authOptions } from "@/lib/auth";
 import { TeacherSidebar, TeacherBottomNav } from "@/components/teacher-dashboard/TeacherNav";
 import HomeTab from "@/components/teacher-dashboard/HomeTab";
 import { AttendanceTab } from "@/components/teacher-dashboard/AttendanceTab";
 import TimetableTab from "@/components/teacher-dashboard/TimetableTab";
+import QuizTab from "@/components/teacher-dashboard/QuizTab";
 import { MoreTab, ProfileBottomSheet, ToolModal } from "@/components/teacher-dashboard/MoreTab";
 import { buildMonthCalendar, dayKey, weekDaysFromDate } from "@/components/teacher-dashboard/utils";
 import { attendanceClasses, monthlyCalendarEvents } from "@/components/teacher-dashboard/data";
@@ -19,6 +20,7 @@ import { attendanceClasses, monthlyCalendarEvents } from "@/components/teacher-d
 
 
 export default function TeacherDashboard({ user }) {
+  const router = useRouter();
   const [activeMenu, setActiveMenu] = useState("home");
   const [calendarDate, setCalendarDate] = useState(new Date());
   const [activeToolModal, setActiveToolModal] = useState(null);
@@ -35,7 +37,7 @@ export default function TeacherDashboard({ user }) {
   });
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileMessage, setProfileMessage] = useState("");
-  const showTopHeader = activeMenu === "home" || activeMenu === "more";
+  const showTopHeader = activeMenu === "home" || activeMenu === "more" || activeMenu === "quiz";
 
   const today = useMemo(() => new Date(), []);
   const weekDays = useMemo(() => weekDaysFromDate(today), [today]);
@@ -138,50 +140,83 @@ export default function TeacherDashboard({ user }) {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [activeMenu, activeToolModal]);
 
+  useEffect(() => {
+    if (!router.isReady) return;
+    const requestedTab = router.query.tab;
+    const allowedTabs = ["home", "attendance", "quiz", "timetable", "more"];
+
+    
+  }, [router.isReady, router.query.tab]);
+
+  const displayName = "Harika";
+
   return (
-    <div className="min-h-dvh bg-white text-slate-950 lg:flex">
+    <div className={`min-h-dvh text-slate-950 lg:flex ${activeMenu === "timetable" ? "bg-[#eef1f6]" : "bg-white"}`}>
       <TeacherSidebar activeMenu={activeMenu} onMenuChange={setActiveMenu} />
 
-      <main className="relative flex-1 pb-28 lg:pb-8">
-        <div className="mx-auto flex min-h-dvh max-w-6xl flex-col px-3 pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6">
+      <main className={`relative flex-1 ${activeMenu === "timetable" ? "bg-[#eef1f6]" : ""}`}>
+        <div className="mx-auto flex   max-w-6xl flex-col px-3 pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6">
           {showTopHeader ? (
             <section className="bg-white p-4 sm:p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-3 lg:hidden">
-                    <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
-                      <Image src="/logo.png" alt="NMS Logo" width={34} height={34} className="object-contain" priority />
+              <div className="flex items-start justify-between gap-3 lg:hidden">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white p-1">
+                      <Image src="/logo.png" alt="NMS Logo" width={28} height={28} className="object-contain" priority />
                     </div>
                     <div>
-                      <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
-                      <p className="text-sm text-slate-500">Teacher Workspace</p>
+                      <p className="text-base font-bold tracking-[0.18em] text-slate-900">NMS</p>
+                      <p className="text-[11px] text-slate-500">Teacher Workspace</p>
                     </div>
                   </div>
-                  <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-                    Welcome, {profileForm.name || user?.name || "Teacher"}
+
+                  <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+                    Welcome, {displayName}
                   </h1>
-                  <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="whitespace-nowrap rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
                       Subject: {profileForm.subject || "Not set"}
                     </span>
-                    <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                    <span className="whitespace-nowrap rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
                       4 classes today
                     </span>
                   </div>
                 </div>
+
                 <button
                   type="button"
                   onClick={() => setProfileModalOpen(true)}
-                  className="p-1 text-slate-500 transition-all duration-150 hover:text-slate-800 active:scale-90 lg:hidden"
+                  className="shrink-0 rounded-full p-0.5 transition-transform duration-150 active:scale-95"
                   aria-label="Open profile"
                 >
-                  <UserCircle2 className="h-7 w-7" />
+                  <Image
+                    src="/student2.png"
+                    alt="Teacher profile"
+                    width={44}
+                    height={44}
+                    className="h-11 w-11 rounded-full object-cover ring-1 ring-slate-200"
+                  />
                 </button>
+              </div>
+
+              <div className="hidden lg:block">
+                <h1 className="mt-1 text-3xl font-semibold tracking-tight sm:text-4xl">
+                  Welcome, {displayName}
+                </h1>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <span className="whitespace-nowrap rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                    Subject: {profileForm.subject || "Not set"}
+                  </span>
+                  <span className="whitespace-nowrap rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                    4 classes today
+                  </span>
+                </div>
               </div>
             </section>
           ) : null}
 
-          {activeMenu === "home" ? <HomeTab weekDays={weekDays} today={today} /> : null}
+          {activeMenu === "home" ? <HomeTab /> : null}
           {activeMenu === "attendance" ? (
             <AttendanceTab
               classes={attendanceClasses}
@@ -189,6 +224,7 @@ export default function TeacherDashboard({ user }) {
               onSubmitAttendance={handleSubmitAttendance}
             />
           ) : null}
+          {activeMenu === "quiz" ? <QuizTab /> : null}
           {activeMenu === "timetable" ? (
             <TimetableTab
               calendarDate={calendarDate}

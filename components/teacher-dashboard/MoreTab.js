@@ -1,32 +1,270 @@
-import { X, Paperclip } from "lucide-react";
+
+import { X, Paperclip, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useRef } from "react";
 import { moreTools, moreToolDetails } from "./data";
 
-export function MoreTab({ onOpenToolModal }) {
+// Academic Calendar Tool as a separate component
+function AcademicCalendarTool() {
+  const [calendarDate, setCalendarDate] = useState(new Date());
+  const [calendarEvents, setCalendarEvents] = useState([...require("./data").monthlyCalendarEvents]);
+  const [eventType, setEventType] = useState("quiz");
+  const [eventTitle, setEventTitle] = useState("");
+  const [activeDate, setActiveDate] = useState(null);
+  const { weekPlan } = require("./data");
+  const { buildMonthCalendar, dayKey, eventDotColor, statusStyles } = require("./utils");
+  const monthGrid = buildMonthCalendar(calendarDate);
+  const today = new Date();
+  const todayKey = dayKey(today);
+  const monthEventsByDate = calendarEvents.reduce((acc, event) => {
+    if (!acc[event.date]) acc[event.date] = [];
+    acc[event.date].push(event);
+    return acc;
+  }, {});
+  const orderedMonthEvents = calendarEvents
+    .filter((event) => {
+      const eventDate = new Date(event.date);
+      return (
+        eventDate.getFullYear() === calendarDate.getFullYear() &&
+        eventDate.getMonth() === calendarDate.getMonth()
+      );
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  const activeDateEvents = activeDate ? monthEventsByDate[activeDate] || [] : [];
+  function openDatePopup(key) {
+    setActiveDate(key);
+    setEventType("quiz");
+    setEventTitle("");
+  }
+  function closeDatePopup() {
+    setActiveDate(null);
+    setEventTitle("");
+    setEventType("quiz");
+  }
+  function addEventToDate() {
+    if (!activeDate || !eventTitle.trim()) return;
+    setCalendarEvents((prev) => [
+      ...prev,
+      { date: activeDate, type: eventType, title: eventTitle.trim() },
+    ]);
+    setEventTitle("");
+  }
+  function removeEventFromDate(eventToRemove) {
+    setCalendarEvents((prev) => prev.filter((item) => !(item.date === eventToRemove.date && item.title === eventToRemove.title && item.type === eventToRemove.type)));
+  }
+  function getDateLabel(key) {
+    const [year, month, day] = key.split("-").map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  }
   return (
-    <section className="mt-4">
-      <article className="bg-[var(--app-surface)] p-4 sm:p-5">
-        <p className="text-sm text-slate-500">More tools</p>
-        <h2 className="mt-1 text-xl font-semibold">Teacher utility modules</h2>
-
-        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3">
-          {moreTools.map((tool) => {
-            const Icon = tool.icon;
+    <div className="mt-4 grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+      {/* Left — Monthly calendar with event markers */}
+      <article className="bg-[--app-surface] p-4 sm:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="mt-1 text-xl font-semibold">Quiz and exam markers</h2>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="rounded-full bg-slate-100 p-2 hover:bg-slate-200"
+              onClick={() => setCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
+              aria-label="Previous month"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              className="rounded-full bg-slate-100 p-2 hover:bg-slate-200"
+              onClick={() => setCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
+              aria-label="Next month"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+        <p className="mt-2 text-sm font-semibold text-slate-800">
+          {calendarDate.toLocaleDateString("en-IN", { month: "long", year: "numeric" })}
+        </p>
+        <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-xs text-slate-500">
+          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((label) => (
+            <p key={label}>{label}</p>
+          ))}
+        </div>
+        <div className="mt-2 grid grid-cols-7 gap-1.5">
+          {monthGrid.map((date, index) => {
+            if (!date) {
+              return <div key={`empty-${index}`} className="h-12 rounded-xl bg-transparent" />;
+            }
+            const key = dayKey(date);
+            const events = monthEventsByDate[key] || [];
+            const isToday = key === todayKey;
             return (
               <button
-                key={tool.key}
                 type="button"
-                onClick={() => onOpenToolModal(tool.key)}
-                className="aspect-square rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-muted)] p-4 text-left transition hover:bg-[var(--app-accent-soft)]"
+                key={key}
+                onClick={() => openDatePopup(key)}
+                className={`flex h-12 flex-col items-center justify-center rounded-xl ${isToday ? "border border-[--app-accent] bg-[--app-accent-soft]" : "bg-slate-50"}`}
               >
-                <Icon className="h-5 w-5 text-[var(--app-accent)]" />
-                <p className="mt-3 text-sm font-semibold text-slate-900">{tool.title}</p>
-                <p className="mt-1 text-xs text-slate-600">{tool.subtitle}</p>
+                <span className={`text-sm font-semibold ${isToday ? "text-[#8b6400]" : "text-slate-800"}`}>{date.getDate()}</span>
+                <div className="mt-1 flex items-center gap-0.5">
+                  {events.slice(0, 2).map((event) => (
+                    <span key={`${key}-${event.type}-${event.title}`} className={`h-1.5 w-1.5 rounded-full ${eventDotColor(event.type)}`} />
+                  ))}
+                </div>
               </button>
             );
           })}
         </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">Quiz day</span>
+          <span className="rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700">Exam day</span>
+          <span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">Homework review</span>
+          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Meeting</span>
+        </div>
+        {orderedMonthEvents.length > 0 && (
+          <div className="mt-5 space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Upcoming this month</p>
+            {orderedMonthEvents.map((event) => (
+              <div key={`${event.date}-${event.title}`} className="flex items-center gap-3 rounded-xl bg-slate-50 p-3">
+                <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${eventDotColor(event.type)}`} />
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-slate-900">{event.title}</p>
+                  <p className="text-xs text-slate-500">{new Date(event.date).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </article>
+      {/* Right — Calendar timings and weekly plan */}
+      <article className="bg-[--app-surface] p-4 sm:p-5">
+        <p className="text-sm text-slate-500">Calendar timings</p>
+        <h2 className="mt-1 text-xl font-semibold">Upcoming academic flow</h2>
+        <div className="mt-4 space-y-3">
+          {weekPlan.map((item) => (
+            <div key={`${item.label}-${item.focus}`} className="rounded-2xl bg-slate-50 p-4">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm font-semibold text-slate-900">{item.label}</p>
+                <span className={`rounded-full px-2 py-1 text-[11px] font-semibold ring-1 ${statusStyles(item.status)}`}>{item.status}</span>
+              </div>
+              <p className="mt-2 text-sm text-slate-600">{item.focus}</p>
+            </div>
+          ))}
+        </div>
+      </article>
+      {/* Date event popup */}
+      {activeDate ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4" onClick={closeDatePopup}>
+          <div className="w-full max-w-lg rounded-3xl bg-white p-5 ring-1 ring-[--app-border]" onClick={(event) => event.stopPropagation()}>
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm text-slate-500">Manage date events</p>
+                <h3 className="text-lg font-semibold text-slate-900">{getDateLabel(activeDate)}</h3>
+              </div>
+              <button type="button" onClick={closeDatePopup} className="rounded-full border border-slate-300 p-2 text-slate-600 hover:bg-slate-50" aria-label="Close date event popup">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="mt-4 grid gap-2 sm:grid-cols-[0.34fr_1fr_auto]">
+              <select value={eventType} onChange={(event) => setEventType(event.target.value)} className="rounded-xl border border-slate-300 px-3 py-2.5 text-sm">
+                <option value="quiz">Quiz</option>
+                <option value="exam">Exam</option>
+                <option value="homework">Homework</option>
+                <option value="meeting">General</option>
+              </select>
+              <input value={eventTitle} onChange={(event) => setEventTitle(event.target.value)} placeholder="e.g. 9th B - Quiz on Tenses" className="rounded-xl border border-slate-300 px-3 py-2.5 text-sm" />
+              <button type="button" onClick={addEventToDate} className="rounded-xl bg-[--app-accent] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10]">Add</button>
+            </div>
+            <div className="mt-4 max-h-64 space-y-2 overflow-y-auto pr-1">
+              {activeDateEvents.length === 0 ? (
+                <p className="rounded-xl bg-slate-50 px-3 py-2 text-sm text-slate-600 ring-1 ring-slate-200">No events for this date yet.</p>
+              ) : (
+                activeDateEvents.map((eventItem) => (
+                  <div key={`${eventItem.date}-${eventItem.type}-${eventItem.title}`} className="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-3 py-2.5 ring-1 ring-slate-200">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-slate-900">{eventItem.title}</p>
+                      <p className="text-xs text-slate-500">Type: {eventItem.type}</p>
+                    </div>
+                    <button type="button" onClick={() => removeEventFromDate(eventItem)} className="text-xs font-semibold text-rose-600">Remove</button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+
+
+export function MoreTab({ onOpenToolModal }) {
+  const toolCardStyles = [
+    "from-green-400 to-emerald-600 text-white",
+    "from-yellow-400 to-amber-500 text-white",
+    "from-blue-500 to-indigo-700 text-white",
+    "from-pink-500 to-rose-500 text-white",
+    "from-purple-500 to-violet-700 text-white",
+    "from-cyan-500 to-sky-600 text-white",
+    "from-orange-500 to-red-500 text-white",
+    "from-teal-500 to-emerald-500 text-white",
+    "from-fuchsia-500 to-purple-600 text-white",
+  ];
+
+  function getTeacherActionLabel(toolKey) {
+    const labels = {
+      sectionPerformance: "View Performance",
+      enrollStudents: "Manage Enrollment",
+      leaveRequests: "Apply Leave",
+      quizCenter: "Create Quiz",
+      quizResults: "View Results",
+      notesCenter: "Open Notes",
+      announcements: "Post Update",
+      learningResources: "Share Resource",
+      academicCalendar: "View Calendar",
+    };
+
+    return labels[toolKey] || "Open Tool";
+  }
+
+  return (
+    <section className="mt-4">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {moreTools.map((tool, index) => {
+          const colorTone = toolCardStyles[index % toolCardStyles.length];
+          return (
+            <article
+              key={tool.key}
+              className={`rounded-3xl bg-linear-to-br p-6 shadow-lg ${colorTone}`}
+            >
+              <div className="flex items-start gap-3">
+                <div className="rounded-xl bg-white/20 p-2.5">
+                  <tool.icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-base font-semibold">{tool.title}</p>
+                  <p className="mt-1 text-xs opacity-90">{tool.subtitle}</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => onOpenToolModal(tool.key)}
+                className="mt-4 rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition-colors hover:bg-white"
+              >
+                {getTeacherActionLabel(tool.key)}
+              </button>
+            </article>
+          );
+        })}
+      </div>
+
+    
     </section>
   );
 }
@@ -85,7 +323,7 @@ export function ProfileBottomSheet({
               name="name"
               value={profileForm.name}
               onChange={onProfileChange}
-              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[var(--app-accent)] focus:ring-4 focus:ring-[var(--app-accent-soft)]"
+              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[--app-accent] focus:ring-4 focus:ring-[--app-accent-soft]"
             />
           </div>
 
@@ -96,7 +334,7 @@ export function ProfileBottomSheet({
               name="subject"
               value={profileForm.subject}
               onChange={onProfileChange}
-              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[var(--app-accent)] focus:ring-4 focus:ring-[var(--app-accent-soft)]"
+              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[--app-accent] focus:ring-4 focus:ring-[--app-accent-soft]"
             />
           </div>
 
@@ -107,7 +345,7 @@ export function ProfileBottomSheet({
               name="number"
               value={profileForm.number}
               onChange={onProfileChange}
-              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[var(--app-accent)] focus:ring-4 focus:ring-[var(--app-accent-soft)]"
+              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[--app-accent] focus:ring-4 focus:ring-[--app-accent-soft]"
             />
           </div>
 
@@ -139,11 +377,11 @@ export function ProfileBottomSheet({
             </p>
           ) : null}
 
-          <div className="sm:col-span-2 grid gap-2 sm:grid-cols-2">
+          <div className="sm:col-span-2 flex flex-col gap-2">
             <button
               type="submit"
               disabled={profileSaving}
-              className="w-full rounded-2xl bg-[var(--app-accent)] px-4 py-3 text-sm font-semibold text-white hover:bg-[#b07e10] disabled:cursor-not-allowed disabled:bg-[#e6cc8a]"
+              className="w-full rounded-2xl bg-[--app-accent] px-4 py-3 text-sm font-semibold text-white hover:bg-[#b07e10] disabled:cursor-not-allowed disabled:bg-[#e6cc8a]"
             >
               {profileSaving ? "Saving..." : "Update profile"}
             </button>
@@ -403,7 +641,7 @@ export function ToolModal({ activeTool, onClose }) {
                 key={row.classRef}
                 type="button"
                 onClick={() => setSelectedSection(row.classRef)}
-                className={`rounded-xl border px-3 py-2.5 text-left ${selectedSection === row.classRef ? "border-[var(--app-accent)] bg-[var(--app-accent-soft)]" : "border-slate-200 bg-slate-50"}`}
+                className={`rounded-xl border px-3 py-2.5 text-left ${selectedSection === row.classRef ? "border-[--app-accent] bg-[--app-accent-soft]" : "border-slate-200 bg-slate-50"}`}
               >
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-semibold text-slate-900">{row.classRef}</p>
@@ -467,12 +705,12 @@ export function ToolModal({ activeTool, onClose }) {
             type="button"
             onClick={addEnrollment}
             disabled={!enrollStudentName.trim() || !enrollStudentRoll.trim()}
-            className="w-full rounded-xl bg-[var(--app-accent)] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-xl bg-[--app-accent] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Enroll Student
           </button>
 
-          <div className="rounded-xl bg-[var(--app-accent-soft)] px-3 py-2 text-sm text-[#8b6400]">
+          <div className="rounded-xl bg-[--app-accent-soft] px-3 py-2 text-sm text-[#8b6400]">
             Total students in {selectedEnrollClass}: <span className="font-semibold">{enrolledStudents.length}</span>
           </div>
 
@@ -514,7 +752,7 @@ export function ToolModal({ activeTool, onClose }) {
             </div>
           </div>
 
-          <div className="rounded-xl bg-[var(--app-accent-soft)] px-3 py-2 text-sm text-[#8b6400]">
+          <div className="rounded-xl bg-[--app-accent-soft] px-3 py-2 text-sm text-[#8b6400]">
             Leave days: <span className="font-semibold">{leaveDays || 0}</span>
           </div>
 
@@ -530,7 +768,7 @@ export function ToolModal({ activeTool, onClose }) {
             type="button"
             onClick={addLeaveRequest}
             disabled={!fromDate || !toDate || !leaveReason.trim() || !leaveDays}
-            className="w-full rounded-xl bg-[var(--app-accent)] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-xl bg-[--app-accent] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Submit Leave Request
           </button>
@@ -575,7 +813,7 @@ export function ToolModal({ activeTool, onClose }) {
               placeholder="Quiz title for lesson"
               className="rounded-xl border border-slate-300 px-3 py-2.5 text-sm"
             />
-            <button type="button" onClick={addQuiz} className="rounded-xl bg-[var(--app-accent)] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10]">
+            <button type="button" onClick={addQuiz} className="rounded-xl bg-[--app-accent] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10]">
               Add
             </button>
           </div>
@@ -606,7 +844,7 @@ export function ToolModal({ activeTool, onClose }) {
                       setSelectedQuizName(item.id);
                       setSelectedQuizSection(null);
                     }}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-left hover:bg-[var(--app-accent-soft)]"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-left hover:bg-[--app-accent-soft]"
                   >
                     <p className="text-sm font-semibold text-slate-900">{item.quizName}</p>
                     <p className="text-xs text-slate-600 mt-1">{item.sectionResults.length} section(s) attempted</p>
@@ -666,7 +904,7 @@ export function ToolModal({ activeTool, onClose }) {
                     key={section.classRef}
                     type="button"
                     onClick={() => setSelectedQuizSection(section)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-left hover:bg-[var(--app-accent-soft)]"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-left hover:bg-[--app-accent-soft]"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-sm font-semibold text-slate-900">{section.classRef}</p>
@@ -704,7 +942,7 @@ export function ToolModal({ activeTool, onClose }) {
               placeholder="Add classroom note"
               className="rounded-xl border border-slate-300 px-3 py-2.5 text-sm"
             />
-            <button type="button" onClick={addNote} className="rounded-xl bg-[var(--app-accent)] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10]">
+            <button type="button" onClick={addNote} className="rounded-xl bg-[--app-accent] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10]">
               Add
             </button>
           </div>
@@ -800,7 +1038,7 @@ export function ToolModal({ activeTool, onClose }) {
               placeholder="Write announcement"
               className="rounded-xl border border-slate-300 px-3 py-2.5 text-sm"
             />
-            <button type="button" onClick={addAnnouncement} className="rounded-xl bg-[var(--app-accent)] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10]">
+            <button type="button" onClick={addAnnouncement} className="rounded-xl bg-[--app-accent] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#b07e10]">
               Post
             </button>
           </div>
@@ -822,6 +1060,10 @@ export function ToolModal({ activeTool, onClose }) {
       );
     }
 
+    // Academic Calendar tool
+    if (activeTool === "academicCalendar") {
+      return <AcademicCalendarTool />;
+    }
     return null;
   }
 
@@ -850,7 +1092,7 @@ export function ToolModal({ activeTool, onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="mt-5 w-full rounded-2xl bg-[var(--app-accent)] px-4 py-3 text-sm font-semibold text-white hover:bg-[#b07e10]"
+          className="mt-5 w-full rounded-2xl bg-[--app-accent] px-4 py-3 text-sm font-semibold text-white hover:bg-[#b07e10]"
         >
           Continue
         </button>
