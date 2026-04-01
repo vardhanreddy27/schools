@@ -5,7 +5,7 @@ import {
   ClipboardCheck,
   GraduationCap,
   LayoutGrid,
-  UserCircle2,
+  MoreHorizontal,
 } from "lucide-react";
 
 export const studentMenuItems = [
@@ -13,7 +13,7 @@ export const studentMenuItems = [
   { id: "homework", label: "Homework", icon: BookOpen },
   { id: "timetable", label: "Timetable", icon: CalendarDays },
   { id: "academics", label: "Academics", icon: GraduationCap },
-  { id: "more", label: "More", icon: UserCircle2 },
+  { id: "more", label: "More", icon: MoreHorizontal },
 ];
 
 export const studentSummary = [
