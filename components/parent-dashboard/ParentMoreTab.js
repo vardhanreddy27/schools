@@ -85,8 +85,8 @@ export default function ParentMoreTab() {
 
   return (
     <>
-      <section className="-mx-3 space-y-5 pt-2 sm:mx-0">
-        <article className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+      <section className="-mx-3 mt-6 min-h-[calc(100vh-10rem)] space-y-0 bg-white mb-9">
+        <article className=" bg-white px-5 pt-5 ">
           <p className="text-sm text-slate-500">Teacher connect</p>
           <h2 className="mt-1 text-2xl font-semibold text-slate-900">Contact teacher</h2>
 
@@ -118,7 +118,7 @@ export default function ParentMoreTab() {
           </div>
         </article>
 
-        <article className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+        <article className=" bg-white p-5 ">
           <p className="text-sm text-slate-500">Parent control</p>
           <h2 className="mt-1 text-2xl font-semibold text-slate-900">Quick actions</h2>
 

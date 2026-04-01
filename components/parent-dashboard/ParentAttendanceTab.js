@@ -57,7 +57,7 @@ export default function ParentAttendanceTab() {
   );
 
   return (
-    <div className="space-y-6 py-6">
+    <div className="space-y-6 py-6 mb-9">
       {/* Attendance Overview */}
       <section className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200 p-6">
         {/* Header with Title and Legend */}

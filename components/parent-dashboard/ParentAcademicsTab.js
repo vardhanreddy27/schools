@@ -71,7 +71,7 @@ export default function ParentAcademicsTab() {
   const activeChartData = academicsChartData[activePeriod] || academicsChartData.monthly;
 
   return (
-    <div className="space-y-6 py-6">
+    <div className="space-y-6 py-6 mb-9">
       <section className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5">
         <p className="text-sm text-slate-500 font-medium">Academics</p>
         <h2 className="mt-1 text-2xl font-semibold text-slate-900">Performance overview</h2>

@@ -108,7 +108,7 @@ export default function ParentHomeworkTab() {
               <article key={hw.id} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-sm transition-all" onClick={() => setExpandedHomeworkId(isExpanded ? null : hw.id)}>
                 <div className="p-5">
                   <div className="flex items-center gap-4">
-                    <div className="relative h-14 w-14 shrink-0 rounded-2xl bg-slate-50 p-2">
+                    <div className="relative h-18 w-18 shrink-0 ">
                       <Image src={SUBJECT_IMAGE_MAP[hw.subject.toLowerCase()] || "/logo.png"} alt={hw.subject} fill className="object-contain p-2" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -144,7 +144,7 @@ export default function ParentHomeworkTab() {
               <article key={group.subject} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-sm transition-all" onClick={() => setExpandedAssignmentSubject(isExpanded ? null : group.subject)}>
                 <div className="p-5">
                   <div className="flex items-center gap-4">
-                    <div className="relative h-14 w-14 shrink-0 rounded-2xl bg-slate-50 p-2">
+                    <div className="relative h-18 w-18 shrink-0 ">
                       <Image src={group.imageSrc} alt={group.subject} fill className="object-contain p-2" />
                     </div>
                     <div className="flex-1 min-w-0">
