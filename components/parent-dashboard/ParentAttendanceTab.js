@@ -1,6 +1,7 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, PieChart, Pie, Cell, Legend } from "recharts";
 import { AlertTriangle } from "lucide-react";
 import { attendanceMonthly, attendanceLog } from "./data";
+import { useMemo } from "react";
 
 function WeeklyTooltip({ active, payload, label }) {
   if (!active || !payload?.length) {
@@ -32,23 +33,79 @@ export default function ParentAttendanceTab() {
     attendancePct: Math.round((week.present / Math.max(1, week.present + week.absent)) * 100),
   }));
 
+  const stripedData = useMemo(() => {
+    const segments = 84;
+    const presentSegments = Math.round((segments * totalPresent) / Math.max(1, totalDays));
+    return Array.from({ length: segments }, (_, i) => ({
+      name: i < presentSegments ? "Present" : "Absent",
+      value: 1,
+      isPresent: i < presentSegments,
+    }));
+  }, [totalPresent, totalDays]);
+
+  const donutCells = useMemo(
+    () =>
+      stripedData.map((entry, index) => (
+        <Cell
+          key={`cell-${index}`}
+          fill={entry.isPresent ? "#10b981" : "#dc2626"}
+          stroke="white"
+          strokeWidth={0.35}
+        />
+      )),
+    [stripedData]
+  );
+
   return (
     <div className="space-y-6 py-6">
       {/* Attendance Overview */}
       <section className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200 p-6">
-        <h3 className="text-sm font-semibold text-slate-600 mb-4">ATTENDANCE OVERVIEW</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          <div>
-            <p className="text-xs text-slate-600 font-medium">Attendance %</p>
-            <p className="mt-2 text-3xl font-bold text-emerald-700">{attendancePercentage}%</p>
+        {/* Header with Title and Legend */}
+        <div className="flex items-start justify-between mb-6">
+          <h3 className="text-sm font-semibold text-slate-600">ATTENDANCE OVERVIEW</h3>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-red-600"></div>
+              <span className="text-sm font-medium text-slate-700">Absent</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-emerald-600"></div>
+              <span className="text-sm font-medium text-slate-700">Present</span>
+            </div>
           </div>
-          <div>
-            <p className="text-xs text-slate-600 font-medium">Present Days</p>
-            <p className="mt-2 text-3xl font-bold text-emerald-600">{totalPresent}</p>
-          </div>
-          <div>
-            <p className="text-xs text-slate-600 font-medium">Absent Days</p>
-            <p className="mt-2 text-3xl font-bold text-rose-600">{totalDays - totalPresent}</p>
+        </div>
+
+        {/* Chart */}
+        <div className="flex flex-col items-center">
+          <div className="w-full max-w-md h-80 flex items-center justify-center">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={stripedData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={75}
+                  outerRadius={90}
+                  paddingAngle={0.8}
+                  dataKey="value"
+                  startAngle={90}
+                  endAngle={-270}
+                  strokeLinecap="round"
+                  isAnimationActive
+                  animationBegin={0}
+                  animationDuration={900}
+                  animationEasing="ease-out"
+                >
+                  {donutCells}
+                </Pie>
+                <text x="50%" y="45%" textAnchor="middle" dominantBaseline="middle" className="text-sm fill-slate-400">
+                  Attendance
+                </text>
+                <text x="50%" y="55%" textAnchor="middle" dominantBaseline="middle" className="text-4xl font-bold fill-slate-900">
+                  {attendancePercentage}%
+                </text>
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
         {attendancePercentage < 75 && (

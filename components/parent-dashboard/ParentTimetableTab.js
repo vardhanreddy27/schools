@@ -30,7 +30,7 @@ export default function ParentTimetableTab() {
 
         {/* Morning Table */}
         <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
-          <p className="border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+          <p className="border-b border-slate-200 bg-[#00b5ffd6] px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white">
             Morning
           </p>
           <table className="w-full text-sm">
@@ -60,7 +60,7 @@ export default function ParentTimetableTab() {
 
         {/* Afternoon Table */}
         <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
-          <p className="border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+          <p className="border-b border-slate-200 bg-orange-500 px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white">
             Afternoon
           </p>
           <table className="w-full text-sm">

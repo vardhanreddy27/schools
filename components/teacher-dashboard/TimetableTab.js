@@ -1,8 +1,10 @@
 import { todayClasses } from "@/components/teacher-dashboard/data";
 
-function SectionHeader({ title }) {
+function SectionHeader({ title, tone = "morning" }) {
+  const toneClass = tone === "afternoon" ? "bg-orange-500 text-white" : "bg-[#00b5ffd6] text-white";
+
   return (
-    <p className="border-b border-slate-100 bg-slate-50/50 px-4 py-3   uppercase tracking-[0.2em] text-slate-400">
+    <p className={`border-b border-slate-100 px-4 py-3 uppercase tracking-[0.2em] ${toneClass}`}>
       {title}
     </p>
   );
@@ -34,7 +36,7 @@ Morning and afternoon plan
         </div>
       {/* MORNING SESSIONS */}
       <div className="overflow-hidden rounded-4xl border border-slate-100 bg-white shadow-sm">
-        <SectionHeader title="Morning Sessions" />
+        <SectionHeader title="Morning Sessions" tone="morning" />
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -77,7 +79,7 @@ Morning and afternoon plan
 
       {/* AFTERNOON SESSIONS */}
       <div className="overflow-hidden rounded-4xl border border-slate-100 bg-white shadow-sm">
-        <SectionHeader title="Afternoon Sessions" />
+        <SectionHeader title="Afternoon Sessions" tone="afternoon" />
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

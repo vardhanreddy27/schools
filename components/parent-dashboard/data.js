@@ -1,11 +1,11 @@
 import {
   Bell,
   BookOpen,
-  CalendarDays,
   ClipboardCheck,
   AlertTriangle,
   GraduationCap,
   LayoutGrid,
+  MoreHorizontal,
   UserCircle2,
   TrendingDown,
 } from "lucide-react";
@@ -14,8 +14,8 @@ export const parentMenuItems = [
   { id: "home", label: "Home", icon: LayoutGrid },
   { id: "homework", label: "Homework", icon: BookOpen },
   { id: "attendance", label: "Attendance", icon: ClipboardCheck },
-  { id: "timetable", label: "Timetable", icon: CalendarDays },
   { id: "academics", label: "Academics", icon: GraduationCap },
+  { id: "more", label: "More", icon: MoreHorizontal },
 ];
 
 export const parentSummary = [

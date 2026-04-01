@@ -26,8 +26,8 @@ export default function TimetableTab() {
           Morning prayer: 08:45 AM to 09:00 AM (Everyday)
         </div>
 
-        <div className="mt-4 rounded-2xl border border-slate-200 bg-white">
-          <p className="border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Morning</p>
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+          <p className="border-b border-slate-200 bg-[#00b5ffd6] px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white">Morning</p>
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-slate-500">
               <tr>
@@ -52,8 +52,8 @@ export default function TimetableTab() {
           Lunch break: 12:00 PM to 12:45 PM
         </div>
 
-        <div className="mt-4 rounded-2xl border border-slate-200 bg-white">
-          <p className="border-b border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Afternoon</p>
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+          <p className="border-b border-slate-200 bg-orange-500 px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white">Afternoon</p>
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-slate-500">
               <tr>

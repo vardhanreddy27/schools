@@ -1,15 +1,5 @@
 import { studentProfileDefaults } from "@/components/student-dashboard/data";
 function getInitialStudentProfile() {
-  if (typeof window !== "undefined") {
-    const saved = window.localStorage.getItem("studentProfile");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return studentProfileDefaults;
-      }
-    }
-  }
   return studentProfileDefaults;
 }
 import { useEffect, useMemo, useState } from "react";
@@ -28,6 +18,7 @@ import ParentHomeworkTab from "@/components/parent-dashboard/ParentHomeworkTab";
 import ParentAttendanceTab from "@/components/parent-dashboard/ParentAttendanceTab";
 import ParentTimetableTab from "@/components/parent-dashboard/ParentTimetableTab";
 import ParentAcademicsTab from "@/components/parent-dashboard/ParentAcademicsTab";
+import ParentMoreTab from "@/components/parent-dashboard/ParentMoreTab";
 import { parentMenuItems, parentProfileDefaults } from "@/components/parent-dashboard/data";
 
 const familyRoleItems = [
@@ -51,28 +42,10 @@ const roleConfig = {
 };
 
 function getInitialParentProfile() {
-  if (typeof window !== "undefined") {
-    const saved = window.localStorage.getItem("parentProfile");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return parentProfileDefaults;
-      }
-    }
-  }
-
   return parentProfileDefaults;
 }
 
 function getInitialRole(initialRole) {
-  if (typeof window !== "undefined") {
-    const savedRole = window.localStorage.getItem("familyDashboardRole");
-    if (savedRole === "student" || savedRole === "parent") {
-      return savedRole;
-    }
-  }
-
   return initialRole;
 }
 
@@ -168,7 +141,7 @@ function FamilyBottomNav({ activeRole, activeMenu, onMenuChange }) {
 export default function FamilyDashboard({ initialRole = "student" }) {
   const router = useRouter();
   const [activeRole, setActiveRole] = useState(() => getInitialRole(initialRole));
-  const [activeMenu, setActiveMenu] = useState(() => roleConfig[getInitialRole(initialRole)]?.defaultMenu || "home");
+  const [activeMenu, setActiveMenu] = useState(() => roleConfig[initialRole]?.defaultMenu || "home");
   const [studentProfileSheetOpen, setStudentProfileSheetOpen] = useState(false);
   const [parentProfileSheetOpen, setParentProfileSheetOpen] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
@@ -177,7 +150,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
 
   const isStudent = activeRole === "student";
 
-  const showTopHeader = isStudent ? activeMenu === "home" || activeMenu === "more" : activeMenu === "home";
+  const showTopHeader = isStudent ? activeMenu === "home" || activeMenu === "more" : activeMenu === "home" || activeMenu === "more";
 
   const subtitle = useMemo(() => {
     if (isStudent) {
@@ -188,6 +161,36 @@ export default function FamilyDashboard({ initialRole = "student" }) {
   }, [isStudent, studentProfileForm.className, studentProfileForm.section, parentProfileForm.childClass, parentProfileForm.childSection]);
 
   const attendancePercentage = 75;
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const savedRole = window.localStorage.getItem("familyDashboardRole");
+    if (savedRole === "student" || savedRole === "parent") {
+      setActiveRole(savedRole);
+      setActiveMenu(roleConfig[savedRole].defaultMenu);
+    }
+
+    const savedStudentProfile = window.localStorage.getItem("studentProfile");
+    if (savedStudentProfile) {
+      try {
+        setStudentProfileForm(JSON.parse(savedStudentProfile));
+      } catch {
+        setStudentProfileForm(studentProfileDefaults);
+      }
+    }
+
+    const savedParentProfile = window.localStorage.getItem("parentProfile");
+    if (savedParentProfile) {
+      try {
+        setParentProfileForm(JSON.parse(savedParentProfile));
+      } catch {
+        setParentProfileForm(parentProfileDefaults);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -283,7 +286,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
                   <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
                     {isStudent
                       ? `Welcome Shiva`
-                      : `Welcome, ${parentProfileForm.parentName || "Parent"}`}
+                      : `Welcome Prakesh`}
                   </h1>
 
                   <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -297,7 +300,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
                     ) : (
                       <>
                         <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                          {parentProfileForm.childName || "Child"}
+                          Krishna
                         </span>
                         <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">{subtitle}</span>
                       </>
@@ -337,13 +340,13 @@ export default function FamilyDashboard({ initialRole = "student" }) {
                     className="p-1 text-slate-500 transition-all duration-150 hover:text-slate-800 active:scale-90 lg:hidden"
                     aria-label="Open profile"
                   >
-                    <span className="block h-12 w-12 overflow-hidden rounded-full border border-slate-200 bg-white p-0.5 shadow-sm">
+                    <span className={`block overflow-hidden rounded-full border border-slate-200 bg-white shadow-sm ${isStudent ? "h-12 w-12 p-0.5" : "h-16 w-16 p-0"}`}>
                       <Image
-                        src="/student3.png"
+                        src={isStudent ? "/student3.png" : "/parent.jpg"}
                         alt={isStudent ? "Student profile" : "Parent profile"}
-                        width={48}
-                        height={48}
-                        className="h-full w-full object-cover"
+                        width={isStudent ? 48 : 64}
+                        height={isStudent ? 48 : 64}
+                        className={isStudent ? "h-full w-full object-cover" : "h-full w-full scale-[1.12] object-cover object-[center_18%]"}
                       />
                     </span>
                   </button>
@@ -388,8 +391,8 @@ export default function FamilyDashboard({ initialRole = "student" }) {
                 {activeMenu === "home" ? <ParentHomeTab /> : null}
                 {activeMenu === "homework" ? <ParentHomeworkTab /> : null}
                 {activeMenu === "attendance" ? <ParentAttendanceTab /> : null}
-                {activeMenu === "timetable" ? <ParentTimetableTab /> : null}
                 {activeMenu === "academics" ? <ParentAcademicsTab /> : null}
+                {activeMenu === "more" ? <ParentMoreTab /> : null}
               </>
             )}
           </div>
