@@ -20,7 +20,7 @@ const moreCards = [
   },
   {
     id: "exams",
-    title: "View Exams",
+    title: "View Report card",
     subtitle: "Upcoming and past exams",
     imageSrc: "/examicon.webp",
     tone: "from-indigo-100 to-violet-100",

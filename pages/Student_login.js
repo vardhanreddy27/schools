@@ -80,7 +80,8 @@ export default function FamilyLogin() {
     }
 
     setIsSubmitting(false);
-    router.push("/Studentdashboard");
+    const redirectPath = activeRole === "parent" ? "/Parentdashboard" : "/Studentdashboard";
+    router.push(redirectPath);
   }
 
   async function handleGoogleLogin() {
@@ -90,9 +91,10 @@ export default function FamilyLogin() {
       window.localStorage.setItem("familyDashboardRole", activeRole);
     }
 
+    const callbackUrl = activeRole === "parent" ? "/Parentdashboard" : "/Studentdashboard";
     const googleResult = await signIn("google", {
       redirect: false,
-      callbackUrl: "/Studentdashboard",
+      callbackUrl: callbackUrl,
     });
 
     setIsSubmitting(false);
