@@ -1,113 +1,132 @@
-import { studentProfileDefaults, studentResources, attendanceMonthly, attendanceLog } from "@/components/student-dashboard/data";
-import { X, BookOpen } from "lucide-react"; // Added BookOpen for consistency if you add icons later
+import { useState } from "react";
+import Image from "next/image";
+import { X } from "lucide-react";
+import TimetableTab from "./TimetableTab";
 
-export default function MoreTab({ profile, onProfileChange, onProfileSave, profileSaving }) {
-  const currentMonth = new Date().toLocaleString("en-US", { month: "long", year: "numeric" });
-  const totalDays = attendanceLog.length;
-  const presentDays = attendanceLog.filter((log) => log.status === "Present").length;
-  const attendancePercentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+const moreCards = [
+  {
+    id: "calendar",
+    title: "Academic Calendar",
+    subtitle: "Important dates and holidays",
+    imageSrc: "/calendericon.webp",
+    tone: "from-sky-100 to-cyan-100",
+  },
+  {
+    id: "leave",
+    title: "Leave Request",
+    subtitle: "Request student leave quickly",
+    imageSrc: "/leaveicon.webp",
+    tone: "from-amber-100 to-orange-100",
+  },
+  {
+    id: "exams",
+    title: "View Report card",
+    subtitle: "Upcoming and past exams",
+    imageSrc: "/examicon.webp",
+    tone: "from-indigo-100 to-violet-100",
+  },
+  {
+    id: "syllabus",
+    title: "Syllabus",
+    subtitle: "Track curriculum progress",
+    imageSrc: "/syllbusicon.webp",
+    tone: "from-emerald-100 to-teal-100",
+  },
+  {
+    id: "announcements",
+    title: "Announcements",
+    subtitle: "School notices and updates",
+    imageSrc: "/announcementsicon.png",
+    tone: "from-amber-100 to-yellow-100",
+  },
+  {
+    id: "bus",
+    title: "Bus Tracking",
+    subtitle: "Live route and arrival status",
+    imageSrc: "/bustracking.webp",
+    tone: "from-rose-100 to-pink-100",
+  },
+  {
+    id: "timetable",
+    title: "Timetable",
+    subtitle: "Tap to open full schedule",
+    imageSrc: "/timetable.png",
+    tone: "from-blue-100 to-indigo-100",
+  },
+];
+
+export default function MoreTab() {
+  const [timetableOpen, setTimetableOpen] = useState(false);
+
+  function handleCardClick(cardId) {
+    if (cardId === "timetable") {
+      setTimetableOpen(true);
+    }
+  }
 
   return (
     <>
-      <section className="mt-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Academic Calendar Card */}
-          <article className="rounded-3xl bg-linear-to-br from-green-400 to-emerald-600 p-6 shadow-lg flex flex-col gap-2 text-white relative overflow-hidden">
-            <div className="flex items-center gap-3">
-              <div>
-                <p className="text-base font-semibold">Academic Calendar</p>
-                <p className="text-xs opacity-90 mt-1">View important academic dates and holidays.</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm hover:bg-white transition-colors"
-            >
-              View Calendar
-            </button>
-          </article>
+      <section className="-mx-3 mt-6 min-h-[calc(100vh-10rem)] space-y-0 bg-white mb-9">
+        <article className="bg-white p-5">
+          <p className="text-sm text-slate-500">Student control</p>
+          <h2 className="mt-1 text-2xl font-semibold text-slate-900">Quick actions</h2>
 
-          {/* Leave Request Card */}
-          <article className="rounded-3xl bg-linear-to-br from-yellow-400 to-amber-500 p-6 shadow-lg flex flex-col gap-2 text-white relative overflow-hidden">
-            <div className="flex items-center gap-3">
-              <div>
-                <p className="text-base font-semibold">Leave Request</p>
-                <p className="text-xs opacity-90 mt-1">Submit a request for leave to your class teacher.</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-amber-700 shadow-sm hover:bg-white transition-colors"
-            >
-              Request Leave
-            </button>
-          </article>
-
-          {/* Report Card */}
-          <article className="rounded-3xl bg-linear-to-br from-blue-500 to-indigo-700 p-6 shadow-lg flex flex-col gap-2 text-white relative overflow-hidden">
-            <div className="flex items-center gap-3">
-              <div>
-                <p className="text-base font-semibold">Report Card</p>
-                <p className="text-xs opacity-90 mt-1">View or download your latest report card.</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-white transition-colors"
-            >
-              View Report Card
-            </button>
-          </article>
-
-          {/* Exams Card */}
-          <article className="rounded-3xl bg-linear-to-br from-pink-500 to-rose-500 p-6 shadow-lg flex flex-col gap-2 text-white relative overflow-hidden">
-            <div className="flex items-center gap-3">
-              <div>
-                <p className="text-base font-semibold">View Exams</p>
-                <p className="text-xs opacity-90 mt-1">See upcoming and past exam schedules.</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-white transition-colors"
-            >
-              View Exams
-            </button>
-          </article>
-
-          {/* NEW: Syllabus Card */}
-          <article className="rounded-3xl bg-linear-to-br from-purple-500 to-violet-700 p-6 shadow-lg flex flex-col gap-2 text-white relative overflow-hidden">
-            <div className="flex items-center gap-3">
-              <div>
-                <p className="text-base font-semibold">Syllabus</p>
-                <p className="text-xs opacity-90 mt-1">Track your curriculum and subject topics.</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              className="mt-4 self-end rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-violet-700 shadow-sm hover:bg-white transition-colors"
-            >
-              View Syllabus
-            </button>
-          </article>
-        </div>
-
-        {/* Notes and Resources Card */}
-        <article className="rounded-3xl bg-white p-6 shadow-lg mt-6">
-          <p className="text-sm text-slate-500">Notes and resources</p>
-          <h2 className="mt-1 text-2xl font-semibold">Notes and files</h2>
-          <div className="mt-5">
-            <ul className="space-y-2">
-              {studentResources.map((item) => (
-                <li key={item.id} className="flex items-center justify-between rounded-xl bg-slate-50 p-3">
-                  <span className="font-semibold text-slate-900">{item.title}</span>
-                  <span className="rounded-full bg-[#fff4d6] px-2 py-1 text-xs font-semibold text-[#8b6400]">{item.type}</span>
-                </li>
-              ))}
-            </ul>
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {moreCards.map((card) => {
+              return (
+                <button
+                  key={card.id}
+                  type="button"
+                  onClick={() => handleCardClick(card.id)}
+                  className={`group rounded-2xl bg-linear-to-br ${card.tone} p-4 text-left text-slate-900 shadow-sm ring-1 ring-slate-200/70 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98]`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold">{card.title}</p>
+                      <p className="mt-1 text-xs text-slate-600">{card.subtitle}</p>
+                      {card.id !== "timetable" ? <p className="mt-3 text-[11px] font-medium text-slate-500">Coming soon</p> : null}
+                    </div>
+                    <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl">
+                      <Image
+                        src={card.imageSrc}
+                        alt={`${card.title} icon`}
+                        width={72}
+                        height={72}
+                        className="h-14 w-14 object-contain"
+                      />
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </article>
       </section>
+
+      {timetableOpen ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 p-0 backdrop-blur-sm sm:items-center sm:p-6">
+          <div className="h-[90vh] w-full overflow-hidden rounded-t-3xl bg-[#eef3fb] shadow-2xl sm:h-auto sm:max-h-[88vh] sm:max-w-4xl sm:rounded-3xl">
+            <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 sm:px-5">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">More</p>
+                <h3 className="text-lg font-semibold text-slate-900">Timetable</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTimetableOpen(false)}
+                className="rounded-xl p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
+                aria-label="Close timetable"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="max-h-[calc(90vh-64px)] overflow-y-auto px-3 pb-4 sm:max-h-[calc(88vh-64px)] sm:px-5 sm:pb-5">
+              <TimetableTab />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }

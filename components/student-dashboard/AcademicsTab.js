@@ -44,7 +44,7 @@ export default function AcademicsTab() {
   };
 
   return (
-    <section className="mt-4 grid gap-4 xl:grid-cols-[1fr_1fr] w-full overflow-x-hidden px-0 sm:px-0">
+    <section className="mt-4 mb-14 grid gap-4 xl:grid-cols-[1fr_1fr] w-full overflow-x-hidden px-0 sm:px-0">
       {/* PRACTICE QUIZZES SECTION */}
       <article className="xl:col-span-2 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-6 lg:p-8 w-full overflow-x-hidden">
         <div className="mb-6">

@@ -15,7 +15,7 @@ export default function TimetableTab() {
   ];
 
   return (
-    <section className="mt-4">
+    <section className="mt-4 mb-26">
       <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <p className="text-sm text-slate-500">Weekly timetable</p>
         <h2 className="mt-1 text-2xl font-semibold">Morning and afternoon plan</h2>

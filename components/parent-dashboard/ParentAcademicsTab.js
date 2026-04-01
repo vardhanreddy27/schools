@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AlertTriangle, CheckCircle2, ChevronDown } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { subjectPerformance } from "./data";
 
 const progressOptions = [
@@ -62,6 +62,8 @@ const SUBJECT_IMAGE_MAP = {
   hindi: "/hindi.webp",
   biology: "/biology.png",
 };
+
+const CHART_BAR_COLORS = ["#f59e0b", "#8b5cf6", "#0ea5e9", "#06b6d4", "#10b981", "#f43f5e"];
 
 export default function ParentAcademicsTab() {
   const [activePeriod, setActivePeriod] = useState("monthly");
@@ -134,7 +136,11 @@ export default function ParentAcademicsTab() {
                   color: "#0f172a",
                 }}
               />
-              <Bar dataKey="score" fill="#fb923c" radius={[12, 12, 0, 0]} maxBarSize={40} />
+              <Bar dataKey="score" radius={[12, 12, 0, 0]} maxBarSize={40}>
+                {activeChartData.map((entry, index) => (
+                  <Cell key={`bar-${entry.label}`} fill={CHART_BAR_COLORS[index % CHART_BAR_COLORS.length]} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>

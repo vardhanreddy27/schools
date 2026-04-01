@@ -2,6 +2,7 @@ import { studentAssignments, studentAnnouncements, subjectProgress } from "@/com
 import Image from "next/image";
 import { PiLightbulbFilamentBold } from "react-icons/pi";
 import { useMemo, useState } from "react";
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Bell, ChevronLeft, ChevronRight, Trophy, School, UserRound, Bus } from "lucide-react";
 
 function HalfProgressGauge({ value }) {
@@ -44,6 +45,7 @@ export default function HomeTab() {
   const [scheduleWindow, setScheduleWindow] = useState("morning");
   const [announcementQuickFilter, setAnnouncementQuickFilter] = useState("all");
   const [announcementsPage, setAnnouncementsPage] = useState(1);
+  const [activePeriod, setActivePeriod] = useState("monthly");
   const announcementsPageSize = 3;
   const pendingHomework = studentAssignments.filter((item) => item.status !== "Submitted");
   const homeworkPreviewItems = pendingHomework.slice(0, 3);
@@ -72,6 +74,38 @@ export default function HomeTab() {
     "bg-emerald-500",
     "bg-rose-500",
   ];
+  const academicsChartData = {
+    monthly: [
+      { label: "Telugu", score: 83 },
+      { label: "Hindi", score: 80 },
+      { label: "English", score: 78 },
+      { label: "Maths", score: 62 },
+      { label: "Science", score: 81 },
+      { label: "Social", score: 77 },
+    ],
+    halfYearly: [
+      { label: "Telugu", score: 85 },
+      { label: "Hindi", score: 82 },
+      { label: "English", score: 80 },
+      { label: "Maths", score: 66 },
+      { label: "Science", score: 83 },
+      { label: "Social", score: 79 },
+    ],
+    annual: [
+      { label: "Telugu", score: 88 },
+      { label: "Hindi", score: 84 },
+      { label: "English", score: 82 },
+      { label: "Maths", score: 72 },
+      { label: "Science", score: 86 },
+      { label: "Social", score: 81 },
+    ],
+  };
+  const progressOptions = [
+    { id: "monthly", label: "Monthly" },
+    { id: "halfYearly", label: "Half-Yearly" },
+    { id: "annual", label: "Annual" },
+  ];
+  const activeChartData = academicsChartData[activePeriod] || academicsChartData.monthly;
   const weakSubjectItems = [
     { subject: "Maths", score: 52, tip: "Revise formulas and solve 5 mixed problems daily." },
     { subject: "Science", score: 48, tip: "Read one concept summary and practice one diagram." },
@@ -227,36 +261,51 @@ export default function HomeTab() {
       <section className="mt-4 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <h2 className="mt-1 text-2xl font-semibold">Subject Performance</h2>
 
-        <div className="mt-4 rounded-3xl py-3 pe-3">
-          <div className="grid grid-cols-[2.8rem_1fr]">
-            <div className="flex h-52 items-center justify-center text-[11px] font-semibold text-slate-500">
-              <span style={{ writingMode: "vertical-rl" }} className="-rotate-180 text-center">
-                Percentage (%) of marks scored
-              </span>
-            </div>
-
-            <div>
-              <div className="relative h-52">
-                <div className="relative z-10 grid h-full grid-cols-6 items-end gap-2">
-                  {subjectBars.map((item, index) => (
-                    <div key={item.subject} className="flex h-full flex-col items-center justify-end gap-1">
-                      <span className="text-[11px] font-semibold text-slate-700">{item.score}%</span>
-                      <div
-                        className={`w-full rounded-t-lg border border-slate-300/70 transition-all duration-300 ${chartBarColors[index % chartBarColors.length]}`}
-                        style={{ height: `${Math.max(item.score, 10)}%` }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-2 grid grid-cols-6 gap-2 text-center text-[11px] font-semibold text-slate-600">
-                {subjectBars.map((item) => (
-                  <span key={item.subject}>{item.subject.slice(0, 3)}</span>
-                ))}
-              </div>
-            </div>
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-1">
+          <div className="grid grid-cols-3 gap-1">
+            {progressOptions.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => setActivePeriod(option.id)}
+                className={`rounded-xl py-2 text-sm font-semibold transition-colors ${
+                  activePeriod === option.id ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
           </div>
+        </div>
+
+        <div className="mt-5 h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={activeChartData} barGap={10}>
+              <CartesianGrid strokeDasharray="4 4" stroke="#e2e8f0" vertical={false} />
+              <XAxis dataKey="label" tick={{ fill: "#64748b", fontSize: 12 }} tickLine={false} axisLine={false} />
+              <YAxis domain={[0, 100]} ticks={[0, 20, 40, 60, 80, 100]} tick={{ fill: "#64748b", fontSize: 12 }} tickLine={false} axisLine={false} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#ffffff",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "12px",
+                  color: "#0f172a",
+                }}
+              />
+              <Bar dataKey="score" radius={[12, 12, 0, 0]} maxBarSize={40}>
+                {activeChartData.map((entry, index) => (
+                  <Cell key={`bar-${entry.label}`} fill={[
+                    "#f59e0b",
+                    "#8b5cf6",
+                    "#0ea5e9",
+                    "#06b6d4",
+                    "#10b981",
+                    "#f43f5e",
+                  ][index % 6]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </section>
 
