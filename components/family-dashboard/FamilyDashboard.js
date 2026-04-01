@@ -255,7 +255,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
   }
 
   return (
-    <div className="min-h-dvh bg-[#eef3fb] text-slate-950 lg:flex">
+    <div className=" bg-[#eef3fb] text-slate-950 lg:flex">
       <FamilySidebar
         activeRole={activeRole}
         activeMenu={activeMenu}
@@ -265,7 +265,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
       />
 
       <main className="relative flex-1 pb-28 lg:pb-8">
-        <div className="mx-auto flex min-h-dvh max-w-6xl flex-col px-3 pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6">
+        <div className="mx-auto flex max-w-6xl flex-col px-3 pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6">
           {showTopHeader ? (
             <section className="rounded-4xl bg-white/80 p-4 shadow-sm ring-1 ring-white/60 backdrop-blur sm:p-5">
               <div className="flex items-start justify-between gap-4">

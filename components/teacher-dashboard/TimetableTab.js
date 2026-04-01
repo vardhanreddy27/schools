@@ -25,11 +25,13 @@ export default function TeacherTimetableTab() {
       <header className="px-1">
         <p className="text-sm font-medium text-slate-500">Weekly Schedule</p>
         <h2 className="text-[28px] font-black text-slate-900 leading-tight">
-          Teaching Plan
+Morning and afternoon plan
         </h2>
       </header>
 
-
+  <div className="mt-4 rounded-2xl border border-slate-200 bg-[#eef7ff] px-4 py-3 text-sm text-slate-700">
+          Morning prayer: 08:45 AM to 09:00 AM (Everyday)
+        </div>
       {/* MORNING SESSIONS */}
       <div className="overflow-hidden rounded-4xl border border-slate-100 bg-white shadow-sm">
         <SectionHeader title="Morning Sessions" />
