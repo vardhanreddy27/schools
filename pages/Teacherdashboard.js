@@ -30,14 +30,14 @@ export default function TeacherDashboard({ user }) {
   const [profileForm, setProfileForm] = useState({
     id: user?.id || "",
     name: user?.name || "",
-    subject: user?.subject || "",
+    subject: user?.subject || "English",
     number: user?.number || "",
     doj: user?.doj || "",
     gender: user?.gender || "",
   });
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileMessage, setProfileMessage] = useState("");
-  const showTopHeader = activeMenu === "home" || activeMenu === "more" || activeMenu === "quiz";
+  const showTopHeader = false;
 
   const today = useMemo(() => new Date(), []);
   const weekDays = useMemo(() => weekDaysFromDate(today), [today]);
@@ -66,7 +66,7 @@ export default function TeacherDashboard({ user }) {
         setProfileForm({
           id: payload.profile.id || "",
           name: payload.profile.name || "",
-          subject: payload.profile.subject || "",
+          subject: payload.profile.subject || "English",
           number: payload.profile.number || "",
           doj: payload.profile.doj || "",
           gender: payload.profile.gender || "",
@@ -113,7 +113,7 @@ export default function TeacherDashboard({ user }) {
       ...prev,
       id: payload.profile.id || prev.id,
       name: payload.profile.name || "",
-      subject: payload.profile.subject || "",
+      subject: payload.profile.subject || "English",
       number: payload.profile.number || "",
       doj: payload.profile.doj || "",
       gender: payload.profile.gender || "",
@@ -145,7 +145,9 @@ export default function TeacherDashboard({ user }) {
     const requestedTab = router.query.tab;
     const allowedTabs = ["home", "attendance", "quiz", "timetable", "more"];
 
-    
+    if (typeof requestedTab === "string" && allowedTabs.includes(requestedTab)) {
+      setActiveMenu(requestedTab);
+    }
   }, [router.isReady, router.query.tab]);
 
   const displayName = "Harika";
@@ -155,7 +157,7 @@ export default function TeacherDashboard({ user }) {
       <TeacherSidebar activeMenu={activeMenu} onMenuChange={setActiveMenu} />
 
       <main className={`relative flex-1 ${activeMenu === "timetable" ? "bg-[#eef1f6]" : ""}`}>
-        <div className="mx-auto flex   max-w-6xl flex-col px-3 pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6">
+        <div className="mx-auto flex   max-w-6xl flex-col  pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6">
           {showTopHeader ? (
             <section className="bg-white p-4 sm:p-5">
               <div className="flex items-start justify-between gap-3 lg:hidden">
@@ -176,7 +178,7 @@ export default function TeacherDashboard({ user }) {
 
                   <div className="mt-2 flex items-center gap-2">
                     <span className="whitespace-nowrap rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
-                      Subject: {profileForm.subject || "Not set"}
+                      Subject: {profileForm.subject || "English"}
                     </span>
                     <span className="whitespace-nowrap rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
                       4 classes today
@@ -206,7 +208,7 @@ export default function TeacherDashboard({ user }) {
                 </h1>
                 <div className="mt-3 flex flex-wrap items-center gap-2">
                   <span className="whitespace-nowrap rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                    Subject: {profileForm.subject || "Not set"}
+                    Subject: {profileForm.subject || "English"}
                   </span>
                   <span className="whitespace-nowrap rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                     4 classes today
@@ -216,7 +218,9 @@ export default function TeacherDashboard({ user }) {
             </section>
           ) : null}
 
-          {activeMenu === "home" ? <HomeTab /> : null}
+          {activeMenu === "home" ? (
+            <HomeTab displayName={displayName} subject={profileForm.subject || "English"} classesToday={4} avatarSrc="/teacher.avif" />
+          ) : null}
           {activeMenu === "attendance" ? (
             <AttendanceTab
               classes={attendanceClasses}
@@ -235,7 +239,15 @@ export default function TeacherDashboard({ user }) {
               setEvents={setCalendarEvents}
             />
           ) : null}
-          {activeMenu === "more" ? <MoreTab onOpenToolModal={setActiveToolModal} /> : null}
+          {activeMenu === "more" ? (
+            <MoreTab
+              onOpenToolModal={setActiveToolModal}
+              displayName={displayName}
+              subject={profileForm.subject || "English"}
+              classesToday={4}
+              avatarSrc="/teacher.avif"
+            />
+          ) : null}
         </div>
 
         <TeacherBottomNav activeMenu={activeMenu} onMenuChange={setActiveMenu} />

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { X, Paperclip, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useRef } from "react";
 import { moreTools, moreToolDetails } from "./data";
+import TeacherHeroCard from "./TeacherHeroCard";
 
 const teacherMoreCardAssets = {
   sectionPerformance: { imageSrc: "/performance.png", tone: "from-sky-100 to-cyan-100" },
@@ -181,7 +182,7 @@ function AcademicCalendarTool() {
               </button>
             </div>
             <div className="mt-4 grid gap-2 sm:grid-cols-[0.34fr_1fr_auto]">
-              <select value={eventType} onChange={(event) => setEventType(event.target.value)} className="rounded-xl border border-slate-300 px-3 py-2.5 text-sm">
+              <select value={eventType} onChange={(event) => setEventType(event.target.value)} className="rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200">
                 <option value="quiz">Quiz</option>
                 <option value="exam">Exam</option>
                 <option value="homework">Homework</option>
@@ -214,10 +215,12 @@ function AcademicCalendarTool() {
 
 
 
-export function MoreTab({ onOpenToolModal }) {
+export function MoreTab({ onOpenToolModal, displayName = "Harika", subject = "Physics", classesToday = 4, avatarSrc = "/teacher.avif" }) {
   return (
     <section className="-mx-3 mt-6 min-h-[calc(100vh-10rem)] space-y-0 bg-white mb-9">
-      <article className="bg-white p-5">
+      <TeacherHeroCard displayName={displayName} subject={subject} classesToday={classesToday} avatarSrc={avatarSrc} />
+
+      <article className=" bg-white p-5">
         <p className="text-sm text-slate-500">Teacher control</p>
         <h2 className="mt-1 text-2xl font-semibold text-slate-900">Quick actions</h2>
 

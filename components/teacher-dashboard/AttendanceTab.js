@@ -313,17 +313,17 @@ export function AttendanceTab({ classes, attendanceRecords, onSubmitAttendance }
                               aria-label={`${student.name} attendance`}
                               onClick={() => toggleStudent(studentIndex)}
                               className={`mx-auto flex h-8 w-16 items-center rounded-full p-1 transition-colors ${
-                                isPresent ? " bg-rose-400" : "bg-[#16c7bd]"
+                                isPresent ? "bg-[#16c7bd]" : "bg-rose-400"
                               }`}
                             >
                               <span
                                 className={`h-6 w-6 rounded-full bg-white shadow-sm transition-transform ${
-                                  isPresent ? "translate-x-0" : "translate-x-8"
+                                  isPresent ? "translate-x-8" : "translate-x-0"
                                 }`}
                               />
                             </button>
-                            <p className={`mt-1 text-center text-[10px] font-semibold ${isPresent ? " text-rose-600" : "text-[#0d8f86]"}`}>
-                              {isPresent ? " Absent" : "Present"}
+                            <p className={`mt-1 text-center text-[10px] font-semibold ${isPresent ? "text-[#0d8f86]" : "text-rose-600"}`}>
+                              {isPresent ? "Present" : "Absent"}
                             </p>
                           </td>
                         </tr>
