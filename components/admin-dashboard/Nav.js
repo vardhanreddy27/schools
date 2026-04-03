@@ -24,7 +24,7 @@ export function SidebarNav({ activeMenu, onMenuChange }) {
             type="button"
             onClick={() => onMenuChange(id)}
             className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium transition-all duration-200 active:scale-[0.97] ${
-              activeMenu === id ? "text-white" : "text-slate-300 hover:bg-slate-900 hover:text-white"
+              activeMenu === id ? "text-slate-950" : "text-slate-300 hover:bg-slate-900 hover:text-white"
             }`}
           >
             <Icon className="h-5 w-5" />
@@ -60,7 +60,7 @@ export function MobileBottomNav({ activeMenu, onMenuChange, items }) {
               type="button"
               onClick={() => onMenuChange(id)}
               className={`flex min-h-14 w-full flex-col items-center justify-center gap-0.5 rounded-xl py-1.5 text-[11px] font-medium transition-colors duration-200 active:scale-95 ${
-                isActive ? "text-[#8b6400]" : "text-slate-500"
+                isActive ? "text-black" : "text-slate-500"
               }`}
             >
               <Icon className="h-5 w-5" />

@@ -5,6 +5,7 @@ export default function TeacherHeroCard({
   subject = "English",
   classesToday = 4,
   avatarSrc = "/teacher.avif",
+  onAvatarClick,
 }) {
   return (
     <article className="rounded-[28px] bg-[#eef4fb] p-4 mx-3 shadow-[0_12px_30px_-22px_rgba(15,23,42,0.28)] sm:p-5">
@@ -34,6 +35,7 @@ export default function TeacherHeroCard({
 
         <button
           type="button"
+          onClick={onAvatarClick}
           className="shrink-0 rounded-full p-0.5 transition-transform duration-150 active:scale-95"
           aria-label="Open profile"
         >

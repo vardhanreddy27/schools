@@ -215,10 +215,23 @@ function AcademicCalendarTool() {
 
 
 
-export function MoreTab({ onOpenToolModal, displayName = "Harika", subject = "Physics", classesToday = 4, avatarSrc = "/teacher.avif" }) {
+export function MoreTab({
+  onOpenToolModal,
+  displayName = "Harika",
+  subject = "Physics",
+  classesToday = 4,
+  avatarSrc = "/teacher.avif",
+  onAvatarClick,
+}) {
   return (
     <section className="-mx-3 mt-6 min-h-[calc(100vh-10rem)] space-y-0 bg-white mb-9">
-      <TeacherHeroCard displayName={displayName} subject={subject} classesToday={classesToday} avatarSrc={avatarSrc} />
+      <TeacherHeroCard
+        displayName={displayName}
+        subject={subject}
+        classesToday={classesToday}
+        avatarSrc={avatarSrc}
+        onAvatarClick={onAvatarClick}
+      />
 
       <article className=" bg-white p-5">
         <p className="text-sm text-slate-500">Teacher control</p>
@@ -314,7 +327,7 @@ export function ProfileBottomSheet({
               name="name"
               value={profileForm.name}
               onChange={onProfileChange}
-              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[--app-accent] focus:ring-4 focus:ring-[--app-accent-soft]"
+              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#16c7bd] focus:ring-4 focus:ring-[#fff4d6]"
             />
           </div>
 
@@ -325,7 +338,7 @@ export function ProfileBottomSheet({
               name="subject"
               value={profileForm.subject}
               onChange={onProfileChange}
-              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[--app-accent] focus:ring-4 focus:ring-[--app-accent-soft]"
+              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#16c7bd] focus:ring-4 focus:ring-[#fff4d6]"
             />
           </div>
 
@@ -336,7 +349,7 @@ export function ProfileBottomSheet({
               name="number"
               value={profileForm.number}
               onChange={onProfileChange}
-              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[--app-accent] focus:ring-4 focus:ring-[--app-accent-soft]"
+              className="mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-[#16c7bd] focus:ring-4 focus:ring-[#fff4d6]"
             />
           </div>
 
@@ -372,14 +385,14 @@ export function ProfileBottomSheet({
             <button
               type="submit"
               disabled={profileSaving}
-              className="w-full rounded-2xl bg-[--app-accent] px-4 py-3 text-sm font-semibold text-white hover:bg-[#b07e10] disabled:cursor-not-allowed disabled:bg-[#e6cc8a]"
+              className="w-full rounded-2xl bg-[#16c7bd] px-4 py-3 text-sm font-semibold text-white hover:bg-[#12a79f] disabled:cursor-not-allowed disabled:bg-[#8fded8]"
             >
               {profileSaving ? "Saving..." : "Update profile"}
             </button>
             <button
               type="button"
               onClick={onLogout}
-              className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-200"
+              className="w-full rounded-2xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white hover:bg-rose-500"
             >
               Logout
             </button>

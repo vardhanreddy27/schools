@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import {
   ArrowLeft,
   Bell,
@@ -18,49 +19,57 @@ const MORE_ITEMS = [
     id: "alerts",
     title: "Alerts",
     description: "School-wide notices and reminders",
-    icon: Bell,
+    imageSrc: "/message.png",
+    tone: "from-sky-100 to-cyan-100",
   },
   {
     id: "teachers",
     title: "Teachers performance",
     description: "Attendance, completion and participation",
-    icon: Users,
+    imageSrc: "/performance.png",
+    tone: "from-emerald-100 to-teal-100",
   },
   {
     id: "classes",
     title: "Class performance",
     description: "Subject progress by class and section",
-    icon: GraduationCap,
+    imageSrc: "/examicon.webp",
+    tone: "from-indigo-100 to-violet-100",
   },
   {
     id: "calendar",
     title: "Calendar View",
     description: "Week-first calendar view with upcoming events",
-    icon: CalendarDays,
+    imageSrc: "/calendericon.webp",
+    tone: "from-blue-100 to-indigo-100",
   },
   {
     id: "events",
     title: "Events",
     description: "Planned school programmes and dates",
-    icon: Bell,
+    imageSrc: "/announcementsicon.png",
+    tone: "from-amber-100 to-yellow-100",
   },
   {
     id: "results",
     title: "Results",
     description: "Scheduled result releases and publishing",
-    icon: FileText,
+    imageSrc: "/quiz.png",
+    tone: "from-rose-100 to-pink-100",
   },
   {
     id: "sports",
     title: "Sports",
     description: "Sports activities and meet updates",
-    icon: Trophy,
+    imageSrc: "/performance.png",
+    tone: "from-sky-100 to-cyan-100",
   },
   {
     id: "competitions",
     title: "Competitions",
     description: "Upcoming student competitions",
-    icon: Medal,
+    imageSrc: "/notes.webp",
+    tone: "from-amber-100 to-orange-100",
   },
 ];
 
@@ -241,15 +250,14 @@ export default function CommunicationView({
 
   if (activeSection === "menu") {
     return (
-      <section className="mt-4">
-        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
-          <p className="text-sm text-slate-500">More</p>
-          <h2 className="mt-1 text-2xl font-semibold">School tools and updates</h2>
-          <p className="mt-2 text-sm text-slate-500">Open the area you want to review.</p>
+      <section className="-mx-3 mt-6 min-h-[calc(100vh-10rem)] space-y-0 bg-white mb-9">
+        <article className="bg-white p-5">
+          <p className="text-sm text-slate-500">Administrative tools</p>
+          <h2 className="mt-1 text-2xl font-semibold text-slate-900">Quick actions</h2>
+          <p className="mt-2 text-sm text-slate-500">Access school management features.</p>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {MORE_ITEMS.map((item) => {
-              const Icon = item.icon;
               return (
                 <button
                   key={item.id}
@@ -259,13 +267,24 @@ export default function CommunicationView({
                     setTeacherPage(1);
                     setClassPage(1);
                   }}
-                  className="rounded-3xl bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:bg-[#fff4d6]"
+                  className={`group rounded-2xl bg-linear-to-br ${item.tone} p-4 text-left text-slate-900 shadow-sm ring-1 ring-slate-200/70 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98]`}
                 >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#fff4d6] text-[#8b6400]">
-                    <Icon className="h-5 w-5" />
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-base font-semibold">{item.title}</p>
+                      <p className="mt-1 text-xs text-slate-600">{item.description}</p>
+                      <p className="mt-3 text-[11px] font-medium text-slate-500">Open tool</p>
+                    </div>
+                    <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl">
+                      <Image
+                        src={item.imageSrc}
+                        alt={`${item.title} icon`}
+                        width={72}
+                        height={72}
+                        className="h-14 w-14 object-contain"
+                      />
+                    </span>
                   </div>
-                  <p className="mt-4 font-semibold text-slate-900">{item.title}</p>
-                  <p className="mt-1 text-sm text-slate-500">{item.description}</p>
                 </button>
               );
             })}

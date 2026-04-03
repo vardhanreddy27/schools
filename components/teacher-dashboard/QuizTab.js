@@ -183,7 +183,7 @@ export default function QuizTab() {
   }
 
   return (
-    <section className="page-enter space-y-4 pb-24">
+    <section className="page-enter space-y-4 px-3 pb-24">
       {!selectedSection ? (
         <article className="stagger-item bg-(--app-surface)  sm:p-5" style={{ "--stagger-delay": "40ms" }}>
           <p className="text-sm text-slate-500">Quiz center</p>

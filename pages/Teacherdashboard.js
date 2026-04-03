@@ -219,7 +219,13 @@ export default function TeacherDashboard({ user }) {
           ) : null}
 
           {activeMenu === "home" ? (
-            <HomeTab displayName={displayName} subject={profileForm.subject || "English"} classesToday={4} avatarSrc="/teacher.avif" />
+            <HomeTab
+              displayName={displayName}
+              subject={profileForm.subject || "English"}
+              classesToday={4}
+              avatarSrc="/teacher.avif"
+              onAvatarClick={() => setProfileModalOpen(true)}
+            />
           ) : null}
           {activeMenu === "attendance" ? (
             <AttendanceTab
@@ -246,6 +252,7 @@ export default function TeacherDashboard({ user }) {
               subject={profileForm.subject || "English"}
               classesToday={4}
               avatarSrc="/teacher.avif"
+              onAvatarClick={() => setProfileModalOpen(true)}
             />
           ) : null}
         </div>

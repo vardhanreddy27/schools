@@ -1,13 +1,16 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import {
-  Area,
-  AreaChart,
+  Bar,
+  BarChart,
   CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
-  Area as AreaShape,
 } from "recharts";
 import {
   alerts,
@@ -22,23 +25,95 @@ import {
 
 const EMPTY_ROWS = [];
 
+const studentAvatarPool = ["/student1.png", "/student2.png", "/student3.png", "/student4.png", "/student.jpeg"];
+
+const staffBreakdown = [
+  { key: "teaching", label: "Teaching Staff", value: 48, color: "#8f89f8" },
+  { key: "nonTeaching", label: "Non-Teaching Staff", value: 21, color: "#eb6f40" },
+];
+
+const totalStaff = staffBreakdown.reduce((sum, item) => sum + item.value, 0);
+
 function MetricCard({ item, isActive, onOpen }) {
-  const Icon = item.icon;
+  const hasBreakdown = item.breakdown;
+  const hasExtendedLayout = Boolean(hasBreakdown || item.helper);
 
   return (
     <button
       type="button"
-      onClick={() => onOpen(item.key)}
-      className={`h-28 w-full rounded-3xl bg-white p-4 text-left shadow-[0_12px_28px_-22px_rgba(15,23,42,0.32)] transition-all duration-300 ${
+      onClick={() => {
+        if (item.key === "buses") return;
+        onOpen(item.key);
+      }}
+      className={`w-full rounded-3xl bg-white p-4 text-left shadow-[0_12px_28px_-22px_rgba(15,23,42,0.32)] transition-all duration-300 ${
+        hasExtendedLayout ? "h-auto" : "h-28"
+      } ${
         isActive ? "-translate-y-0.5 ring-2 ring-[#f7e2a3]" : "hover:-translate-y-0.5"
       }`}
     >
-      <p className="truncate text-sm font-medium text-slate-500">{item.title}</p>
-      <div className="mt-3 flex items-center justify-between gap-3">
-        <p className="text-3xl font-semibold text-slate-950">{item.value}</p>
-        <div className="flex items-center justify-center text-slate-500">
-          <Icon className="h-5 w-5" />
+      {hasBreakdown ? (
+        <div className="flex items-center justify-between gap-3">
+          <p className="truncate text-sm font-medium text-slate-500">{item.title}</p>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#096dd9" }} />
+              <span className="text-xs font-semibold text-slate-600">Boys {item.breakdown.male}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: "#f097e8" }} />
+              <span className="text-xs font-semibold text-slate-600">Girls {item.breakdown.female}</span>
+            </div>
+          </div>
         </div>
+      ) : (
+        <p className="truncate text-sm font-medium text-slate-500">{item.title}</p>
+      )}
+      <div className="mt-3">
+        {hasBreakdown ? (
+          <>
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-3xl font-semibold text-slate-950">{item.value}</p>
+              <div className="inline-flex items-center -space-x-2.5 rounded-full bg-white px-2.5 py-1.5">
+                {studentAvatarPool.slice(0, 3).map((avatar, idx) => (
+                  <div key={idx} className="h-10 w-10 overflow-hidden rounded-full bg-slate-100 ring-2 ring-white shrink-0">
+                    <Image src={avatar} alt="Student avatar" width={38} height={38} className="h-9 w-9 object-cover" />
+                  </div>
+                ))}
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-slate-700 text-[11px] font-bold text-white ring-2 ring-white shrink-0">
+                  +{parseInt(item.value.replace(",", "")) - 3}
+                </div>
+              </div>
+            </div>
+
+          <div className="mt-4 text-left">
+            <div className="h-3 rounded-full overflow-hidden flex w-full bg-white">
+              <div 
+                className="flex items-center justify-center" 
+                style={{ backgroundColor: "#096dd9", width: `${(item.breakdown.male / parseInt(item.value.replace(',', ''))) * 100}%` }}
+              />
+              <div 
+                className="flex items-center justify-center" 
+                style={{ backgroundColor: "#f097e8", width: `${(item.breakdown.female / parseInt(item.value.replace(',', ''))) * 100}%` }}
+              />
+            </div>
+          </div>
+          </>
+        ) : (
+          <>
+            {item.key === "buses" ? (
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-3xl font-semibold text-slate-950">{item.value}</p>
+                <div className="inline-flex items-center -space-x-3">
+                  <Image src="/schoolbus.png" alt="School bus" width={66} height={46} className="h-11 w-auto object-contain" />
+                  <Image src="/schoolbus.png" alt="School bus" width={66} height={46} className="h-11 w-auto object-contain" />
+                </div>
+              </div>
+            ) : (
+              <p className="text-3xl font-semibold text-slate-950">{item.value}</p>
+            )}
+            {item.helper ? <p className="mt-1 text-xs font-semibold text-slate-500">{item.helper}</p> : null}
+          </>
+        )}
       </div>
     </button>
   );
@@ -137,10 +212,87 @@ function DrilldownPanel({ activeMetric }) {
   );
 }
 
+function StaffBreakdownCard() {
+  return (
+    <section className="mt-4 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p className="text-sm text-slate-500">Staff strength</p>
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:items-center">
+        <div className="flex items-center justify-center">
+          <div className="relative h-48 w-full max-w-72">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={staffBreakdown}
+                  dataKey="value"
+                  nameKey="label"
+                  innerRadius={60}
+                  outerRadius={90}
+                  paddingAngle={3}
+                  stroke="#ffffff"
+                  strokeWidth={6}
+                >
+                  {staffBreakdown.map((item) => (
+                    <Cell key={item.key} fill={item.color} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="text-center">
+                <p className="  text-l font-black tracking-tight text-slate-900">Total Staff</p>
+                <p className="mt-1 text-xl font-medium text-slate-900">{totalStaff}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {staffBreakdown.map((item) => (
+            <div key={item.key} className="flex items-center justify-between gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
+              <div className="flex items-center gap-3">
+                <span className="h-5 w-5 rounded-lg" style={{ backgroundColor: item.color }} />
+                <p className="text-base font-medium text-slate-900">{item.label}</p>
+              </div>
+              <p className="text-2xl font-semibold text-slate-600">{item.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function OverviewView({ activeTrend, onTrendChange, leaveRequests, activeMetric, onOpenMetric, onNavigate }) {
-  const trend = attendanceTrend[activeTrend];
+  const trend = attendanceTrend[activeTrend] || attendanceTrend.Weekly;
   const [activeHighlight, setActiveHighlight] = useState("alerts");
   const [activeModule, setActiveModule] = useState(null);
+  const [activeAttendanceType, setActiveAttendanceType] = useState("students");
+  const [isAttendanceDropdownOpen, setIsAttendanceDropdownOpen] = useState(false);
+  const attendanceDropdownRef = useRef(null);
+
+  const attendanceTypes = [
+    { key: "students", label: "Students", color: "#16c7bd" },
+    { key: "teachers", label: "Teachers", color: "#8f89f8" },
+    { key: "nonTeaching", label: "Non-Teaching Staff", color: "#eb6f40" },
+  ];
+  const activeAttendance = attendanceTypes.find((item) => item.key === activeAttendanceType) || attendanceTypes[0];
+
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (attendanceDropdownRef.current && !attendanceDropdownRef.current.contains(event.target)) {
+        setIsAttendanceDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, []);
 
   const dynamicHighlightValue = (item) => {
     if (item.title === "Pending Leaves") {
@@ -156,9 +308,22 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
 
   return (
     <>
-      <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {topMetrics.map((item, index) => (
-          <div key={item.key} className="stagger-item" style={{ "--stagger-delay": `${80 + index * 45}ms` }}>
+      <StaffBreakdownCard />
+
+      <section className="mt-4">
+        {/* Full-width Students Card */}
+        <div className="stagger-item" style={{ "--stagger-delay": "80ms" }}>
+          <MetricCard 
+            item={topMetrics.find(m => m.key === "students")} 
+            isActive={activeMetric === "students"} 
+            onOpen={onOpenMetric} 
+          />
+        </div>
+      </section>
+
+      <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {topMetrics.filter((item) => item.key !== "teaching" && item.key !== "nonTeaching" && item.key !== "students").map((item, index) => (
+          <div key={item.key} className="stagger-item" style={{ "--stagger-delay": `${125 + index * 45}ms` }}>
             <MetricCard item={item} isActive={activeMetric === item.key} onOpen={onOpenMetric} />
           </div>
         ))}
@@ -167,12 +332,12 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
       <DrilldownPanel activeMetric={activeMetric} />
 
       <section className="mt-4 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm text-slate-500">Attendance trend</p>
-            <h2 className="mt-1 text-2xl font-semibold">Students and teachers</h2>
-          </div>
+        <div>
+          <p className="text-sm text-slate-500">Attendance trend</p>
+          <h2 className="mt-1 text-2xl font-semibold">Class wise attendance</h2>
+        </div>
 
+        <div className="mt-4 flex items-start justify-between gap-3">
           <div className="inline-flex rounded-full bg-slate-100 p-1">
             {trendTabs.map((tab) => (
               <button
@@ -185,35 +350,48 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
               </button>
             ))}
           </div>
+
+          <div ref={attendanceDropdownRef} className="relative w-56">
+            <button
+              type="button"
+              onClick={() => setIsAttendanceDropdownOpen((prev) => !prev)}
+              className="inline-flex w-full items-center justify-between gap-3 rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm"
+            >
+              <span>{activeAttendance.label}</span>
+              <span className={`text-slate-500 transition-transform ${isAttendanceDropdownOpen ? "rotate-180" : ""}`}>⌄</span>
+            </button>
+
+            {isAttendanceDropdownOpen ? (
+              <div className="absolute left-0 top-full z-10 mt-2 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+                {attendanceTypes.map((type) => (
+                  <button
+                    key={type.key}
+                    type="button"
+                    onClick={() => {
+                      setActiveAttendanceType(type.key);
+                      setIsAttendanceDropdownOpen(false);
+                    }}
+                    className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition hover:bg-slate-50 ${activeAttendanceType === type.key ? "bg-[#fff4d6] text-slate-950" : "text-slate-600"}`}
+                  >
+                    <span>{type.label}</span>
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: type.color }} />
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
 
         <div className="mt-5 min-w-0 min-h-64 h-64 rounded-3xl bg-slate-50 p-4 sm:h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={trend}>
-              <defs>
-                <linearGradient id="studentsFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#16c7bd" stopOpacity={0.25} />
-                  <stop offset="95%" stopColor="#16c7bd" stopOpacity={0.03} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid vertical={false} stroke="#dbe3f0" strokeDasharray="4 4" />
+            <BarChart data={trend} margin={{ top: 8, right: 0, left: 0, bottom: 0 }} barCategoryGap="14%">
+              <CartesianGrid vertical horizontal stroke="#dbe3f0" strokeDasharray="3 3" />
               <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
               <YAxis tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
               <Tooltip />
-              <AreaShape type="monotone" dataKey="students" stroke="#16c7bd" fill="url(#studentsFill)" strokeWidth={3} />
-              <AreaShape type="monotone" dataKey="teachers" stroke="#0f172a" fillOpacity={0} strokeWidth={2} />
-            </AreaChart>
+              <Bar dataKey={activeAttendanceType} fill={activeAttendance.color} radius={[8, 8, 0, 0]} barSize={30} />
+            </BarChart>
           </ResponsiveContainer>
-        </div>
-        <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-600">
-          <span className="inline-flex items-center gap-2 rounded-full bg-[#fff4d6] px-3 py-1 text-[#8b6400]">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#16c7bd]" />
-            Students line
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-slate-700">
-            <span className="h-2.5 w-2.5 rounded-full bg-slate-900" />
-            Teachers line
-          </span>
         </div>
       </section>
 

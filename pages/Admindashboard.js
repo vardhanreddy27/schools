@@ -11,7 +11,6 @@ import ProfileView from "@/components/admin-dashboard/ProfileView";
 import SearchResults from "@/components/admin-dashboard/SearchResults";
 import TimetableView from "@/components/admin-dashboard/TimetableView";
 import { MobileBottomNav, SidebarNav } from "@/components/admin-dashboard/Nav";
-import { UserCircle2 } from "lucide-react";
 import {
   alerts,
   initialBroadcastMessages,
@@ -23,7 +22,7 @@ import {
 
 export default function AdminDashboard({ user = {} }) {
   const [activeMenu, setActiveMenu] = useState("overview");
-  const [activeTrend, setActiveTrend] = useState("Today");
+  const [activeTrend, setActiveTrend] = useState("Weekly");
   const [activeMetric, setActiveMetric] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [leaveRequests, setLeaveRequests] = useState(initialLeaveRequests);
@@ -180,10 +179,17 @@ export default function AdminDashboard({ user = {} }) {
 
   const mobileNavItems = navItems.filter((item) => item.id !== "profile");
   const isProfileView = activeMenu === "profile";
+  const profileSheetOpen = activeMenu === "profile";
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [activeMenu]);
+
+  function handleCloseProfileSheet() {
+    if (activeMenu === "profile") {
+      setActiveMenu("overview");
+    }
+  }
 
   return (
     <div className="min-h-dvh bg-[#eef3fb] text-slate-950 lg:flex">
@@ -204,17 +210,27 @@ export default function AdminDashboard({ user = {} }) {
                   </div>
                 </div>
 
-                <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Welcome back, {profileForm.name || "Principal"}</h1>
+                <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Welcome , Vardhan</h1>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setActiveMenu("profile")}
-                  className="p-1 text-slate-500 transition-all duration-150 hover:text-slate-800 active:scale-90 lg:hidden"
-                  aria-label="Profile"
+                  onClick={() => {
+                    setActiveMenu("profile");
+                  }}
+                  className="rounded-full p-0.5 transition-all duration-150 hover:scale-95 active:scale-90"
+                  aria-label="Open profile"
                 >
-                  <UserCircle2 className="h-7 w-7" />
+                  <span className="block h-12 w-12 overflow-hidden rounded-full border border-slate-200 bg-white shadow-sm lg:h-14 lg:w-14">
+                    <Image
+                      src="/principal.jpeg"
+                      alt="Principal profile"
+                      width={56}
+                      height={56}
+                      className="h-full w-full object-cover"
+                    />
+                  </span>
                 </button>
                 <button
                   type="button"
@@ -262,21 +278,22 @@ export default function AdminDashboard({ user = {} }) {
                 broadcastForm={broadcastForm}
               />
             ) : null}
-            {activeMenu === "profile" ? (
-              <ProfileView
-                profileForm={profileForm}
-                onProfileChange={handleProfileChange}
-                onProfileSave={handleProfileSave}
-                profileSaving={profileSaving}
-                profileMessage={profileMessage}
-                onLogout={() => signOut({ callbackUrl: "/Admin_login" })}
-              />
-            ) : null}
           </div>
         </div>
 
         <MobileBottomNav activeMenu={activeMenu} onMenuChange={setActiveMenu} items={mobileNavItems} />
       </main>
+
+      <ProfileView
+        open={profileSheetOpen}
+        onClose={handleCloseProfileSheet}
+        profileForm={profileForm}
+        onProfileChange={handleProfileChange}
+        onProfileSave={handleProfileSave}
+        profileSaving={profileSaving}
+        profileMessage={profileMessage}
+        onLogout={() => signOut({ callbackUrl: "/Admin_login" })}
+      />
     </div>
   );
 }

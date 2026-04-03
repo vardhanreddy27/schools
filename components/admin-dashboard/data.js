@@ -8,36 +8,39 @@ import {
   GraduationCap,
   LayoutGrid,
   Megaphone,
+  MoreHorizontal,
   ShieldAlert,
   UserCircle2,
   UserRoundCheck,
   Users,
 } from "lucide-react";
 
-export const trendTabs = ["Today", "Weekly", "Monthly"];
+export const trendTabs = ["Weekly", "Monthly"];
 
 export const attendanceTrend = {
-  Today: [
-    { label: "8 AM", students: 76, teachers: 84 },
-    { label: "9 AM", students: 89, teachers: 92 },
-    { label: "10 AM", students: 93, teachers: 95 },
-    { label: "11 AM", students: 94, teachers: 96 },
-    { label: "12 PM", students: 95, teachers: 95 },
-  ],
   Weekly: [
-    { label: "Sun", students: 52, teachers: 58 },
-    { label: "Mon", students: 90, teachers: 94 },
-    { label: "Tue", students: 89, teachers: 93 },
-    { label: "Wed", students: 92, teachers: 95 },
-    { label: "Thu", students: 93, teachers: 95 },
-    { label: "Fri", students: 94, teachers: 96 },
-    { label: "Sat", students: 87, teachers: 90 },
+    { label: "I", students: 182, teachers: 9, nonTeaching: 6 },
+    { label: "II", students: 196, teachers: 10, nonTeaching: 6 },
+    { label: "III", students: 188, teachers: 9, nonTeaching: 5 },
+    { label: "IV", students: 201, teachers: 10, nonTeaching: 6 },
+    { label: "V", students: 190, teachers: 9, nonTeaching: 5 },
+    { label: "VI", students: 206, teachers: 11, nonTeaching: 6 },
+    { label: "VII", students: 211, teachers: 11, nonTeaching: 6 },
+    { label: "VIII", students: 214, teachers: 11, nonTeaching: 6 },
+    { label: "IX", students: 226, teachers: 12, nonTeaching: 7 },
+    { label: "X", students: 238, teachers: 12, nonTeaching: 7 },
   ],
   Monthly: [
-    { label: "W1", students: 88, teachers: 92 },
-    { label: "W2", students: 90, teachers: 94 },
-    { label: "W3", students: 92, teachers: 95 },
-    { label: "W4", students: 89, teachers: 93 },
+    { label: "I", students: 178, teachers: 9, nonTeaching: 5 },
+    { label: "II", students: 191, teachers: 10, nonTeaching: 6 },
+    { label: "III", students: 184, teachers: 9, nonTeaching: 5 },
+    { label: "IV", students: 197, teachers: 10, nonTeaching: 6 },
+    { label: "V", students: 187, teachers: 9, nonTeaching: 5 },
+    { label: "VI", students: 202, teachers: 10, nonTeaching: 6 },
+    { label: "VII", students: 207, teachers: 11, nonTeaching: 6 },
+    { label: "VIII", students: 209, teachers: 11, nonTeaching: 6 },
+    { label: "IX", students: 221, teachers: 11, nonTeaching: 7 },
+    { label: "X", students: 233, teachers: 12, nonTeaching: 7 },
   ],
 };
 
@@ -121,10 +124,9 @@ export const sectionWiseAttendance = gradeSectionMap.flatMap((gradeItem, gradeIn
 export const topMetrics = [
   { key: "teaching", title: "Teaching Staff", value: "48", icon: Users },
   { key: "nonTeaching", title: "Non-Teaching Staff", value: "21", icon: Briefcase },
-  { key: "students", title: "Students", value: "1,286", icon: GraduationCap },
-  { key: "classes", title: "Classes", value: "18", icon: LayoutGrid },
-  { key: "sections", title: "Sections", value: "32", icon: LayoutGrid },
-  { key: "buses", title: "Transport Buses", value: "12", icon: Bus },
+  { key: "students", title: "Students", value: "1,286", icon: GraduationCap, breakdown: { male: 670, female: 616 } },
+  { key: "classes", title: "Classes / Sections", value: "18 / 32", helper: "", icon: LayoutGrid },
+  { key: "buses", title: "Track Buses", value: "4", icon: Bus },
 ];
 
 export const metricDrilldown = {
@@ -385,6 +387,6 @@ export const navItems = [
   { id: "attendance", label: "Attendance", icon: ClipboardCheck },
   { id: "timetable", label: "Timetable", icon: CalendarDays },
   { id: "approvals", label: "Approvals", icon: UserRoundCheck },
-  { id: "communication", label: "More", icon: BookOpen },
+  { id: "communication", label: "More", icon: MoreHorizontal },
   { id: "profile", label: "Profile", icon: UserCircle2 },
 ];

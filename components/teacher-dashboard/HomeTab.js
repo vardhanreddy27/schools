@@ -14,7 +14,7 @@ const homeworkClassesForBottom = uniqueHomeworkClasses.filter(
   (cls) => !((cls.className === "8th" && cls.section === "A") || (cls.className === "10th" && cls.section === "A"))
 );
 
-export default function HomeTab({ displayName = "Harika", subject = "English", classesToday = 4, avatarSrc = "/teacher.avif" }) {
+export default function HomeTab({ displayName = "Harika", subject = "English", classesToday = 4, avatarSrc = "/teacher.avif", onAvatarClick }) {
   const fileInputRef = useRef({});
   const cameraInputRef = useRef({});
 
@@ -168,7 +168,13 @@ export default function HomeTab({ displayName = "Harika", subject = "English", c
 
   return (
     <section className="page-enter space-y-4 pb-24">
-      <TeacherHeroCard displayName={displayName} subject={subject} classesToday={classesToday} avatarSrc={avatarSrc} />
+      <TeacherHeroCard
+        displayName={displayName}
+        subject={subject}
+        classesToday={classesToday}
+        avatarSrc={avatarSrc}
+        onAvatarClick={onAvatarClick}
+      />
 
       <article className="stagger-item rounded-3xl bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.32)] sm:p-5" style={{ "--stagger-delay": "40ms" }}>
         <p className="text-sm text-slate-500">My classes</p>

@@ -23,7 +23,7 @@ export default function TeacherTimetableTab() {
   });
 
   return (
-    <section className="space-y-6 pt-2 font-sans">
+    <section className="space-y-6 px-3 pt-2 font-sans">
       <header className="px-1">
         <p className="text-sm font-medium text-slate-500">Weekly Schedule</p>
         <h2 className="text-[28px] font-black text-slate-900 leading-tight">
