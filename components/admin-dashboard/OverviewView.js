@@ -24,6 +24,37 @@ const EMPTY_ROWS = [];
 
 const studentAvatarPool = ["/student1.png", "/student2.png", "/student3.png", "/student4.png", "/student.jpeg"];
 
+const upcomingExams = [
+  {
+    id: "exam-1",
+    dateLabel: "12 June",
+    subject: "Maths",
+    type: "Weekly test",
+    image: "/maths.png",
+  },
+  {
+    id: "exam-2",
+    dateLabel: "15 June",
+    subject: "Science",
+    type: "Monthly test",
+    image: "/science.png",
+  },
+  {
+    id: "exam-3",
+    dateLabel: "18 June",
+    subject: "Biology",
+    type: "Surprise test",
+    image: "/biology.png",
+  },
+  {
+    id: "exam-4",
+    dateLabel: "20 June",
+    subject: "English",
+    type: "Weekly test",
+    image: "/english.png",
+  },
+];
+
 const staffBreakdown = [
   { key: "teaching", label: "Teaching Staff", value: 48, color: "#8f89f8" },
   { key: "nonTeaching", label: "Non-Teaching Staff", value: 21, color: "#eb6f40" },
@@ -266,6 +297,13 @@ function StaffBreakdownCard() {
 }
 
 function UpcomingEvents() {
+  const getDateParts = (dateLabel) => {
+    const leftSide = dateLabel.split("•")[0] || "";
+    const dayMonth = leftSide.split(",").pop()?.trim() || "";
+    const [day = "--", month = "---"] = dayMonth.split(" ");
+    return { day, month: month.toUpperCase() };
+  };
+
   return (
     <section className="mt-4 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
       <div className="mb-4 flex items-center justify-between gap-3">
@@ -284,16 +322,19 @@ function UpcomingEvents() {
       <div className="-mx-4 overflow-x-auto px-4 no-scrollbar sm:-mx-5 sm:px-5">
         <div className="flex min-w-max gap-4 pb-1">
           {EVENTS.map((event, index) => {
-            const Icon = event.icon;
+            const dateParts = getDateParts(event.date);
             return (
               <article
                 key={event.id}
-                className={`stagger-item relative w-[280px] shrink-0 overflow-hidden rounded-[32px] bg-gradient-to-br ${event.gradient} p-4 text-white shadow-[0_22px_44px_-28px_rgba(30,41,59,0.65)]`}
+                className={`stagger-item relative w-[280px] shrink-0 overflow-hidden rounded-[32px] bg-gradient-to-br ${event.gradient} p-4 text-white `}
                 style={{ "--stagger-delay": `${90 + index * 70}ms` }}
               >
                 <div className="mb-4 flex items-start justify-between gap-2">
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/35 bg-white/15 backdrop-blur-md">
-                    <Icon size={20} strokeWidth={2.2} />
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl border border-white/80 bg-white text-slate-900 shadow-[0_10px_24px_-14px_rgba(15,23,42,0.7)]">
+                    <div className="text-center leading-none">
+                      <p className="text-base font-black tracking-tight">{dateParts.day}</p>
+                      <p className="mt-0.5 text-[8px] font-semibold tracking-[0.16em] text-slate-500">{dateParts.month}</p>
+                    </div>
                   </div>
                   <span className="rounded-full border border-white/35 bg-white/15 px-3 py-1 text-xs font-semibold backdrop-blur-md">
                     {event.status}
@@ -339,6 +380,48 @@ function UpcomingEvents() {
             <p className="mt-1 text-xs">Quick action for principal dashboard</p>
           </button>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function UpcomingExams() {
+  return (
+    <section className="mt-4 rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
+      <div className="mb-4">
+        <div>
+          <p className="text-sm text-slate-500">Exam timetable</p>
+          <h2 className="text-xl font-semibold text-slate-950">Upcoming exams</h2>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {upcomingExams.slice(0, 3).map((exam, index) => (
+          <article
+            key={exam.id}
+            className="stagger-item flex items-center gap-3 rounded-3xl border border-slate-200 bg-slate-50 p-3"
+            style={{ "--stagger-delay": `${100 + index * 55}ms` }}
+          >
+            <div className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl  p-1">
+              <Image src={exam.image} alt={`${exam.subject} subject`} width={40} height={40} className="h-10 w-10 object-contain" />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start justify-between gap-2">
+                <p className="truncate text-base font-semibold text-slate-900">{exam.subject}</p>
+                <p className="shrink-0 text-xs font-semibold text-black">{exam.dateLabel}</p>
+              </div>
+              <p className="mt-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500">{exam.type}</p>
+            </div>
+          </article>
+        ))}
+
+        <button
+          type="button"
+          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+        >
+          View all exams
+        </button>
       </div>
     </section>
   );
@@ -414,6 +497,8 @@ export default function OverviewView({ activeTrend, onTrendChange, activeMetric,
           </ResponsiveContainer>
         </div>
       </section>
+
+      <UpcomingExams />
 
     
     </>
