@@ -48,7 +48,7 @@ export default function ParentAttendanceTab({ lang = PARENT_LANGUAGES.EN }) {
       donutData.map((entry, index) => (
         <Cell
           key={`cell-${index}`}
-          fill={entry.isPresent ? "url(#presentStripePattern)" : "#dc2626"}
+          fill={entry.isPresent ? "#10b981" : "url(#absentStripePattern)"}
           stroke="white"
           strokeWidth={1}
         />
@@ -65,17 +65,17 @@ export default function ParentAttendanceTab({ lang = PARENT_LANGUAGES.EN }) {
           <h3 className="text-sm font-semibold text-slate-600">{t("ATTENDANCE OVERVIEW")}</h3>
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-red-600"></div>
+              <div
+                className="h-4 w-4 border border-red-600"
+                style={{
+                  backgroundImage:
+                    "repeating-linear-gradient(135deg, rgba(220,38,38,0.95) 0 2px, rgba(255,255,255,0.9) 2px 4px)",
+                }}
+              ></div>
               <span className="text-sm font-medium text-slate-700">{t("Absent")}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div
-                className="h-4 w-4 border border-emerald-500"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(135deg, rgba(16,185,129,0.95) 0 2px, rgba(255,255,255,0.9) 2px 4px)",
-                }}
-              ></div>
+              <div className="h-4 w-4 rounded-sm bg-emerald-500"></div>
               <span className="text-sm font-medium text-slate-700">{t("Present")}</span>
             </div>
           </div>
@@ -87,9 +87,9 @@ export default function ParentAttendanceTab({ lang = PARENT_LANGUAGES.EN }) {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <defs>
-                  <pattern id="presentStripePattern" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(25)">
-                    <rect width="6" height="6" fill="#e6faf3" />
-                    <rect width="2" height="6" fill="#10b981" />
+                    <pattern id="absentStripePattern" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(25)">
+                      <rect width="6" height="6" fill="#fde8e8" />
+                      <rect width="2" height="6" fill="#dc2626" />
                   </pattern>
                 </defs>
                 <Pie
