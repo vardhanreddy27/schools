@@ -22,7 +22,7 @@ import {
 
 export default function AdminDashboard({ user = {} }) {
   const [activeMenu, setActiveMenu] = useState("overview");
-  const [activeTrend, setActiveTrend] = useState("Weekly");
+  const [activeTrend, setActiveTrend] = useState("Today");
   const [activeMetric, setActiveMetric] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [leaveRequests, setLeaveRequests] = useState(initialLeaveRequests);

@@ -269,30 +269,9 @@ function StaffBreakdownCard() {
 }
 
 export default function OverviewView({ activeTrend, onTrendChange, leaveRequests, activeMetric, onOpenMetric, onNavigate }) {
-  const trend = attendanceTrend[activeTrend] || attendanceTrend.Weekly;
   const [activeHighlight, setActiveHighlight] = useState("alerts");
   const [activeModule, setActiveModule] = useState(null);
-  const [activeAttendanceType, setActiveAttendanceType] = useState("students");
-  const [isAttendanceDropdownOpen, setIsAttendanceDropdownOpen] = useState(false);
-  const attendanceDropdownRef = useRef(null);
-
-  const attendanceTypes = [
-    { key: "students", label: "Students", color: "#16c7bd" },
-    { key: "teachers", label: "Teachers", color: "#8f89f8" },
-    { key: "nonTeaching", label: "Non-Teaching Staff", color: "#eb6f40" },
-  ];
-  const activeAttendance = attendanceTypes.find((item) => item.key === activeAttendanceType) || attendanceTypes[0];
-
-  useEffect(() => {
-    const handlePointerDown = (event) => {
-      if (attendanceDropdownRef.current && !attendanceDropdownRef.current.contains(event.target)) {
-        setIsAttendanceDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handlePointerDown);
-    return () => document.removeEventListener("mousedown", handlePointerDown);
-  }, []);
+  const trend = attendanceTrend[activeTrend] || attendanceTrend.Today;
 
   const dynamicHighlightValue = (item) => {
     if (item.title === "Pending Leaves") {
@@ -337,7 +316,7 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
           <h2 className="mt-1 text-2xl font-semibold">Class wise attendance</h2>
         </div>
 
-        <div className="mt-4 flex items-start justify-between gap-3">
+        <div className="mt-4 flex items-center justify-center">
           <div className="inline-flex rounded-full bg-slate-100 p-1">
             {trendTabs.map((tab) => (
               <button
@@ -350,46 +329,16 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
               </button>
             ))}
           </div>
-
-          <div ref={attendanceDropdownRef} className="relative w-56">
-            <button
-              type="button"
-              onClick={() => setIsAttendanceDropdownOpen((prev) => !prev)}
-              className="inline-flex w-full items-center justify-between gap-3 rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm"
-            >
-              <span>{activeAttendance.label}</span>
-              <span className={`text-slate-500 transition-transform ${isAttendanceDropdownOpen ? "rotate-180" : ""}`}>⌄</span>
-            </button>
-
-            {isAttendanceDropdownOpen ? (
-              <div className="absolute left-0 top-full z-10 mt-2 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
-                {attendanceTypes.map((type) => (
-                  <button
-                    key={type.key}
-                    type="button"
-                    onClick={() => {
-                      setActiveAttendanceType(type.key);
-                      setIsAttendanceDropdownOpen(false);
-                    }}
-                    className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition hover:bg-slate-50 ${activeAttendanceType === type.key ? "bg-[#fff4d6] text-slate-950" : "text-slate-600"}`}
-                  >
-                    <span>{type.label}</span>
-                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: type.color }} />
-                  </button>
-                ))}
-              </div>
-            ) : null}
-          </div>
         </div>
 
-        <div className="mt-5 min-w-0 min-h-64 h-64 rounded-3xl bg-slate-50 p-4 sm:h-72">
+        <div className="mt-5 min-w-0 min-h-64 h-64 rounded-3xl  sm:h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={trend} margin={{ top: 8, right: 0, left: 0, bottom: 0 }} barCategoryGap="14%">
-              <CartesianGrid vertical horizontal stroke="#dbe3f0" strokeDasharray="3 3" />
+            <BarChart data={trend} margin={{ top: 8, right: 0, left: 8, bottom: 0 }} barCategoryGap="10%">
+              <CartesianGrid vertical horizontal stroke="#dbe3f0" strokeDasharray="2 3" />
               <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
-              <YAxis tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
+              <YAxis width={36} tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
               <Tooltip />
-              <Bar dataKey={activeAttendanceType} fill={activeAttendance.color} radius={[8, 8, 0, 0]} barSize={30} />
+              <Bar dataKey="students" fill="#16c7bd" radius={[8, 8, 0, 0]} barSize={30} />
             </BarChart>
           </ResponsiveContainer>
         </div>
