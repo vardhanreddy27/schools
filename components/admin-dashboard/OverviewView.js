@@ -336,8 +336,15 @@ export default function OverviewView({ activeTrend, onTrendChange, leaveRequests
             <BarChart data={trend} margin={{ top: 8, right: 0, left: 8, bottom: 0 }} barCategoryGap="10%">
               <CartesianGrid vertical horizontal stroke="#dbe3f0" strokeDasharray="2 3" />
               <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
-              <YAxis width={36} tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
-              <Tooltip />
+              <YAxis
+                width={36}
+                domain={[0, 100]}
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: "#64748b", fontSize: 12 }}
+                tickFormatter={(value) => `${value}%`}
+              />
+              <Tooltip formatter={(value) => [`${value}%`, "Attendance"]} />
               <Bar dataKey="students" fill="#16c7bd" radius={[8, 8, 0, 0]} barSize={30} />
             </BarChart>
           </ResponsiveContainer>

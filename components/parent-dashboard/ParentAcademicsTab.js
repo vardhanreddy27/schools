@@ -3,6 +3,7 @@ import Image from "next/image";
 import { AlertTriangle, CheckCircle2, ChevronDown } from "lucide-react";
 import { BarChart, Bar, Cell, LabelList, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { subjectPerformance } from "./data";
+import { PARENT_LANGUAGES, translateText } from "./i18n";
 
 const progressOptions = [
   { id: "monthly", label: "Monthly" },
@@ -48,8 +49,8 @@ const IMPROVEMENT_TIPS = {
   biology: "Revise definitions and labeled diagrams; practice concise explanation answers.",
 };
 
-function getImprovementTip(subjectName) {
-  return IMPROVEMENT_TIPS[subjectName.toLowerCase()] || "Focus on daily revision and practice with teacher feedback.";
+function getImprovementTip(subjectName, t) {
+  return t(IMPROVEMENT_TIPS[subjectName.toLowerCase()] || "Focus on daily revision and practice with teacher feedback.");
 }
 
 const SUBJECT_IMAGE_MAP = {
@@ -65,7 +66,8 @@ const SUBJECT_IMAGE_MAP = {
 
 const CHART_BAR_COLORS = ["#f59e0b", "#8b5cf6", "#0ea5e9", "#06b6d4", "#10b981", "#f43f5e"];
 
-export default function ParentAcademicsTab() {
+export default function ParentAcademicsTab({ lang = PARENT_LANGUAGES.EN }) {
+  const t = (text) => translateText(lang, text);
   const [activePeriod, setActivePeriod] = useState("monthly");
   const [selectedQuiz, setSelectedQuiz] = useState("Quiz 2");
   const [isQuizMenuOpen, setIsQuizMenuOpen] = useState(false);
@@ -102,8 +104,8 @@ export default function ParentAcademicsTab() {
   return (
     <div className="space-y-6 py-6 mb-9">
       <section className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5">
-        <p className="text-sm text-slate-500 font-medium">Academics</p>
-        <h2 className="mt-1 text-2xl font-semibold text-slate-900">Performance overview</h2>
+        <p className="text-sm text-slate-500 font-medium">{t("Academics")}</p>
+        <h2 className="mt-1 text-2xl font-semibold text-slate-900">{t("Performance overview")}</h2>
 
         <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-1">
           <div className="grid grid-cols-3 gap-1">
@@ -116,7 +118,7 @@ export default function ParentAcademicsTab() {
                   activePeriod === option.id ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                 }`}
               >
-                {option.label}
+                {t(option.label)}
               </button>
             ))}
           </div>
@@ -126,9 +128,11 @@ export default function ParentAcademicsTab() {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={activeChartData} barGap={10}>
               <CartesianGrid strokeDasharray="4 4" stroke="#e2e8f0" vertical={false} />
-              <XAxis dataKey="label" tick={{ fill: "#64748b", fontSize: 12 }} tickLine={false} axisLine={false} />
+              <XAxis dataKey="label" tickFormatter={(value) => t(value)} tick={{ fill: "#64748b", fontSize: 12 }} tickLine={false} axisLine={false} />
               <YAxis domain={[0, 100]} ticks={[0, 20, 40, 60, 80, 100]} tick={{ fill: "#64748b", fontSize: 12 }} tickLine={false} axisLine={false} />
               <Tooltip
+                formatter={(value) => [`${value}%`, t("Score")]} 
+                labelFormatter={(label) => t(label)}
                 contentStyle={{
                   backgroundColor: "#ffffff",
                   border: "1px solid #e2e8f0",
@@ -155,8 +159,8 @@ export default function ParentAcademicsTab() {
       <section className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm text-slate-500 font-medium">Quiz</p>
-            <h2 className="mt-1 text-2xl font-semibold text-slate-900">Performance</h2>
+            <p className="text-sm text-slate-500 font-medium">{t("Quiz")}</p>
+            <h2 className="mt-1 text-2xl font-semibold text-slate-900">{t("Performance")}</h2>
           </div>
           <div className="relative min-w-35" ref={quizMenuRef}>
             <button
@@ -166,13 +170,13 @@ export default function ParentAcademicsTab() {
               aria-haspopup="listbox"
               aria-expanded={isQuizMenuOpen}
             >
-              <span className="whitespace-nowrap">{selectedQuiz}</span>
+              <span className="whitespace-nowrap">{t(selectedQuiz)}</span>
               <ChevronDown className={`h-4 w-4 shrink-0 text-slate-500 transition-transform ${isQuizMenuOpen ? "rotate-180" : ""}`} />
             </button>
 
             {isQuizMenuOpen && (
               <div className="absolute right-0 top-full z-30 mt-2 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
-                <div className="py-1" role="listbox" aria-label="Select quiz">
+                <div className="py-1" role="listbox" aria-label={t("Select quiz")}>
                   {["Quiz 1", "Quiz 2", "Quiz 3", "Quiz 4", "Quiz 5"].map((quiz) => (
                     <button
                       key={quiz}
@@ -187,7 +191,7 @@ export default function ParentAcademicsTab() {
                       role="option"
                       aria-selected={selectedQuiz === quiz}
                     >
-                      {quiz}
+                      {t(quiz)}
                     </button>
                   ))}
                 </div>
@@ -231,12 +235,12 @@ export default function ParentAcademicsTab() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-center text-[10px] font-bold uppercase tracking-tighter text-slate-700">{item.subject}</span>
+                    <span className="text-center text-[10px] font-bold uppercase tracking-tighter text-slate-700">{t(item.subject)}</span>
                   </div>
                 </div>
 
                 <div className="text-center">
-                  <div className="text-xs font-bold text-slate-900">{item.score}% Score</div>
+                  <div className="text-xs font-bold text-slate-900">{item.score}% {t("Score")}</div>
                 </div>
               </div>
             );
@@ -248,7 +252,7 @@ export default function ParentAcademicsTab() {
       {weakSubjects.length > 0 && (
         <section>
           <h3 className="text-sm font-semibold text-slate-600 mb-3 flex items-center gap-2">
-            AREAS NEEDING IMPROVEMENT
+            {t("AREAS NEEDING IMPROVEMENT")}
           </h3>
           <div className="space-y-3">
             {weakSubjects.map((subject) => (
@@ -263,9 +267,9 @@ export default function ParentAcademicsTab() {
                     />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-slate-950">{subject.subject}</h4>
+                    <h4 className="font-semibold text-slate-950">{t(subject.subject)}</h4>
                     <p className="mt-1 text-sm text-slate-700">
-                      Current Score: <span className="font-bold text-amber-700">{subject.score}%</span> | Target: {subject.target}%
+                      {t("Current Score:")} <span className="font-bold text-amber-700">{subject.score}%</span> | {t("Target:")} {subject.target}%
                     </p>
                     <div className="mt-3 w-full bg-amber-200 rounded-full h-2">
                       <div
@@ -274,7 +278,7 @@ export default function ParentAcademicsTab() {
                       ></div>
                     </div>
                     <p className="mt-2 text-xs font-semibold inline text-slate-800">
-                      Focus area: </p><p className="inline text-sm text-slate-700">{getImprovementTip(subject.subject)}</p>
+                      {t("Focus area:")} </p><p className="inline text-sm text-slate-700">{getImprovementTip(subject.subject, t)}</p>
                     
                   </div>
                 </div>
@@ -288,7 +292,7 @@ export default function ParentAcademicsTab() {
       {strongSubjects.length > 0 && (
         <section>
           <h3 className="text-sm font-semibold text-slate-600 mb-3 flex items-center gap-2">
-            STRONG SUBJECTS
+            {t("STRONG SUBJECTS")}
           </h3>
           <div className="space-y-3">
             {strongSubjects.map((subject) => (
@@ -303,9 +307,9 @@ export default function ParentAcademicsTab() {
                     />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-slate-950">{subject.subject}</h4>
+                    <h4 className="font-semibold text-slate-950">{t(subject.subject)}</h4>
                     <p className="mt-1 text-sm text-slate-700">
-                      Score: <span className="font-bold text-emerald-700">{subject.score}%</span> • Completion: {subject.completion}%
+                      {t("Score:")} <span className="font-bold text-emerald-700">{subject.score}%</span> • {t("Completion:")} {subject.completion}%
                     </p>
                     <div className="mt-3 w-full bg-emerald-200 rounded-full h-2">
                       <div
@@ -323,27 +327,27 @@ export default function ParentAcademicsTab() {
 
       {/* Recommendations */}
       <section className="bg-linear-to-r from-blue-50 to-cyan-50 rounded-2xl border border-blue-200 p-6">
-        <h3 className="font-semibold text-slate-950 mb-3">Recommendations for Improvement</h3>
+        <h3 className="font-semibold text-slate-950 mb-3">{t("Recommendations for Improvement")}</h3>
         <ul className="space-y-2 text-sm text-slate-700">
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold">1.</span>
-            Focus more on weak subjects - allocate 40% study time to them
+            {t("Focus more on weak subjects - allocate 40% study time to them")}
           </li>
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold">2.</span>
-            Practice problem-solving daily for Math & Science
+            {t("Practice problem-solving daily for Math & Science")}
           </li>
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold">3.</span>
-            Maintain study consistency across all subjects
+            {t("Maintain study consistency across all subjects")}
           </li>
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold">4.</span>
-            Review teacher feedback and track improvements
+            {t("Review teacher feedback and track improvements")}
           </li>
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold">5.</span>
-            Schedule revision sessions weekly for all subjects
+            {t("Schedule revision sessions weekly for all subjects")}
           </li>
         </ul>
       </section>

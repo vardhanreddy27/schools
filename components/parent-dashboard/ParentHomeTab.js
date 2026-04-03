@@ -14,8 +14,10 @@ import {
   Bus,
 } from "lucide-react";
 import { childInfo, performanceAlerts, upcomingTests, parentNotifications } from "./data";
+import { PARENT_LANGUAGES, translateText } from "./i18n";
 
-export default function ParentHomeTab() {
+export default function ParentHomeTab({ lang = PARENT_LANGUAGES.EN }) {
+  const t = (text) => translateText(lang, text);
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
@@ -46,12 +48,12 @@ export default function ParentHomeTab() {
   const unreadCount = parentNotifications.filter((notification) => !readIds.has(notification.id)).length;
 
   const weakSubjectItems = [
-    { subject: "Maths", score: 52, tip: "Revise formulas and solve 5 mixed problems daily." },
-    { subject: "Science", score: 48, tip: "Read one concept summary and practice one diagram." },
+    { subject: t("Maths"), score: 52, tip: t("Revise formulas and solve 5 mixed problems daily.") },
+    { subject: t("Science"), score: 48, tip: t("Read one concept summary and practice one diagram.") },
   ];
   const homeworkPreviewItems = [
-    { subject: "English", title: "Essay writing" },
-    { subject: "Maths", title: "Algebra worksheet" },
+    { subject: t("English"), title: t("Essay writing") },
+    { subject: t("Maths"), title: t("Algebra worksheet") },
   ];
   const childAvatar = childInfo.photo || "/student.jpeg";
 
@@ -104,10 +106,10 @@ export default function ParentHomeTab() {
       <section className="bg-linear-to-r from-[#fff4d6] to-yellow-50 rounded-2xl border border-yellow-100 p-6">
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
-            <h3 className="text-sm font-semibold text-slate-600">CHILD INFO</h3>
+            <h3 className="text-sm font-semibold text-slate-600">{t("CHILD INFO")}</h3>
             <p className="mt-2 text-2xl font-bold text-slate-950">{childInfo.name}</p>
             <p className="mt-1 text-sm text-slate-600">
-              Class {childInfo.className} • Section {childInfo.section} • Roll {childInfo.rollNumber}
+              {t("Class")} {childInfo.className} • {t("Section")} {childInfo.section} • {t("Roll")} {childInfo.rollNumber}
             </p>
           </div>
           <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-white/80 shadow-sm">
@@ -116,7 +118,7 @@ export default function ParentHomeTab() {
         </div>
         <div className="space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-600">Attendance</span>
+            <span className="text-xs font-semibold text-slate-600">{t("Attendance")}</span>
             <span className="text-xs font-semibold text-emerald-700">93% (26/28 days)</span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200">
@@ -127,10 +129,10 @@ export default function ParentHomeTab() {
 
       {/* Key Metrics */}
       <section className="mt-4">
-        <h2 className="text-xl font-semibold text-slate-900">Key Metrics</h2>
+        <h2 className="text-xl font-semibold text-slate-900">{t("Key Metrics")}</h2>
         <div className="mt-3 grid grid-cols-2 gap-3">
           <article className="grid min-h-52 grid-rows-[auto_1fr_auto] overflow-hidden rounded-3xl bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
-            <p className="text-sm text-slate-500">Quiz Performance</p>
+            <p className="text-sm text-slate-500">{t("Quiz Performance")}</p>
             <div className="flex items-center justify-center">
               <div className="mx-auto mt-1 w-full max-w-36 sm:max-w-40">
                 <svg viewBox="0 0 120 80" className="h-auto w-full" aria-hidden="true">
@@ -163,12 +165,12 @@ export default function ParentHomeTab() {
               </div>
             </div>
             <p className="inline-flex self-start rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
-              Average quiz score
+              {t("Average quiz score")}
             </p>
           </article>
 
           <article className="grid min-h-52 grid-rows-[auto_1fr_auto] overflow-hidden rounded-3xl bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
-            <p className="text-sm text-slate-500">Homework Due</p>
+            <p className="text-sm text-slate-500">{t("Homework Due")}</p>
             <div className="grid h-full grid-cols-[auto_1fr] items-center gap-3">
               <p className="text-4xl font-semibold leading-none text-slate-950 sm:text-5xl">{homeworkPreviewItems.length}</p>
               <ul className="min-w-0 space-y-1 rounded-xl bg-amber-50/90 p-2 ring-1 ring-amber-100">
@@ -183,12 +185,12 @@ export default function ParentHomeTab() {
               </ul>
             </div>
             <p className="inline-flex self-start rounded-full bg-[#fff4d6] px-3 py-1 text-xs font-semibold text-[#8b6400]">
-              Pending Tasks
+              {t("Pending Tasks")}
             </p>
           </article>
 
           <article className="grid min-h-52 grid-rows-[auto_1fr_auto] overflow-hidden rounded-3xl bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
-            <p className="text-sm text-slate-500">Upcoming Tests</p>
+            <p className="text-sm text-slate-500">{t("Upcoming Tests")}</p>
             <div className="grid h-full grid-cols-[auto_1fr] items-center gap-3">
               <p className="text-4xl font-semibold leading-none text-slate-950 sm:text-5xl">{upcomingTests.length}</p>
               <ul className="min-w-0 space-y-1 rounded-xl bg-blue-50/90 p-2 ring-1 ring-blue-100">
@@ -196,19 +198,19 @@ export default function ParentHomeTab() {
                   <li key={test.id} className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500" aria-hidden="true" />
                     <span className="block min-w-0 truncate text-[11px] font-medium text-slate-700" title={test.subject}>
-                      {test.subject}
+                      {t(test.subject)}
                     </span>
                   </li>
                 ))}
               </ul>
             </div>
             <p className="inline-flex self-start rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
-              This week
+              {t("This week")}
             </p>
           </article>
 
           <article className="grid min-h-52 grid-rows-[auto_1fr_auto] overflow-hidden rounded-3xl bg-white p-4 shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
-            <p className="text-sm text-slate-500">Weak Subjects</p>
+            <p className="text-sm text-slate-500">{t("Weak Subjects")}</p>
             <div className="min-w-0 space-y-3 self-center">
               {weakSubjectItems.map((item) => (
                 <div key={item.subject} className="min-w-0 space-y-1.5">
@@ -242,16 +244,16 @@ export default function ParentHomeTab() {
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#ecfffd] text-[#0e8f84] ring-1 ring-[#cfeeed]">
                 <Bell className="h-4 w-4" />
               </span>
-              School Announcements
+              {t("School Announcements")}
             </h3>
-            <p className="mt-1 max-w-2xl text-xs leading-5 text-slate-500">Important notices from the school office, teachers, sports staff, transport and exam cell.</p>
+            <p className="mt-1 max-w-2xl text-xs leading-5 text-slate-500">{t("Important notices from the school office, teachers, sports staff, transport and exam cell.")}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-slate-700 shadow-sm">
-              Total: {parentNotifications.length}
+              {t("Total")}: {parentNotifications.length}
             </span>
             <span className="rounded-full bg-[#fff6e6] px-3 py-1 font-semibold text-[#9a6b12] shadow-sm">
-              High: {unreadCount}
+              {t("High")}: {unreadCount}
             </span>
           </div>
         </div>
@@ -272,21 +274,21 @@ export default function ParentHomeTab() {
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 shadow-sm">
                         {getSourceIcon(notification.sourceRole)}
-                        {notification.sourceRole}
+                        {t(notification.sourceRole)}
                       </span>
                       <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold ${getCategoryTone(notification.category)}`}>
-                        {notification.category}
+                        {t(notification.category)}
                       </span>
                       <span
                         className={`rounded-full border px-2 py-1 text-[11px] font-semibold uppercase tracking-wide ${getPriorityTone(notification.priority)}`}
                       >
-                        {notification.priority}
+                        {t(notification.priority)}
                       </span>
                     </div>
-                    <h4 className="mt-3 text-sm font-semibold text-slate-950">{notification.title}</h4>
-                    <p className="mt-1 text-sm leading-6 text-slate-700">{notification.message}</p>
+                    <h4 className="mt-3 text-sm font-semibold text-slate-950">{t(notification.title)}</h4>
+                    <p className="mt-1 text-sm leading-6 text-slate-700">{t(notification.message)}</p>
                     <p className="mt-2 text-xs text-slate-500">
-                      By {notification.sourceName} • {new Date(notification.date).toLocaleString("en-IN", {
+                      {t("By")} {notification.sourceName} • {new Date(notification.date).toLocaleString("en-IN", {
                         month: "short",
                         day: "numeric",
                         hour: "numeric",
@@ -300,7 +302,7 @@ export default function ParentHomeTab() {
                       type="button"
                       className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-slate-700"
                     >
-                      {notification.actionLabel}
+                      {t(notification.actionLabel)}
                     </button>
                   </div>
                 </div>
@@ -310,14 +312,14 @@ export default function ParentHomeTab() {
 
           {paginatedNotifications.length === 0 && (
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
-              No notifications match the selected filters.
+              {t("No notifications match the selected filters.")}
             </div>
           )}
         </div>
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-sm">
           <p className="text-slate-600">
-            Showing {filteredNotifications.length === 0 ? 0 : (page - 1) * pageSize + 1} to {Math.min(page * pageSize, filteredNotifications.length)} of {filteredNotifications.length}
+            {t("Showing")} {filteredNotifications.length === 0 ? 0 : (page - 1) * pageSize + 1} {t("to")} {Math.min(page * pageSize, filteredNotifications.length)} {t("of")} {filteredNotifications.length}
           </p>
           <div className="flex items-center gap-2">
             <button
@@ -327,10 +329,10 @@ export default function ParentHomeTab() {
               className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 text-slate-700 enabled:hover:bg-slate-50 disabled:cursor-default disabled:opacity-50"
             >
               <ChevronLeft className="h-4 w-4" />
-              Prev
+              {t("Prev")}
             </button>
             <span className="text-slate-700 font-semibold">
-              Page {page} / {totalPages}
+              {t("Page")} {page} / {totalPages}
             </span>
             <button
               type="button"
@@ -338,7 +340,7 @@ export default function ParentHomeTab() {
               disabled={page === totalPages}
               className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 text-slate-700 enabled:hover:bg-slate-50 disabled:cursor-default disabled:opacity-50"
             >
-              Next
+              {t("Next")}
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>

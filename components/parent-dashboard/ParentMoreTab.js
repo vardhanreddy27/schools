@@ -2,6 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 import ParentTimetableTab from "./ParentTimetableTab";
+import { PARENT_LANGUAGES, translateText } from "./i18n";
 
 const moreCards = [
   {
@@ -66,7 +67,7 @@ const teacherContactCards = [
   },
   {
     id: "text",
-    title: "Text ",
+    title: "Text",
     teacherName: "Sri Ma'am",
     section: "9th B",
     imageSrc: "/message.png",
@@ -74,7 +75,8 @@ const teacherContactCards = [
   },
 ];
 
-export default function ParentMoreTab() {
+export default function ParentMoreTab({ lang = PARENT_LANGUAGES.EN }) {
+  const t = (text) => translateText(lang, text);
   const [timetableOpen, setTimetableOpen] = useState(false);
 
   function handleCardClick(cardId) {
@@ -87,8 +89,8 @@ export default function ParentMoreTab() {
     <>
       <section className="-mx-3 mt-6 min-h-[calc(100vh-10rem)] space-y-0 bg-white mb-9">
         <article className=" bg-white px-5 pt-5 ">
-          <p className="text-sm text-slate-500">Teacher connect</p>
-          <h2 className="mt-1 text-2xl font-semibold text-slate-900">Contact teacher</h2>
+          <p className="text-sm text-slate-500">{t("Teacher connect")}</p>
+          <h2 className="mt-1 text-2xl font-semibold text-slate-900">{t("Contact teacher")}</h2>
 
           <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-3">
             {teacherContactCards.map((card) => (
@@ -99,7 +101,7 @@ export default function ParentMoreTab() {
               >
                 <div className="flex items-start justify-between gap-2 sm:gap-3">
                   <div>
-                    <p className="text-sm font-semibold leading-tight sm:text-base">{card.title}</p>
+                    <p className="text-sm font-semibold leading-tight sm:text-base">{t(card.title)}</p>
                     <p className="mt-1 text-[11px] text-slate-600 sm:text-xs">{card.teacherName}, {card.section}</p>
                   </div>
 
@@ -119,8 +121,8 @@ export default function ParentMoreTab() {
         </article>
 
         <article className=" bg-white p-5 ">
-          <p className="text-sm text-slate-500">Parent control</p>
-          <h2 className="mt-1 text-2xl font-semibold text-slate-900">Quick actions</h2>
+          <p className="text-sm text-slate-500">{t("Parent control")}</p>
+          <h2 className="mt-1 text-2xl font-semibold text-slate-900">{t("Quick actions")}</h2>
 
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {moreCards.map((card) => {
@@ -133,9 +135,9 @@ export default function ParentMoreTab() {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-base font-semibold">{card.title}</p>
-                      <p className="mt-1 text-xs text-slate-600">{card.subtitle}</p>
-                      {card.id !== "timetable" ? <p className="mt-3 text-[11px] font-medium text-slate-500">Coming soon</p> : null}
+                      <p className="text-base font-semibold">{t(card.title)}</p>
+                      <p className="mt-1 text-xs text-slate-600">{t(card.subtitle)}</p>
+                      {card.id !== "timetable" ? <p className="mt-3 text-[11px] font-medium text-slate-500">{t("Coming soon")}</p> : null}
                     </div>
                     <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl">
                       <Image
@@ -159,8 +161,8 @@ export default function ParentMoreTab() {
           <div className="h-[90vh] w-full overflow-hidden rounded-t-3xl bg-[#eef3fb] shadow-2xl sm:h-auto sm:max-h-[88vh] sm:max-w-4xl sm:rounded-3xl">
             <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 sm:px-5">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">More</p>
-                <h3 className="text-lg font-semibold text-slate-900">Timetable</h3>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{t("More")}</p>
+                <h3 className="text-lg font-semibold text-slate-900">{t("Timetable")}</h3>
               </div>
               <button
                 type="button"
@@ -173,7 +175,7 @@ export default function ParentMoreTab() {
             </div>
 
             <div className="max-h-[calc(90vh-64px)] overflow-y-auto px-3 pb-4 sm:max-h-[calc(88vh-64px)] sm:px-5 sm:pb-5">
-              <ParentTimetableTab />
+              <ParentTimetableTab lang={lang} />
             </div>
           </div>
         </div>

@@ -2,8 +2,9 @@ import { BarChart, Bar, LabelList, XAxis, YAxis, CartesianGrid, Tooltip, Respons
 import { AlertTriangle } from "lucide-react";
 import { attendanceMonthly, attendanceLog } from "./data";
 import { useMemo } from "react";
+import { PARENT_LANGUAGES, translateText } from "./i18n";
 
-function WeeklyTooltip({ active, payload, label }) {
+function WeeklyTooltip({ active, payload, label, t }) {
   if (!active || !payload?.length) {
     return null;
   }
@@ -17,14 +18,15 @@ function WeeklyTooltip({ active, payload, label }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur">
       <p className="text-xs font-semibold text-slate-500">{label}</p>
-      <p className="mt-1 text-sm font-semibold text-emerald-700">Present: {present} days</p>
-      <p className="text-sm font-semibold text-rose-600">Absent: {absent} days</p>
-      <p className="mt-1 text-xs text-slate-500">Weekly attendance: {percent}%</p>
+      <p className="mt-1 text-sm font-semibold text-emerald-700">{t("Present")}: {present} {t("days")}</p>
+      <p className="text-sm font-semibold text-rose-600">{t("Absent")}: {absent} {t("days")}</p>
+      <p className="mt-1 text-xs text-slate-500">{t("Weekly attendance")}: {percent}%</p>
     </div>
   );
 }
 
-export default function ParentAttendanceTab() {
+export default function ParentAttendanceTab({ lang = PARENT_LANGUAGES.EN }) {
+  const t = (text) => translateText(lang, text);
   const totalDays = attendanceMonthly.reduce((sum, week) => sum + week.present + week.absent, 0);
   const totalPresent = attendanceMonthly.reduce((sum, week) => sum + week.present, 0);
   const attendancePercentage = Math.round((totalPresent / totalDays) * 100);
@@ -62,15 +64,15 @@ export default function ParentAttendanceTab() {
       <section className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200 p-6">
         {/* Header with Title and Legend */}
         <div className="flex items-start justify-between mb-6">
-          <h3 className="text-sm font-semibold text-slate-600">ATTENDANCE OVERVIEW</h3>
+          <h3 className="text-sm font-semibold text-slate-600">{t("ATTENDANCE OVERVIEW")}</h3>
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-red-600"></div>
-              <span className="text-sm font-medium text-slate-700">Absent</span>
+              <span className="text-sm font-medium text-slate-700">{t("Absent")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-emerald-600"></div>
-              <span className="text-sm font-medium text-slate-700">Present</span>
+              <span className="text-sm font-medium text-slate-700">{t("Present")}</span>
             </div>
           </div>
         </div>
@@ -99,7 +101,7 @@ export default function ParentAttendanceTab() {
                   {donutCells}
                 </Pie>
                 <text x="50%" y="45%" textAnchor="middle" dominantBaseline="middle" className="text-sm fill-slate-400">
-                  Attendance
+                  {t("Attendance")}
                 </text>
                 <text x="50%" y="55%" textAnchor="middle" dominantBaseline="middle" className="text-4xl font-bold fill-slate-900">
                   {attendancePercentage}%
@@ -112,7 +114,7 @@ export default function ParentAttendanceTab() {
           <div className="mt-4 flex gap-2 rounded-lg bg-rose-100 p-3">
             <AlertTriangle className="h-5 w-5 shrink-0 text-rose-600" />
             <p className="text-sm text-rose-800 font-medium">
-              Attendance is below 75%. Follow up on absences.
+              {t("Attendance is below 75%. Follow up on absences.")}
             </p>
           </div>
         )}
@@ -120,11 +122,11 @@ export default function ParentAttendanceTab() {
 
       {/* Weekly Attendance Chart */}
       <section>
-        <h3 className="text-sm font-semibold text-slate-600 mb-3">WEEKLY PRESENT GRAPH</h3>
+        <h3 className="text-sm font-semibold text-slate-600 mb-3">{t("WEEKLY PRESENT GRAPH")}</h3>
         <div className="rounded-2xl border border-slate-200 bg-white p-4">
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Present days by week</p>
-            <p className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">Target: 5+ days</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{t("Present days by week")}</p>
+            <p className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">{t("Target: 5+ days")}</p>
           </div>
 
           <div className="h-60 w-full rounded-xl bg-linear-to-b from-white to-slate-50/80 p-2">
@@ -140,7 +142,7 @@ export default function ParentAttendanceTab() {
                 <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#475569", fontSize: 12 }} />
                 <YAxis domain={[0, 7]} ticks={[0, 2, 4, 6, 7]} tickLine={false} axisLine={false} tick={{ fill: "#475569", fontSize: 12 }} />
                 <ReferenceLine y={5} stroke="#94a3b8" strokeDasharray="4 4" />
-                <Tooltip content={<WeeklyTooltip />} cursor={{ fill: "rgba(148, 163, 184, 0.12)" }} />
+                <Tooltip content={<WeeklyTooltip t={t} />} cursor={{ fill: "rgba(148, 163, 184, 0.12)" }} />
                 <Bar dataKey="present" fill="url(#presentBarFill)" radius={[12, 12, 8, 8]} maxBarSize={46}>
                   <LabelList
                     dataKey="attendancePct"
@@ -157,7 +159,7 @@ export default function ParentAttendanceTab() {
             {attendanceWeekly.map((week) => (
               <div key={week.label} className="rounded-xl bg-slate-50 px-3 py-2">
                 <p className="text-xs font-medium text-slate-500">{week.label}</p>
-                <p className="text-sm font-semibold text-slate-900">{week.attendancePct}% present</p>
+                <p className="text-sm font-semibold text-slate-900">{week.attendancePct}% {t("present")}</p>
               </div>
             ))}
           </div>
@@ -166,7 +168,7 @@ export default function ParentAttendanceTab() {
 
       {/* Daily Attendance Log */}
       <section>
-        <h3 className="text-sm font-semibold text-slate-600 mb-3">DAILY LOG</h3>
+        <h3 className="text-sm font-semibold text-slate-600 mb-3">{t("DAILY LOG")}</h3>
         <div className="space-y-2">
           {attendanceLog.map((log, idx) => (
             <div
@@ -193,12 +195,12 @@ export default function ParentAttendanceTab() {
                       day: "numeric",
                     })}
                   </p>
-                  <p className="text-xs text-slate-600">{log.note}</p>
+                  <p className="text-xs text-slate-600">{t(log.note)}</p>
                 </div>
               </div>
               <div className="shrink-0 text-right">
                 <p className={`text-sm font-semibold ${log.status === "Present" ? "text-emerald-700" : "text-rose-700"}`}>
-                  {log.status}
+                  {t(log.status)}
                 </p>
                 {log.checkIn !== "-" && (
                   <p className="text-xs text-slate-600">{log.checkIn}</p>
@@ -211,23 +213,23 @@ export default function ParentAttendanceTab() {
 
       {/* Attendance Tips */}
       <section className="bg-linear-to-r from-blue-50 to-cyan-50 rounded-2xl border border-blue-200 p-6">
-        <h3 className="font-semibold text-slate-950 mb-3">Important Notes</h3>
+        <h3 className="font-semibold text-slate-950 mb-3">{t("Important Notes")}</h3>
         <ul className="space-y-2 text-sm text-slate-700">
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold">•</span>
-            Regular attendance ensures better academic performance
+            {t("Regular attendance ensures better academic performance")}
           </li>
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold">•</span>
-            School requires minimum 75% attendance
+            {t("School requires minimum 75% attendance")}
           </li>
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold">•</span>
-            Inform office in advance for planned absences
+            {t("Inform office in advance for planned absences")}
           </li>
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold">•</span>
-            Medical certificates needed for extended absence
+            {t("Medical certificates needed for extended absence")}
           </li>
         </ul>
       </section>

@@ -1,6 +1,8 @@
 import { childTimetable } from "./data";
+import { PARENT_LANGUAGES, translateText } from "./i18n";
 
-export default function ParentTimetableTab() {
+export default function ParentTimetableTab({ lang = PARENT_LANGUAGES.EN }) {
+  const t = (text) => translateText(lang, text);
   // Taking the first day's schedule from childTimetable to match the student view logic
   const sampleDay = childTimetable[0];
   
@@ -20,32 +22,32 @@ export default function ParentTimetableTab() {
   return (
     <section className="mt-4 font-sans">
       <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
-        <p className="text-sm text-slate-500">Weekly timetable</p>
-        <h2 className="mt-1 text-2xl font-semibold">Morning and afternoon plan</h2>
+        <p className="text-sm text-slate-500">{t("Weekly timetable")}</p>
+        <h2 className="mt-1 text-2xl font-semibold">{t("Morning and afternoon plan")}</h2>
 
         {/* Morning Prayer Notification */}
         <div className="mt-4 rounded-2xl border border-slate-200 bg-[#eef7ff] px-4 py-3 text-sm text-slate-700">
-          Morning prayer: 08:45 AM to 09:00 AM (Everyday)
+          {t("Morning prayer: 08:45 AM to 09:00 AM (Everyday)")}
         </div>
 
         {/* Morning Table */}
         <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
           <p className="border-b border-slate-200 bg-[#00b5ffd6] px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white">
-            Morning
+            {t("Morning")}
           </p>
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-slate-500">
               <tr>
-                <th className="px-3 py-2 font-medium">Period</th>
-                <th className="px-3 py-2 font-medium">Subject</th>
-                <th className="px-3 py-2 font-medium">Time</th>
+                <th className="px-3 py-2 font-medium">{t("Period")}</th>
+                <th className="px-3 py-2 font-medium">{t("Subject")}</th>
+                <th className="px-3 py-2 font-medium">{t("Time")}</th>
               </tr>
             </thead>
             <tbody>
               {morningPeriods.map((period) => (
                 <tr key={`morning-${period.label}`} className="border-t border-slate-100 text-slate-700 hover:bg-[#fff4d6]/40 transition-colors">
                   <td className="px-3 py-3 font-semibold text-slate-900">{period.label}</td>
-                  <td className="px-3 py-3">{period.subject}</td>
+                  <td className="px-3 py-3">{t(period.subject)}</td>
                   <td className="px-3 py-3 text-slate-600">{period.time}</td>
                 </tr>
               ))}
@@ -55,27 +57,27 @@ export default function ParentTimetableTab() {
 
         {/* Lunch Break Notification */}
         <div className="mt-4 rounded-2xl border border-slate-200 bg-[#f8fafc] px-4 py-3 text-sm text-slate-700">
-          Lunch break: 12:00 PM to 12:45 PM
+          {t("Lunch break: 12:00 PM to 12:45 PM")}
         </div>
 
         {/* Afternoon Table */}
         <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
           <p className="border-b border-slate-200 bg-orange-500 px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white">
-            Afternoon
+            {t("Afternoon")}
           </p>
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-slate-500">
               <tr>
-                <th className="px-3 py-2 font-medium">Period</th>
-                <th className="px-3 py-2 font-medium">Subject</th>
-                <th className="px-3 py-2 font-medium">Time</th>
+                <th className="px-3 py-2 font-medium">{t("Period")}</th>
+                <th className="px-3 py-2 font-medium">{t("Subject")}</th>
+                <th className="px-3 py-2 font-medium">{t("Time")}</th>
               </tr>
             </thead>
             <tbody>
               {afternoonPeriods.map((period) => (
                 <tr key={`afternoon-${period.label}`} className="border-t border-slate-100 text-slate-700 hover:bg-[#fff4d6]/40 transition-colors">
                   <td className="px-3 py-3 font-semibold text-slate-900">{period.label}</td>
-                  <td className="px-3 py-3">{period.subject}</td>
+                  <td className="px-3 py-3">{t(period.subject)}</td>
                   <td className="px-3 py-3 text-slate-600">{period.time}</td>
                 </tr>
               ))}

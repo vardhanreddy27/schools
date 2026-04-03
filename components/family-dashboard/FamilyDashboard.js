@@ -20,6 +20,7 @@ import ParentTimetableTab from "@/components/parent-dashboard/ParentTimetableTab
 import ParentAcademicsTab from "@/components/parent-dashboard/ParentAcademicsTab";
 import ParentMoreTab from "@/components/parent-dashboard/ParentMoreTab";
 import { parentMenuItems, parentProfileDefaults } from "@/components/parent-dashboard/data";
+import { languageToggleLabel, PARENT_LANGUAGES, translateText } from "@/components/parent-dashboard/i18n";
 
 const familyRoleItems = [
   { id: "student", label: "Student" },
@@ -49,8 +50,9 @@ function getInitialRole(initialRole) {
   return initialRole;
 }
 
-function FamilySidebar({ activeRole, activeMenu, onRoleChange, onMenuChange, onLogout }) {
+function FamilySidebar({ activeRole, activeMenu, onRoleChange, onMenuChange, onLogout, parentLanguage }) {
   const menuItems = roleConfig[activeRole].menuItems;
+  const t = (text) => translateText(activeRole === "parent" ? parentLanguage : PARENT_LANGUAGES.EN, text);
 
   return (
     <aside className="hidden w-72 shrink-0 bg-slate-950 text-slate-100 lg:flex lg:flex-col">
@@ -61,7 +63,7 @@ function FamilySidebar({ activeRole, activeMenu, onRoleChange, onMenuChange, onL
           </div>
           <div>
             <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
-            <p className="text-sm text-slate-400">Family App</p>
+            <p className="text-sm text-slate-400">{t("Family App")}</p>
           </div>
         </div>
       </div>
@@ -78,7 +80,7 @@ function FamilySidebar({ activeRole, activeMenu, onRoleChange, onMenuChange, onL
                 : "text-slate-300 hover:bg-slate-800 hover:text-white"
             }`}
           >
-            {roleItem.label}
+            {t(roleItem.label)}
           </button>
         ))}
       </div>
@@ -96,7 +98,7 @@ function FamilySidebar({ activeRole, activeMenu, onRoleChange, onMenuChange, onL
             }`}
           >
             <Icon className="h-5 w-5" />
-            {label}
+            {t(label)}
           </button>
         ))}
       </nav>
@@ -107,15 +109,16 @@ function FamilySidebar({ activeRole, activeMenu, onRoleChange, onMenuChange, onL
           onClick={onLogout}
           className="w-full rounded-2xl bg-slate-800 px-4 py-3 text-sm font-semibold text-slate-100 transition-all duration-200 hover:bg-slate-700"
         >
-          Logout
+          {t("Logout")}
         </button>
       </div>
     </aside>
   );
 }
 
-function FamilyBottomNav({ activeRole, activeMenu, onMenuChange }) {
+function FamilyBottomNav({ activeRole, activeMenu, onMenuChange, parentLanguage }) {
   const menuItems = roleConfig[activeRole].menuItems;
+  const t = (text) => translateText(activeRole === "parent" ? parentLanguage : PARENT_LANGUAGES.EN, text);
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 bg-white/95 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-1.5 shadow-[0_-10px_24px_-20px_rgba(15,23,42,0.4)] backdrop-blur-xl lg:hidden">
@@ -130,7 +133,7 @@ function FamilyBottomNav({ activeRole, activeMenu, onMenuChange }) {
             }`}
           >
             <Icon className="h-5 w-5" />
-            <p>{label}</p>
+            <p>{t(label)}</p>
           </button>
         ))}
       </div>
@@ -147,6 +150,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
   const [profileSaving, setProfileSaving] = useState(false);
   const [studentProfileForm, setStudentProfileForm] = useState(getInitialStudentProfile());
   const [parentProfileForm, setParentProfileForm] = useState(getInitialParentProfile());
+  const [parentLanguage, setParentLanguage] = useState(PARENT_LANGUAGES.EN);
 
   const isStudent = activeRole === "student";
 
@@ -161,6 +165,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
   }, [isStudent, studentProfileForm.className, studentProfileForm.section, parentProfileForm.childClass, parentProfileForm.childSection]);
 
   const attendancePercentage = 75;
+  const parentT = (text) => translateText(parentLanguage, text);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -190,6 +195,11 @@ export default function FamilyDashboard({ initialRole = "student" }) {
         setParentProfileForm(parentProfileDefaults);
       }
     }
+
+    const savedParentLanguage = window.localStorage.getItem("parentDashboardLanguage");
+    if (savedParentLanguage === PARENT_LANGUAGES.EN || savedParentLanguage === PARENT_LANGUAGES.TE) {
+      setParentLanguage(savedParentLanguage);
+    }
   }, []);
 
   useEffect(() => {
@@ -199,6 +209,14 @@ export default function FamilyDashboard({ initialRole = "student" }) {
 
     window.localStorage.setItem("familyDashboardRole", activeRole);
   }, [activeRole]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.localStorage.setItem("parentDashboardLanguage", parentLanguage);
+  }, [parentLanguage]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -265,6 +283,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
         onRoleChange={handleRoleChange}
         onMenuChange={handleMenuChange}
         onLogout={handleLogout}
+        parentLanguage={parentLanguage}
       />
 
       <main className="relative flex-1 lg:pb-8">
@@ -279,14 +298,16 @@ export default function FamilyDashboard({ initialRole = "student" }) {
                     </div>
                     <div>
                       <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
-                      <p className="text-sm text-slate-500">{roleConfig[activeRole].title}</p>
+                      <p className="text-sm text-slate-500">
+                        {activeRole === "parent" ? parentT(roleConfig[activeRole].title) : roleConfig[activeRole].title}
+                      </p>
                     </div>
                   </div>
 
                   <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
                     {isStudent
                       ? `Welcome Shiva`
-                      : `Welcome Prakesh`}
+                      : `${parentT("Welcome")} Prakesh`}
                   </h1>
 
                   <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -327,29 +348,43 @@ export default function FamilyDashboard({ initialRole = "student" }) {
                     ))}
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (isStudent) {
-                        setStudentProfileSheetOpen(true);
-                        return;
-                      }
+                  <div className={`flex ${isStudent ? "items-center" : "flex-col items-center"} gap-2`}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (isStudent) {
+                          setStudentProfileSheetOpen(true);
+                          return;
+                        }
 
-                      setParentProfileSheetOpen(true);
-                    }}
-                    className="p-1 text-slate-500 transition-all duration-150 hover:text-slate-800 active:scale-90 lg:hidden"
-                    aria-label="Open profile"
-                  >
-                    <span className={`block overflow-hidden rounded-full border border-slate-200 bg-white shadow-sm ${isStudent ? "h-12 w-12 p-0.5" : "h-16 w-16 p-0"}`}>
-                      <Image
-                        src={isStudent ? "/student3.png" : "/parent.jpg"}
-                        alt={isStudent ? "Student profile" : "Parent profile"}
-                        width={isStudent ? 48 : 64}
-                        height={isStudent ? 48 : 64}
-                        className={isStudent ? "h-full w-full object-cover" : "h-full w-full scale-[1.12] object-cover object-[center_18%]"}
-                      />
-                    </span>
-                  </button>
+                        setParentProfileSheetOpen(true);
+                      }}
+                      className="p-1 text-slate-500 transition-all duration-150 hover:text-slate-800 active:scale-90 lg:hidden"
+                      aria-label="Open profile"
+                    >
+                      <span className={`block overflow-hidden rounded-full border border-slate-200 bg-white shadow-sm ${isStudent ? "h-12 w-12 p-0.5" : "h-16 w-16 p-0"}`}>
+                        <Image
+                          src={isStudent ? "/student3.png" : "/parent.jpg"}
+                          alt={isStudent ? "Student profile" : "Parent profile"}
+                          width={isStudent ? 48 : 64}
+                          height={isStudent ? 48 : 64}
+                          className={isStudent ? "h-full w-full object-cover" : "h-full w-full scale-[1.12] object-cover object-[center_18%]"}
+                        />
+                      </span>
+                    </button>
+
+                    {!isStudent ? (
+                      <button
+                        type="button"
+                        onClick={() => setParentLanguage((prev) => (prev === PARENT_LANGUAGES.EN ? PARENT_LANGUAGES.TE : PARENT_LANGUAGES.EN))}
+                        className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300"
+                        aria-label="Toggle parent dashboard language"
+                      >
+                        <Image src="/telugu.png" alt="Telugu language" width={16} height={16} className="rounded-sm object-cover" />
+                        <span>{languageToggleLabel(parentLanguage)}</span>
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
               </div>
 
@@ -388,17 +423,22 @@ export default function FamilyDashboard({ initialRole = "student" }) {
               </>
             ) : (
               <>
-                {activeMenu === "home" ? <ParentHomeTab /> : null}
-                {activeMenu === "homework" ? <ParentHomeworkTab /> : null}
-                {activeMenu === "attendance" ? <ParentAttendanceTab /> : null}
-                {activeMenu === "academics" ? <ParentAcademicsTab /> : null}
-                {activeMenu === "more" ? <ParentMoreTab /> : null}
+                {activeMenu === "home" ? <ParentHomeTab lang={parentLanguage} /> : null}
+                {activeMenu === "homework" ? <ParentHomeworkTab lang={parentLanguage} /> : null}
+                {activeMenu === "attendance" ? <ParentAttendanceTab lang={parentLanguage} /> : null}
+                {activeMenu === "academics" ? <ParentAcademicsTab lang={parentLanguage} /> : null}
+                {activeMenu === "more" ? <ParentMoreTab lang={parentLanguage} /> : null}
               </>
             )}
           </div>
         </div>
 
-        <FamilyBottomNav activeRole={activeRole} activeMenu={activeMenu} onMenuChange={handleMenuChange} />
+        <FamilyBottomNav
+          activeRole={activeRole}
+          activeMenu={activeMenu}
+          onMenuChange={handleMenuChange}
+          parentLanguage={parentLanguage}
+        />
       </main>
 
       <ProfileBottomSheet

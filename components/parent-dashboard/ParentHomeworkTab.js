@@ -7,6 +7,7 @@ import {
   ChevronUp, 
 } from "lucide-react";
 import { studentAssignments, pendingHomework } from "./data";
+import { PARENT_LANGUAGES, translateText } from "./i18n";
 
 const SUBJECT_IMAGE_MAP = {
   science: "/science.png",
@@ -19,7 +20,8 @@ const SUBJECT_IMAGE_MAP = {
   biology: "/biology.png",
 };
 
-export default function ParentHomeworkTab() {
+export default function ParentHomeworkTab({ lang = PARENT_LANGUAGES.EN }) {
+  const t = (text) => translateText(lang, text);
   const [activeSegment, setActiveSegment] = useState("homework");
   const [expandedHomeworkId, setExpandedHomeworkId] = useState(null);
   const [expandedAssignmentSubject, setExpandedAssignmentSubject] = useState(null);
@@ -54,9 +56,9 @@ export default function ParentHomeworkTab() {
         };
       }
       grouped[item.subject].tasks.push({
-        title: item.title,
-        desc: item.description || "Research and compile a 2-page report including diagrams and references.",
-        requirements: ["A4 Sheet", "Colored Pens", "Diagrams"]
+        title: t(item.title),
+        desc: t(item.description || "Research and compile a 2-page report including diagrams and references."),
+        requirements: [t("A4 Sheet"), t("Colored Pens"), t("Diagrams")]
       });
     });
     return Object.values(grouped);
@@ -65,7 +67,7 @@ export default function ParentHomeworkTab() {
   return (
     <div className="space-y-6 pb-24 pt-4 font-sans">
       {/* 1. CALENDAR STRIP */}
-      <section className="rounded-[32px] border border-slate-100 bg-white p-4 shadow-sm mx-1">
+      <section className="rounded-4xl border border-slate-100 bg-white p-4 shadow-sm mx-1">
         <div className="mb-4 flex items-center justify-between px-2">
           <h3 className="text-lg font-extrabold text-slate-900">
             {weekStart.toLocaleDateString("en-IN", { month: 'short', day: 'numeric' })} - 
@@ -95,8 +97,8 @@ export default function ParentHomeworkTab() {
 
       {/* 2. TABS */}
       <div className="flex rounded-3xl bg-slate-100 p-1.5 mx-1">
-        <button onClick={() => setActiveSegment("homework")} className={`flex-1 rounded-2xl py-3 text-sm font-black transition-all ${activeSegment === "homework" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"}`}>Homework</button>
-        <button onClick={() => setActiveSegment("assignments")} className={`flex-1 rounded-2xl py-3 text-sm font-black transition-all ${activeSegment === "assignments" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"}`}>Assignments</button>
+        <button onClick={() => setActiveSegment("homework")} className={`flex-1 rounded-2xl py-3 text-sm font-black transition-all ${activeSegment === "homework" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"}`}>{t("Homework")}</button>
+        <button onClick={() => setActiveSegment("assignments")} className={`flex-1 rounded-2xl py-3 text-sm font-black transition-all ${activeSegment === "assignments" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"}`}>{t("Assignments")}</button>
       </div>
 
       {/* 3. CONTENT LIST */}
@@ -105,15 +107,15 @@ export default function ParentHomeworkTab() {
           pendingHomework.map((hw) => {
             const isExpanded = expandedHomeworkId === hw.id;
             return (
-              <article key={hw.id} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-sm transition-all" onClick={() => setExpandedHomeworkId(isExpanded ? null : hw.id)}>
+              <article key={hw.id} className="overflow-hidden rounded-4xl border border-slate-100 bg-white shadow-sm transition-all" onClick={() => setExpandedHomeworkId(isExpanded ? null : hw.id)}>
                 <div className="p-5">
                   <div className="flex items-center gap-4">
                     <div className="relative h-18 w-18 shrink-0 ">
                       <Image src={SUBJECT_IMAGE_MAP[hw.subject.toLowerCase()] || "/logo.png"} alt={hw.subject} fill className="object-contain p-2" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-lg font-black text-slate-900 leading-tight">{hw.subject}</h4>
-                      <p className="truncate text-sm font-semibold text-slate-500">{hw.title}</p>
+                      <h4 className="text-lg font-black text-slate-900 leading-tight">{t(hw.subject)}</h4>
+                      <p className="truncate text-sm font-semibold text-slate-500">{t(hw.title)}</p>
                     </div>
                     <div className="rounded-2xl bg-slate-50 p-2 text-slate-400">
                       {isExpanded ? <ChevronUp className="h-4 w-4 text-slate-900" /> : <ChevronDown className="h-4 w-4" />}
@@ -121,13 +123,13 @@ export default function ParentHomeworkTab() {
                   </div>
                   {isExpanded && (
                     <div className="mt-4 pt-4 border-t border-slate-100 animate-in fade-in">
-                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Instructions</p>
-                      <p className="mt-1 text-sm font-bold text-slate-800">{hw.description}</p>
+                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">{t("Instructions")}</p>
+                      <p className="mt-1 text-sm font-bold text-slate-800">{t(hw.description)}</p>
                       <ul className="mt-3 space-y-2">
                         {/* Rendering single instruction as a list item to match student UI style */}
                         <li className="flex gap-3 text-sm font-medium text-slate-600 leading-snug">
                           <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[10px] font-bold text-white">1</span>
-                          Complete the work by {new Date(hw.dueDate).toLocaleDateString("en-IN", { month: 'short', day: 'numeric' })}
+                          {t("Complete the work by")} {new Date(hw.dueDate).toLocaleDateString("en-IN", { month: 'short', day: 'numeric' })}
                         </li>
                       </ul>
                     </div>
@@ -141,15 +143,15 @@ export default function ParentHomeworkTab() {
           groupedAssignments.map((group) => {
             const isExpanded = expandedAssignmentSubject === group.subject;
             return (
-              <article key={group.subject} className="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-sm transition-all" onClick={() => setExpandedAssignmentSubject(isExpanded ? null : group.subject)}>
+              <article key={group.subject} className="overflow-hidden rounded-4xl border border-slate-100 bg-white shadow-sm transition-all" onClick={() => setExpandedAssignmentSubject(isExpanded ? null : group.subject)}>
                 <div className="p-5">
                   <div className="flex items-center gap-4">
                     <div className="relative h-18 w-18 shrink-0 ">
                       <Image src={group.imageSrc} alt={group.subject} fill className="object-contain p-2" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-lg font-black text-slate-900 leading-tight">{group.subject}</h4>
-                      <p className="text-sm font-semibold text-slate-500">{group.tasks.length} Assignments Available</p>
+                      <h4 className="text-lg font-black text-slate-900 leading-tight">{t(group.subject)}</h4>
+                      <p className="text-sm font-semibold text-slate-500">{group.tasks.length} {t("Assignments Available")}</p>
                     </div>
                     <div className="rounded-2xl bg-slate-50 p-2 text-slate-400">
                       {isExpanded ? <ChevronUp className="h-4 w-4 text-slate-900" /> : <ChevronDown className="h-4 w-4" />}
