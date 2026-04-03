@@ -236,7 +236,7 @@ export default function AttendanceView() {
       <section className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
         <div>
           <p className="text-sm text-slate-500">Latecomers graph</p>
-          <h2 className="mt-1 text-2xl font-semibold">Class wise latecomers </h2>
+          <h2 className="mt-1 text-2xl font-semibold">Class wise late comers </h2>
         </div>
 
         <div className="mt-4 rounded-3xl border border-slate-200 bg-slate-50 p-3 sm:p-4">

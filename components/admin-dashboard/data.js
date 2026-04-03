@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   Bell,
   BookOpen,
   Briefcase,
@@ -433,7 +434,7 @@ export const initialTimetableUpdates = [
 export const navItems = [
   { id: "overview", label: "Overview", icon: LayoutGrid },
   { id: "attendance", label: "Attendance", icon: ClipboardCheck },
-  { id: "timetable", label: "Timetable", icon: CalendarDays },
+  { id: "timetable", label: "Performance", icon: BarChart3 },
   { id: "approvals", label: "Approvals", icon: UserRoundCheck },
   { id: "communication", label: "More", icon: MoreHorizontal },
   { id: "profile", label: "Profile", icon: UserCircle2 },
