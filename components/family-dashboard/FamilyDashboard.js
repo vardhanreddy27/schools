@@ -59,10 +59,10 @@ function FamilySidebar({ activeRole, activeMenu, onRoleChange, onMenuChange, onL
       <div className="px-7 pb-4 pt-8">
         <div className="flex items-center gap-3">
           <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
-            <Image src="/logo.png" alt="NMS Logo" width={42} height={42} className="object-contain" priority />
+            <Image src="/logo.jpg" alt="QH Logo" width={50} height={50} className="object-contain" priority />
           </div>
           <div>
-            <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
+            <p className="text-2xl font-semibold tracking-[0.22em]">QH</p>
             <p className="text-sm text-slate-400">{t("Family App")}</p>
           </div>
         </div>
@@ -293,11 +293,11 @@ export default function FamilyDashboard({ initialRole = "student" }) {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3 lg:hidden">
-                    <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
-                      <Image src="/logo.png" alt="NMS Logo" width={34} height={34} className="object-contain" priority />
+                    <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
+                      <Image src="/logo.jpg" alt="QH Logo" width={60} height={60} className="object-contain" priority />
                     </div>
                     <div>
-                      <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
+                      <p className="text-2xl font-semibold tracking-[0.22em]">QH</p>
                       <p className="text-sm text-slate-500">
                         {activeRole === "parent" ? parentT(roleConfig[activeRole].title) : roleConfig[activeRole].title}
                       </p>

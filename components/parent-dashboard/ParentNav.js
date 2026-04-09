@@ -6,7 +6,7 @@ export function ParentSidebar({ activeMenu, onMenuChange, onLogout }) {
   return (
     <aside className="hidden h-screen w-72 flex-col border-r border-slate-200 bg-white px-6 py-8 lg:flex sticky top-0">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#16c7bd]">NMS</h1>
+        <h1 className="text-2xl font-bold text-[#16c7bd]">QH</h1>
         <p className="text-xs text-slate-500 mt-1">Parent Portal</p>
       </div>
 

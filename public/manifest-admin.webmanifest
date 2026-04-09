@@ -1,7 +1,7 @@
 {
-  "name": "NMS ADMIN",
-  "short_name": "NMS ADMIN",
-  "description": "NMS Admin progressive web app",
+  "name": "QH ADMIN",
+  "short_name": "QH ADMIN",
+  "description": "QH Admin progressive web app",
   "id": "/Admin_login",
   "start_url": "/Admin_login",
   "scope": "/",
@@ -11,13 +11,13 @@
   "theme_color": "#1f2937",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/logo.jpg",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/logo.png",
+      "src": "/logo.jpg",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

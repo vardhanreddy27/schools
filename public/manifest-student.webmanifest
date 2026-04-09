@@ -1,7 +1,7 @@
 {
-  "name": "NMS Parents",
-  "short_name": "NMS Parents",
-  "description": "NMS Students progressive web app",
+  "name": "QH Parents",
+  "short_name": "QH Parents",
+  "description": "QH Students progressive web app",
   "id": "/Student_login",
   "start_url": "/Student_login",
   "scope": "/",
@@ -11,13 +11,13 @@
   "theme_color": "#1f2937",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/logo.jpg",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/logo.png",
+      "src": "/logo.jpg",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

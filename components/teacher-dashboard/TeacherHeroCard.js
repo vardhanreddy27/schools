@@ -13,10 +13,10 @@ export default function TeacherHeroCard({
         <div className="min-w-0">
           <div className="flex items-center gap-2.5">
             <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white p-1 shadow-sm ring-1 ring-slate-100">
-              <Image src="/logo.png" alt="NMS Logo" width={38} height={38} className="object-contain" priority />
+              <Image src="/logo.jpg" alt="QH Logo" width={46} height={46} className="object-contain" priority />
             </div>
             <div>
-              <p className="text-2xl font-black tracking-[0.18em] text-slate-900">NMS</p>
+              <p className="text-2xl font-black tracking-[0.18em] text-slate-900">QH</p>
               <p className="text-sm text-slate-500">Teacher Workspace</p>
             </div>
           </div>

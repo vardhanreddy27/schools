@@ -116,7 +116,7 @@ const staffBreakdown = [
 
 const totalStaff = staffBreakdown.reduce((sum, item) => sum + item.value, 0);
 
-function MetricCard({ item, isActive, onOpen }) {
+function MetricCard({ item, isActive, onOpen, onTrackBuses }) {
   const hasBreakdown = item.breakdown;
   const hasExtendedLayout = Boolean(hasBreakdown || item.helper);
 
@@ -124,7 +124,10 @@ function MetricCard({ item, isActive, onOpen }) {
     <button
       type="button"
       onClick={() => {
-        if (item.key === "buses") return;
+        if (item.key === "buses") {
+          onTrackBuses?.();
+          return;
+        }
         onOpen(item.key);
       }}
       className={`w-full rounded-3xl bg-white p-4 text-left shadow-[0_12px_28px_-22px_rgba(15,23,42,0.32)] transition-all duration-300 ${
@@ -367,10 +370,7 @@ function UpcomingEvents() {
           <p className="text-sm text-slate-500">School calendar</p>
           <h2 className="text-xl font-semibold text-slate-950">Upcoming events</h2>
         </div>
-        <button
-          type="button"
-          className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
-        >
+        <button type="button" className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900">
           See all
         </button>
       </div>
@@ -382,7 +382,7 @@ function UpcomingEvents() {
             return (
               <article
                 key={event.id}
-                className={`stagger-item relative w-[280px] shrink-0 overflow-hidden rounded-[32px] bg-gradient-to-br ${event.gradient} p-4 text-white `}
+                className={`stagger-item relative w-70 shrink-0 overflow-hidden rounded-4xl bg-linear-to-br ${event.gradient} p-4 text-white`}
                 style={{ "--stagger-delay": `${90 + index * 70}ms` }}
               >
                 <div className="mb-4 flex items-start justify-between gap-2">
@@ -400,41 +400,9 @@ function UpcomingEvents() {
                 <h3 className="text-xl font-semibold leading-tight">{event.title}</h3>
                 <p className="mt-1 text-sm font-medium text-white/85">{event.date}</p>
                 <p className="mt-2 line-clamp-2 text-sm text-white/85">{event.description}</p>
-
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="flex -space-x-2.5">
-                    {event.participants.slice(0, 4).map((avatar, avatarIndex) => (
-                      <div
-                        key={`${event.id}-avatar-${avatarIndex}`}
-                        className="h-8 w-8 overflow-hidden rounded-full border-2 border-white/85 bg-white"
-                      >
-                        <Image
-                          src={avatar}
-                          alt="Participant"
-                          width={32}
-                          height={32}
-                          className="h-8 w-8 object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-xs font-semibold tracking-wide text-white/85">{event.attendees} participants</p>
-                </div>
               </article>
             );
           })}
-
-          <button
-            type="button"
-            className="stagger-item grid w-[280px] shrink-0 place-content-center rounded-[32px] border-2 border-dashed border-slate-300 bg-slate-50 p-5 text-center text-slate-600 transition hover:border-slate-400 hover:bg-slate-100 hover:text-slate-900"
-            style={{ "--stagger-delay": `${90 + EVENTS.length * 70}ms` }}
-          >
-            <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white shadow-[0_10px_26px_-18px_rgba(30,41,59,0.5)]">
-              <span className="text-2xl font-semibold">+</span>
-            </div>
-            <p className="mt-3 text-sm font-semibold">Add Event</p>
-            <p className="mt-1 text-xs">Quick action for principal dashboard</p>
-          </button>
         </div>
       </div>
     </section>
@@ -472,8 +440,7 @@ function AnnouncementBoard() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-sm text-slate-500">Notice board</p>
-          <h2 className="text-2xl font-semibold text-slate-950">Announcements</h2>
-         
+          <h2 className="text-xl font-semibold text-slate-950">School announcements</h2>
         </div>
       </div>
 
@@ -553,7 +520,7 @@ function AnnouncementBoard() {
                   </div>
                 </div>
 
-                <div className="absolute right-4 top-4 shrink-0 text-right sm:right-5 sm:top-5">
+                <div className="shrink-0 text-right sm:pt-1">
                   <p className="text-sm font-semibold text-slate-700">{item.date}</p>
                 </div>
               </div>
@@ -607,7 +574,7 @@ function UpcomingExams() {
             className="stagger-item flex items-center gap-3 rounded-3xl border border-slate-200 bg-slate-50 p-3"
             style={{ "--stagger-delay": `${100 + index * 55}ms` }}
           >
-            <div className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl  p-1">
+            <div className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl p-1">
               <Image src={exam.image} alt={`${exam.subject} subject`} width={40} height={40} className="h-10 w-10 object-contain" />
             </div>
 
@@ -621,10 +588,7 @@ function UpcomingExams() {
           </article>
         ))}
 
-        <button
-          type="button"
-          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
-        >
+        <button type="button" className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">
           View all exams
         </button>
       </div>
@@ -632,20 +596,21 @@ function UpcomingExams() {
   );
 }
 
-export default function OverviewView({ activeTrend, onTrendChange, activeMetric, onOpenMetric }) {
+export default function OverviewView({ activeTrend, onTrendChange, activeMetric, onOpenMetric, onNavigate }) {
   const trend = attendanceTrend[activeTrend] || attendanceTrend.Today;
+  const handleBusNavigate = onNavigate || (() => {});
 
   return (
     <>
       <StaffBreakdownCard />
 
       <section className="mt-4">
-        {/* Full-width Students Card */}
         <div className="stagger-item" style={{ "--stagger-delay": "80ms" }}>
-          <MetricCard 
-            item={topMetrics.find(m => m.key === "students")} 
-            isActive={activeMetric === "students"} 
-            onOpen={onOpenMetric} 
+          <MetricCard
+            item={topMetrics.find((metric) => metric.key === "students")}
+            isActive={activeMetric === "students"}
+            onOpen={onOpenMetric}
+            onTrackBuses={() => handleBusNavigate("buses")}
           />
         </div>
       </section>
@@ -653,7 +618,7 @@ export default function OverviewView({ activeTrend, onTrendChange, activeMetric,
       <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {topMetrics.filter((item) => item.key !== "teaching" && item.key !== "nonTeaching" && item.key !== "students").map((item, index) => (
           <div key={item.key} className="stagger-item" style={{ "--stagger-delay": `${125 + index * 45}ms` }}>
-            <MetricCard item={item} isActive={activeMetric === item.key} onOpen={onOpenMetric} />
+            <MetricCard item={item} isActive={activeMetric === item.key} onOpen={onOpenMetric} onTrackBuses={() => handleBusNavigate("buses")} />
           </div>
         ))}
       </section>
@@ -683,19 +648,12 @@ export default function OverviewView({ activeTrend, onTrendChange, activeMetric,
           </div>
         </div>
 
-        <div className="mt-5 min-w-0 min-h-64 h-64 rounded-3xl  sm:h-72">
+        <div className="mt-5 min-h-64 min-w-0 h-64 rounded-3xl sm:h-72">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={trend} margin={{ top: 8, right: 0, left: 8, bottom: 0 }} barCategoryGap="10%">
               <CartesianGrid vertical horizontal stroke="#dbe3f0" strokeDasharray="2 3" />
               <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} />
-              <YAxis
-                width={36}
-                domain={[0, 100]}
-                tickLine={false}
-                axisLine={false}
-                tick={{ fill: "#64748b", fontSize: 12 }}
-                tickFormatter={(value) => `${value}%`}
-              />
+              <YAxis width={36} domain={[0, 100]} tickLine={false} axisLine={false} tick={{ fill: "#64748b", fontSize: 12 }} tickFormatter={(value) => `${value}%`} />
               <Tooltip formatter={(value) => [`${value}%`, "Attendance"]} />
               <Bar dataKey="students" fill="#16c7bd" radius={[8, 8, 0, 0]} barSize={30} />
             </BarChart>
@@ -706,8 +664,6 @@ export default function OverviewView({ activeTrend, onTrendChange, activeMetric,
       <AnnouncementBoard />
 
       <UpcomingExams />
-
-    
     </>
   );
 }

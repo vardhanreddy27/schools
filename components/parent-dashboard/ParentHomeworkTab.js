@@ -51,7 +51,7 @@ export default function ParentHomeworkTab({ lang = PARENT_LANGUAGES.EN }) {
       if (!grouped[item.subject]) {
         grouped[item.subject] = { 
           subject: item.subject, 
-          imageSrc: SUBJECT_IMAGE_MAP[item.subject.toLowerCase()] || "/logo.png", 
+          imageSrc: SUBJECT_IMAGE_MAP[item.subject.toLowerCase()] || "/logo.jpg", 
           tasks: [] 
         };
       }
@@ -111,7 +111,7 @@ export default function ParentHomeworkTab({ lang = PARENT_LANGUAGES.EN }) {
                 <div className="p-5">
                   <div className="flex items-center gap-4">
                     <div className="relative h-18 w-18 shrink-0 ">
-                      <Image src={SUBJECT_IMAGE_MAP[hw.subject.toLowerCase()] || "/logo.png"} alt={hw.subject} fill className="object-contain p-2" />
+                      <Image src={SUBJECT_IMAGE_MAP[hw.subject.toLowerCase()] || "/logo.jpg"} alt={hw.subject} fill className="object-contain p-2" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-lg font-black text-slate-900 leading-tight">{t(hw.subject)}</h4>

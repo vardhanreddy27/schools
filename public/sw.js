@@ -1,11 +1,11 @@
-const CACHE_NAME = "nms-pwa-v2";
+const CACHE_NAME = "qh-pwa-v3";
 const STATIC_ASSETS = [
   "/",
   "/Admin_login",
   "/Teacher_login",
   "/Student_login",
   "/Parent_login",
-  "/logo.png",
+  "/logo.jpg",
   "/manifest.webmanifest",
   "/manifest-admin.webmanifest",
   "/manifest-teacher.webmanifest",

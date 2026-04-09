@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta name="theme-color" content="#1f2937" />
-        <meta name="application-name" content="Nagarjuna Model School" />
+        <meta name="application-name" content="Quantum Heights" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
         <meta name="mobile-web-app-capable" content="yes" />

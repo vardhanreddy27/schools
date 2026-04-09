@@ -239,7 +239,7 @@ export function MoreTab({
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {moreTools.map((tool) => {
-            const cardAsset = teacherMoreCardAssets[tool.key] || { imageSrc: "/logo.png", tone: "from-slate-100 to-slate-200" };
+            const cardAsset = teacherMoreCardAssets[tool.key] || { imageSrc: "/logo.jpg", tone: "from-slate-100 to-slate-200" };
 
             return (
               <button

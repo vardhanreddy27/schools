@@ -55,7 +55,7 @@ export default function AcademicsTab() {
         <div className="grid gap-4 w-full">
           {quizSubjects.map((subject) => {
             const themeClasses = getThemeClasses(subject.theme);
-            const imgSrc = subjectImgMap[subject.name] || '/logo.png';
+            const imgSrc = subjectImgMap[subject.name] || '/logo.jpg';
 
             return (
               <button
@@ -110,7 +110,7 @@ export default function AcademicsTab() {
               Maths: '/maths.png', Math: '/maths.png', Science: '/science.png',
               English: '/english.png', Telugu: '/telugu.png', Social: '/social.png', Hindi: '/hindi.webp',
             };
-            const imgSrc = subjectImgMap[test.subject] || '/logo.png';
+            const imgSrc = subjectImgMap[test.subject] || '/logo.jpg';
             const dateObj = new Date(test.date);
             return (
               <div key={test.id} className="flex items-center gap-4 rounded-3xl bg-slate-50 p-4 border border-slate-100">

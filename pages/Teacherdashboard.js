@@ -163,11 +163,11 @@ export default function TeacherDashboard({ user }) {
               <div className="flex items-start justify-between gap-3 lg:hidden">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white p-1">
-                      <Image src="/logo.png" alt="NMS Logo" width={28} height={28} className="object-contain" priority />
+                    <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-white p-1.5">
+                      <Image src="/logo.jpg" alt="QH Logo" width={60} height={60} className="object-contain" priority />
                     </div>
                     <div>
-                      <p className="text-base font-bold tracking-[0.18em] text-slate-900">NMS</p>
+                      <p className="text-base font-bold tracking-[0.18em] text-slate-900">QH</p>
                       <p className="text-[11px] text-slate-500">Teacher Workspace</p>
                     </div>
                   </div>

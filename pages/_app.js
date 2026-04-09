@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import "leaflet/dist/leaflet.css";
 import Head from "next/head";
 import { useEffect } from "react";
 import { SessionProvider } from "next-auth/react";
@@ -14,12 +15,12 @@ export default function App({ Component, pageProps }) {
     router.pathname === "/Studentdashboard" ||
     router.pathname === "/Student_quiz";
   const appTitle = isAdminInstallContext
-    ? "NMS ADMIN"
+    ? "QH ADMIN"
     : isTeacherInstallContext
-      ? "NMS TEACHERS"
+      ? "QH TEACHERS"
       : isParentInstallContext || isStudentInstallContext
-        ? "NMS Parents"
-      : "Nagarjuna Model School";
+        ? "QH Parents"
+      : "Quantum Heights";
   const manifestPath = isAdminInstallContext
     ? "/manifest-admin.webmanifest"
     : isTeacherInstallContext
@@ -59,7 +60,7 @@ export default function App({ Component, pageProps }) {
         <meta name="application-name" content={appTitle} />
         <meta
           name="description"
-          content="Nagarjuna Model School progressive web app"
+          content="Quantum Heights progressive web app"
         />
         <meta name="theme-color" content="#1f2937" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -67,9 +68,9 @@ export default function App({ Component, pageProps }) {
         <meta name="apple-mobile-web-app-title" content={appTitle} />
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="manifest" href={manifestPath} />
-        <link rel="icon" href="/logo.png" />
-        <link rel="shortcut icon" href="/logo.png" />
-        <link rel="apple-touch-icon" href="/logo.png" />
+        <link rel="icon" href="/logo.jpg" />
+        <link rel="shortcut icon" href="/logo.jpg" />
+        <link rel="apple-touch-icon" href="/logo.jpg" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"

@@ -260,7 +260,7 @@ export default function ParentAcademicsTab({ lang = PARENT_LANGUAGES.EN }) {
                 <div className="flex items-center gap-4">
                   <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl ">
                     <Image
-                      src={SUBJECT_IMAGE_MAP[subject.subject.toLowerCase()] || "/logo.png"}
+                      src={SUBJECT_IMAGE_MAP[subject.subject.toLowerCase()] || "/logo.jpg"}
                       alt={subject.subject}
                       fill
                       className="object-contain p-3"
@@ -300,7 +300,7 @@ export default function ParentAcademicsTab({ lang = PARENT_LANGUAGES.EN }) {
                 <div className="flex items-center gap-4">
                   <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl  ring-emerald-200">
                     <Image
-                      src={SUBJECT_IMAGE_MAP[subject.subject.toLowerCase()] || "/logo.png"}
+                      src={SUBJECT_IMAGE_MAP[subject.subject.toLowerCase()] || "/logo.jpg"}
                       alt={subject.subject}
                       fill
                       className="object-contain p-3"

@@ -7,10 +7,10 @@ export function StudentSidebar({ activeMenu, onMenuChange, onLogout }) {
       <div className="px-7 pb-6 pt-8">
         <div className="flex items-center gap-3">
           <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
-            <Image src="/logo.png" alt="NMS Logo" width={42} height={42} className="object-contain" priority />
+            <Image src="/logo.jpg" alt="QH Logo" width={50} height={50} className="object-contain" priority />
           </div>
           <div>
-            <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
+            <p className="text-2xl font-semibold tracking-[0.22em]">QH</p>
             <p className="text-sm text-slate-400">Student Workspace</p>
           </div>
         </div>

@@ -86,7 +86,7 @@ export default function HomeworkTab() {
       if (!grouped[item.subject]) {
         grouped[item.subject] = { 
           subject: item.subject, 
-          imageSrc: SUBJECT_IMAGE_MAP[item.subject.toLowerCase()] || "/logo.png", 
+          imageSrc: SUBJECT_IMAGE_MAP[item.subject.toLowerCase()] || "/logo.jpg", 
           tasks: [] 
         };
       }

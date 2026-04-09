@@ -7,6 +7,7 @@ import AttendanceView from "@/components/admin-dashboard/AttendanceView";
 import CommunicationView from "@/components/admin-dashboard/CommunicationView";
 import ApprovalsView from "@/components/admin-dashboard/ApprovalsView";
 import OverviewView from "@/components/admin-dashboard/OverviewView";
+import BusTrackingView from "@/components/admin-dashboard/BusTrackingView";
 import ProfileView from "@/components/admin-dashboard/ProfileView";
 import SearchResults from "@/components/admin-dashboard/SearchResults";
 import TimetableView from "@/components/admin-dashboard/TimetableView";
@@ -44,6 +45,7 @@ export default function AdminDashboard({ user = {} }) {
 
     const index = [
       { tab: "overview", title: "Overview Metrics", text: "teaching staff non teaching students classes sections buses" },
+      { tab: "buses", title: "Track Buses", text: "live map route bus tracking transport" },
       { tab: "overview", title: "Attendance Trend", text: "students teachers today weekly monthly" },
       { tab: "overview", title: "Events and Sports", text: "events sports calendar timetable substitute" },
       { tab: "attendance", title: "Daily Attendance Windows", text: "morning evening students teachers present total" },
@@ -179,6 +181,7 @@ export default function AdminDashboard({ user = {} }) {
 
   const mobileNavItems = navItems.filter((item) => item.id !== "profile");
   const isProfileView = activeMenu === "profile";
+  const isBusView = activeMenu === "buses";
   const profileSheetOpen = activeMenu === "profile";
   const showTopHeader = activeMenu === "overview" || activeMenu === "communication";
 
@@ -197,17 +200,17 @@ export default function AdminDashboard({ user = {} }) {
       <SidebarNav activeMenu={activeMenu} onMenuChange={setActiveMenu} />
 
       <main className="relative flex-1 mb-12" >
-        <div className={`mx-auto flex max-w-6xl flex-col px-3 pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6 ${isProfileView ? "min-h-0" : "min-h-dvh"}`}>
+        <div className={`mx-auto flex flex-col ${isBusView ? "max-w-none px-0 pb-0 pt-0" : "max-w-6xl px-3 pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6"} ${isProfileView ? "min-h-0" : "min-h-dvh"}`}>
           {showTopHeader ? (
             <section className="rounded-4xl bg-white/80 p-4 shadow-sm ring-1 ring-white/60 backdrop-blur sm:p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3 lg:hidden">
-                    <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5">
-                      <Image src="/logo.png" alt="NMS Logo" width={34} height={34} className="object-contain" priority />
+                    <div className="flex h-16 w-16  items-center justify-center overflow-hidden  p-1.5">
+                      <Image src="/logo.jpg" alt="QH Logo" width={60} height={60} className="object-contain" priority />
                     </div>
                     <div>
-                      <p className="text-2xl font-semibold tracking-[0.22em]">NMS</p>
+                      <p className="text-2xl font-semibold tracking-[0.22em]">QH</p>
                       <p className="text-sm text-slate-500">Principal Dashboard</p>
                     </div>
                   </div>
@@ -270,6 +273,7 @@ export default function AdminDashboard({ user = {} }) {
                 onNavigate={setActiveMenu}
               />
             ) : null}
+            {activeMenu === "buses" ? <BusTrackingView onBackToOverview={() => setActiveMenu("overview")} /> : null}
             {activeMenu === "attendance" ? <AttendanceView /> : null}
             {activeMenu === "timetable" ? <TimetableView assignments={timetableAssignments} onReassign={handleTimetableReassign} /> : null}
             {activeMenu === "approvals" ? <ApprovalsView leaveRequests={leaveRequests} onDecision={handleLeaveDecision} /> : null}

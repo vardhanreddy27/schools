@@ -1,8 +1,13 @@
 import { useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { X } from "lucide-react";
 import ParentTimetableTab from "./ParentTimetableTab";
 import { PARENT_LANGUAGES, translateText } from "./i18n";
+
+const ParentBusTrackingMap = dynamic(() => import("./ParentBusTrackingMap"), {
+  ssr: false,
+});
 
 const moreCards = [
   {
@@ -78,10 +83,16 @@ const teacherContactCards = [
 export default function ParentMoreTab({ lang = PARENT_LANGUAGES.EN }) {
   const t = (text) => translateText(lang, text);
   const [timetableOpen, setTimetableOpen] = useState(false);
+  const [busTrackingOpen, setBusTrackingOpen] = useState(false);
 
   function handleCardClick(cardId) {
     if (cardId === "timetable") {
       setTimetableOpen(true);
+      return;
+    }
+
+    if (cardId === "bus") {
+      setBusTrackingOpen(true);
     }
   }
 
@@ -137,7 +148,7 @@ export default function ParentMoreTab({ lang = PARENT_LANGUAGES.EN }) {
                     <div>
                       <p className="text-base font-semibold">{t(card.title)}</p>
                       <p className="mt-1 text-xs text-slate-600">{t(card.subtitle)}</p>
-                      {card.id !== "timetable" ? <p className="mt-3 text-[11px] font-medium text-slate-500">{t("Coming soon")}</p> : null}
+                      {card.id !== "timetable" && card.id !== "bus" ? <p className="mt-3 text-[11px] font-medium text-slate-500">{t("Coming soon")}</p> : null}
                     </div>
                     <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl">
                       <Image
@@ -176,6 +187,31 @@ export default function ParentMoreTab({ lang = PARENT_LANGUAGES.EN }) {
 
             <div className="max-h-[calc(90vh-64px)] overflow-y-auto px-3 pb-4 sm:max-h-[calc(88vh-64px)] sm:px-5 sm:pb-5">
               <ParentTimetableTab lang={lang} />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {busTrackingOpen ? (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/45 p-0 backdrop-blur-sm sm:items-center sm:p-6">
+          <div className="h-[94vh] w-full overflow-hidden rounded-t-3xl bg-[#eef3fb] shadow-2xl sm:h-auto sm:max-h-[92vh] sm:max-w-6xl sm:rounded-3xl">
+            <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 sm:px-5">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{t("More")}</p>
+                <h3 className="text-lg font-semibold text-slate-900">{t("Bus Tracking")}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setBusTrackingOpen(false)}
+                className="rounded-xl p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
+                aria-label="Close bus tracking"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="max-h-[calc(94vh-64px)] overflow-y-auto px-3 pb-4 sm:max-h-[calc(92vh-64px)] sm:px-5 sm:pb-5">
+              <ParentBusTrackingMap />
             </div>
           </div>
         </div>
