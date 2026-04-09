@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { CheckCircle2, Send, Camera, Paperclip, Eye, Edit2, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { todayClasses, dashboardInsights, teacherSections } from "./data";
+import { todayClasses, dashboardInsights, teacherSections, quizChaptersBySection } from "./data";
 import { insightCardTone } from "./utils";
 import TeacherHeroCard from "./TeacherHeroCard";
 
@@ -118,32 +118,61 @@ export default function HomeTab({ displayName = "Harika", subject = "English", c
     return new Promise((resolve) => window.setTimeout(resolve, ms));
   }
 
+  function toSectionKey(cls) {
+    return `${cls.className.toLowerCase().replace("th", "")}-${cls.section.toLowerCase()}`;
+  }
+
+  function getCurrentChapter(cls) {
+    const sectionKey = toSectionKey(cls);
+    const chapters = quizChaptersBySection[sectionKey] || [];
+    const prioritized =
+      chapters.find((chapter) => chapter.status === "added") ||
+      chapters.find((chapter) => chapter.status === "none") ||
+      chapters[0];
+
+    return prioritized?.title || "Current chapter";
+  }
+
+  function getExerciseRange(index) {
+    const ranges = ["4.4 to 5.6", "5.1 to 5.8", "6.2 to 6.7", "7.1 to 7.5", "3.3 to 4.2"];
+    return ranges[index % ranges.length];
+  }
+
+  function buildAiHomeworkText(cls, index, withAttachment) {
+    const chapter = getCurrentChapter(cls);
+    const range = getExerciseRange(index);
+
+    if (withAttachment) {
+      return `Chapter ${chapter}: Check the questions attached and solve in textbook from exercise ${range}.`;
+    }
+
+    return `Chapter ${chapter}: Practice from exercise ${range} in textbook and write answers in classwork.`;
+  }
+
   async function handleHomeworkAiFill() {
     const runId = aiHomeworkRunRef.current + 1;
     aiHomeworkRunRef.current = runId;
     setIsAiHomeworkFilling(true);
 
-    const sectionKeys = homeworkClassesForBottom.map((cls) => `${cls.className}-${cls.section}`);
-    const attachmentKeys = new Set(sectionKeys.slice(0, 2));
-    const templates = [
-      "Check the questions attached and complete all answers in your notebook.",
-      "Check the questions attached and solve the given problems neatly.",
-      "Revise today's concept and answer the practice questions shared in class.",
-      "Write short notes for the chapter points discussed in today's session.",
-    ];
+    const sections = homeworkClassesForBottom.map((cls, index) => ({
+      cls,
+      key: `${cls.className}-${cls.section}`,
+      withAttachment: index % 3 === 2 || index === 0,
+      text: buildAiHomeworkText(cls, index, index % 3 === 2 || index === 0),
+    }));
 
     setHomeworkState((prev) => {
       const next = { ...prev };
-      sectionKeys.forEach((key) => {
+      sections.forEach(({ key, withAttachment, cls }) => {
         next[key] = {
           ...next[key],
           text: "",
           sent: false,
-          attachments: attachmentKeys.has(key)
+          attachments: withAttachment
             ? [
                 {
                   id: `ai-attachment-${runId}-${key}`,
-                  name: `${key}-questions.pdf`,
+                  name: `${cls.className}-${cls.section}-practice-sheet.pdf`,
                   type: "application/pdf",
                   size: 0,
                 },
@@ -155,12 +184,14 @@ export default function HomeTab({ displayName = "Harika", subject = "English", c
       return next;
     });
 
-    for (let idx = 0; idx < sectionKeys.length; idx += 1) {
-      const key = sectionKeys[idx];
-      const text = templates[idx % templates.length];
+    for (let idx = 0; idx < sections.length; idx += 1) {
+      const { key, text } = sections[idx];
 
       for (let charCount = 1; charCount <= text.length; charCount += 1) {
-        if (aiHomeworkRunRef.current !== runId) return;
+        if (aiHomeworkRunRef.current !== runId) {
+          setIsAiHomeworkFilling(false);
+          return;
+        }
 
         const snippet = text.slice(0, charCount);
         setHomeworkState((prev) => ({
