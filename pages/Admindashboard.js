@@ -5,6 +5,7 @@ import Image from "next/image";
 import Swal from "sweetalert2";
 import AttendanceView from "@/components/admin-dashboard/AttendanceView";
 import CommunicationView from "@/components/admin-dashboard/CommunicationView";
+import { useRef } from "react";
 import ApprovalsView from "@/components/admin-dashboard/ApprovalsView";
 import OverviewView from "@/components/admin-dashboard/OverviewView";
 import BusTrackingView from "@/components/admin-dashboard/BusTrackingView";
@@ -43,6 +44,9 @@ export default function AdminDashboard({ user = {} }) {
     const term = searchQuery.trim().toLowerCase();
     if (!term) return [];
 
+
+    // Show header only on main dashboard (overview)
+    const showTopHeader = activeMenu === "overview";
     const index = [
       { tab: "overview", title: "Overview Metrics", text: "teaching staff non teaching students classes sections buses" },
       { tab: "buses", title: "Track Buses", text: "live map route bus tracking transport" },
@@ -52,10 +56,6 @@ export default function AdminDashboard({ user = {} }) {
       { tab: "attendance", title: "Section Attendance", text: "class 1 to 10 section a b c d boys girls" },
       { tab: "timetable", title: "Timetable and Substitution", text: "late absent teacher allocation substitute engine" },
       { tab: "approvals", title: "Leave Approvals", text: "start date end date approve reject" },
-      { tab: "communication", title: "More", text: "alerts teachers performance class performance calendar events results sports competitions" },
-      { tab: "communication", title: "Teachers Performance", text: "attendance syllabus activity participation" },
-      { tab: "communication", title: "Class Performance", text: "telugu english hindi Maths science social progress" },
-      { tab: "communication", title: "Calendar", text: "month upcoming events dates" },
       { tab: "profile", title: "Profile", text: "name email number role" },
     ];
 
@@ -182,8 +182,19 @@ export default function AdminDashboard({ user = {} }) {
   const mobileNavItems = navItems.filter((item) => item.id !== "profile");
   const isProfileView = activeMenu === "profile";
   const isBusView = activeMenu === "buses";
+  // Only open profile sheet for profile menu, not payroll
   const profileSheetOpen = activeMenu === "profile";
-  const showTopHeader = activeMenu === "overview" || activeMenu === "communication";
+  // Hide header for Payroll
+  // Hide header for Payroll section inside CommunicationView
+  const commSectionRef = useRef();
+  const [commSection, setCommSection] = useState("menu");
+  // Show header only on home (overview) and main More menu (communication with commSection 'menu'), hide for all More actions
+  const showTopHeader =
+    activeMenu === "overview" || (activeMenu === "communication" && commSection === "menu");
+
+  // Defensive: If commSection is undefined/null, treat as menu (show header)
+  // If commSection is any More action (Payroll, teachers, etc.), hide header
+  // This logic is already correct, but ensure commSection is passed from CommunicationView
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -200,17 +211,14 @@ export default function AdminDashboard({ user = {} }) {
       <SidebarNav activeMenu={activeMenu} onMenuChange={setActiveMenu} />
 
       <main className="relative flex-1 mb-12" >
-        <div className={`mx-auto flex flex-col ${isBusView ? "max-w-none px-0 pb-0 pt-0" : "max-w-6xl px-3 pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6"} ${isProfileView ? "min-h-0" : "min-h-dvh"}`}>
+        <div className={`mx-auto flex flex-col ${isBusView ? "max-w-none px-0 pb-0 pt-0" : "max-w-6xl pb-8 pt-3 sm:px-5 lg:px-6 lg:pt-6"} ${isProfileView ? "min-h-0" : "min-h-dvh"}`}>
           {showTopHeader ? (
-            <section className="rounded-4xl bg-white/80 p-4 shadow-sm ring-1 ring-white/60 backdrop-blur sm:p-5">
+            <section className="rounded-4xl bg-white/80 p-4 shadow-sm ring-1 mx-3 ring-white/60 backdrop-blur sm:p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3 lg:hidden">
-                    <div className="flex h-16 w-16  items-center justify-center overflow-hidden  p-1.5">
-                      <Image src="/logo.jpg" alt="QH Logo" width={60} height={60} className="object-contain" priority />
-                    </div>
                     <div>
-                      <p className="text-2xl font-semibold tracking-[0.22em]">QH</p>
+                      <p className="text-2xl font-semibold ">GOLDEN SPRING </p>
                       <p className="text-sm text-slate-500">Principal Dashboard</p>
                     </div>
                   </div>
@@ -264,25 +272,45 @@ export default function AdminDashboard({ user = {} }) {
 
           <div key={activeMenu} className="page-enter">
             {activeMenu === "overview" ? (
-              <OverviewView
-                activeTrend={activeTrend}
-                onTrendChange={setActiveTrend}
-                leaveRequests={leaveRequests}
-                activeMetric={activeMetric}
-                onOpenMetric={handleOpenMetric}
-                onNavigate={setActiveMenu}
-              />
+              <div className="px-3">
+                <OverviewView
+                  activeTrend={activeTrend}
+                  onTrendChange={setActiveTrend}
+                  leaveRequests={leaveRequests}
+                  activeMetric={activeMetric}
+                  onOpenMetric={handleOpenMetric}
+                  onNavigate={setActiveMenu}
+                />
+              </div>
             ) : null}
             {activeMenu === "buses" ? <BusTrackingView onBackToOverview={() => setActiveMenu("overview")} /> : null}
-            {activeMenu === "attendance" ? <AttendanceView /> : null}
+            {activeMenu === "attendance" ? (
+              <div className="px-3">
+                <AttendanceView />
+              </div>
+            ) : null}
             {activeMenu === "timetable" ? <TimetableView assignments={timetableAssignments} onReassign={handleTimetableReassign} /> : null}
             {activeMenu === "approvals" ? <ApprovalsView leaveRequests={leaveRequests} onDecision={handleLeaveDecision} /> : null}
-            {activeMenu === "communication" ? (
+            {activeMenu === "communication" && commSection === "teachers" ? (
+              <div className="px-3">
+                <CommunicationView
+                  broadcastMessages={broadcastMessages}
+                  onBroadcastInputChange={handleBroadcastInputChange}
+                  onBroadcastSend={handleBroadcastSend}
+                  broadcastForm={broadcastForm}
+                  commSection={commSection}
+                  setCommSection={setCommSection}
+                />
+              </div>
+            ) : null}
+            {activeMenu === "communication" && commSection !== "teachers" ? (
               <CommunicationView
                 broadcastMessages={broadcastMessages}
                 onBroadcastInputChange={handleBroadcastInputChange}
                 onBroadcastSend={handleBroadcastSend}
                 broadcastForm={broadcastForm}
+                commSection={commSection}
+                setCommSection={setCommSection}
               />
             ) : null}
           </div>
@@ -291,16 +319,18 @@ export default function AdminDashboard({ user = {} }) {
         <MobileBottomNav activeMenu={activeMenu} onMenuChange={setActiveMenu} items={mobileNavItems} />
       </main>
 
-      <ProfileView
-        open={profileSheetOpen}
-        onClose={handleCloseProfileSheet}
-        profileForm={profileForm}
-        onProfileChange={handleProfileChange}
-        onProfileSave={handleProfileSave}
-        profileSaving={profileSaving}
-        profileMessage={profileMessage}
-        onLogout={() => signOut({ callbackUrl: "/Admin_login" })}
-      />
+      {profileSheetOpen && (
+        <ProfileView
+          open={profileSheetOpen}
+          onClose={handleCloseProfileSheet}
+          profileForm={profileForm}
+          onProfileChange={handleProfileChange}
+          onProfileSave={handleProfileSave}
+          profileSaving={profileSaving}
+          profileMessage={profileMessage}
+          onLogout={() => signOut({ callbackUrl: "/Admin_login" })}
+        />
+      )}
     </div>
   );
 }

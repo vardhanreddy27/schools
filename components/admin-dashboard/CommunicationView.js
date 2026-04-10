@@ -16,10 +16,10 @@ import { syllabusBySection, teacherPerformance } from "@/components/admin-dashbo
 
 const MORE_ITEMS = [
   {
-    id: "alerts",
-    title: "Alerts",
-    description: "School-wide notices and reminders",
-    imageSrc: "/message.png",
+    id: "Payroll",
+    title: "Payroll",
+    description: "Salary processing, payslips, and staff payment management",
+    imageSrc: "/salary.png",
     tone: "from-sky-100 to-cyan-100",
   },
   {
@@ -111,6 +111,29 @@ const CALENDAR_EVENTS = [
   { date: "2026-04-03", title: "Sports meet", detail: "Inter-house athletics events." },
 ];
 
+// Available months for dropdown
+const AVAILABLE_MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+// Indian teacher names data
+const INDIAN_TEACHERS = [
+  { name: "Dr. Priya Sharma", subject: "Mathematics", baseSalary: 45000, leaveTaken: 1, lossOfPay: 1500, img: "/teacher.avif" },
+  { name: "Rajesh Kumar", subject: "Science", baseSalary: 42000, leaveTaken: 2, lossOfPay: 2800, img: "/teacher2.jpg" },
+  { name: "Prof. Sunita Reddy", subject: "English", baseSalary: 48000, leaveTaken: 0, lossOfPay: 0, img: "/teacher3.avif" },
+  { name: "Anil Deshmukh", subject: "Social Studies", baseSalary: 39000, leaveTaken: 1, lossOfPay: 1300, img: "/teacher4.webp" },
+  { name: "Kavita Nair", subject: "Hindi", baseSalary: 37000, leaveTaken: 3, lossOfPay: 3700, img: "/parent.jpg" },
+  { name: "Suresh Iyer", subject: "Telugu", baseSalary: 36000, leaveTaken: 0, lossOfPay: 0, img: "/teacher.avif" },
+  { name: "Dr. Meera Joshi", subject: "Physics", baseSalary: 52000, leaveTaken: 1, lossOfPay: 1700, img: "/teacher.avif" },
+  { name: "Vikram Singh", subject: "Chemistry", baseSalary: 47000, leaveTaken: 2, lossOfPay: 3100, img: "/teacher.avif" },
+  { name: "Pooja Verma", subject: "Biology", baseSalary: 44000, leaveTaken: 0, lossOfPay: 0, img: "/teacher.avif" },
+  { name: "Ramesh Patil", subject: "History", baseSalary: 38000, leaveTaken: 1, lossOfPay: 1300, img: "/teacher.avif" },
+  { name: "Shweta Kapoor", subject: "Geography", baseSalary: 38500, leaveTaken: 2, lossOfPay: 2600, img: "/teacher.avif" },
+  { name: "Arvind Menon", subject: "Computer Science", baseSalary: 50000, leaveTaken: 0, lossOfPay: 0, img: "/teacher.avif" },
+  { name: "Lakshmi Chandran", subject: "Physical Education", baseSalary: 35000, leaveTaken: 1, lossOfPay: 1200, img: "/teacher.avif" },
+];
+
 function ProgressBar({ label, value, color = "#16c7bd" }) {
   return (
     <div className="rounded-xl bg-white px-3 py-2">
@@ -128,22 +151,22 @@ function ProgressBar({ label, value, color = "#16c7bd" }) {
   );
 }
 
-function BackHeader({ title, subtitle, onBack }) {
+function BackHeader({ title, subtitle, onBack, rightContent }) {
   return (
-    <div className="mb-4 flex items-start justify-between gap-3">
+    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div>
         <button
           type="button"
           onClick={onBack}
-          className="mb-3 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
+          className="mb-3 inline-flex items-center gap-2  bg-white px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
         >
           <ArrowLeft className="h-4 w-4" />
           Back
         </button>
-        <p className="text-sm text-slate-500">More</p>
         <h2 className="mt-1 text-2xl font-semibold">{title}</h2>
         <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
       </div>
+      {rightContent && <div>{rightContent}</div>}
     </div>
   );
 }
@@ -180,13 +203,31 @@ export default function CommunicationView({
   onBroadcastInputChange,
   onBroadcastSend,
   broadcastForm,
+  commSection,
+  setCommSection,
 }) {
-  const [activeSection, setActiveSection] = useState("menu");
+  // Use controlled commSection from parent if provided, else fallback to local state for safety
+  const isControlled = typeof commSection !== "undefined" && typeof setCommSection === "function";
+  const [uncontrolledSection, setUncontrolledSection] = useState("menu");
+  const activeSection = isControlled ? commSection : uncontrolledSection;
+  const setActiveSection = isControlled ? setCommSection : setUncontrolledSection;
   const [teacherQuery, setTeacherQuery] = useState("");
   const [teacherPage, setTeacherPage] = useState(1);
   const [classQuery, setClassQuery] = useState("");
   const [classPage, setClassPage] = useState(1);
-  const [calendarDate, setCalendarDate] = useState(new Date());
+  const [selectedMonth, setSelectedMonth] = useState(() => {
+    const today = new Date();
+    return today.getMonth(); // Current month as default
+  });
+  const [selectedYear, setSelectedYear] = useState(() => {
+    const today = new Date();
+    return today.getFullYear();
+  });
+  // Set default calendar date to previous month
+  const [calendarDate, setCalendarDate] = useState(() => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth() - 1, 1);
+  });
   const teacherPageSize = 4;
   const classPageSize = 4;
 
@@ -275,7 +316,7 @@ export default function CommunicationView({
                       <p className="mt-1 text-xs text-slate-600">{item.description}</p>
                       <p className="mt-3 text-[11px] font-medium text-slate-500">Open tool</p>
                     </div>
-                    <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl">
+                    <span className="flex h-16 w-16 items-center justify-center overflow-hidden ">
                       <Image
                         src={item.imageSrc}
                         alt={`${item.title} icon`}
@@ -294,59 +335,183 @@ export default function CommunicationView({
     );
   }
 
-  if (activeSection === "alerts") {
-    return (
-      <section className="mt-4">
-        <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
-          <BackHeader title="Alerts" subtitle="Share notices with teachers, students and parents." onBack={() => setActiveSection("menu")} />
-          <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
-            <form
-              className="space-y-3 rounded-2xl bg-slate-50 p-4"
-              onSubmit={(event) => {
-                event.preventDefault();
-                onBroadcastSend();
-              }}
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Create alert</p>
-              <select
-                name="audience"
-                value={broadcastForm.audience}
-                onChange={onBroadcastInputChange}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm"
-              >
-                <option value="Everyone">Everyone</option>
-                <option value="Teachers">Teachers</option>
-                <option value="Students">Students</option>
-                <option value="Parents">Parents</option>
-              </select>
-              <textarea
-                name="message"
-                value={broadcastForm.message}
-                onChange={onBroadcastInputChange}
-                placeholder="Write the alert message..."
-                rows={4}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm"
-              />
-              <button type="submit" className="w-full rounded-xl bg-[#16c7bd] px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#b07e10] active:scale-[0.98]">Send alert</button>
-            </form>
+  if (activeSection === "Payroll") {
+    const teachers = INDIAN_TEACHERS;
+    const totalPay = teachers.reduce((sum, t) => sum + t.baseSalary, 0);
+    const totalLossOfPay = teachers.reduce((sum, t) => sum + t.lossOfPay, 0);
+    const netPay = totalPay - totalLossOfPay;
+    const percentNet = Math.round((netPay / totalPay) * 100);
 
-            <div className="rounded-2xl bg-white p-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Recent alerts</p>
-              <div className="mt-3 max-h-80 space-y-3 overflow-y-auto pr-1">
-                {broadcastMessages.map((item) => (
-                  <div key={item.id} className="rounded-2xl bg-slate-50 p-3">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="rounded-full bg-[#fff4d6] px-2 py-1 text-xs font-semibold text-[#8b6400]">To: {item.audience}</p>
-                      <span className="text-xs text-slate-500">{item.time}</span>
-                    </div>
-                    <p className="mt-2 text-sm text-slate-700">{item.message}</p>
-                  </div>
-                ))}
+    // Simple SVG circle graph
+    function CircleGraph({ percent }) {
+      const radius = 40;
+      const stroke = 8;
+      const normalizedRadius = radius - stroke / 2;
+      const circumference = normalizedRadius * 2 * Math.PI;
+      const offset = circumference - (percent / 100) * circumference;
+      return (
+        <svg height={radius * 2} width={radius * 2} className="block">
+          <circle
+            stroke="#e5e7eb"
+            fill="transparent"
+            strokeWidth={stroke}
+            r={normalizedRadius}
+            cx={radius}
+            cy={radius}
+          />
+          <circle
+            stroke="#16c7bd"
+            fill="transparent"
+            strokeWidth={stroke}
+            strokeDasharray={circumference + " " + circumference}
+            style={{ strokeDashoffset: offset, transition: "stroke-dashoffset 0.5s" }}
+            r={normalizedRadius}
+            cx={radius}
+            cy={radius}
+          />
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dy=".3em"
+            fontSize="1.1rem"
+            fontWeight="bold"
+            fill="#16c7bd"
+          >
+            {percent}%
+          </text>
+        </svg>
+      );
+    }
+
+    // Generate year options (current year and next year)
+    const currentYear = new Date().getFullYear();
+    const yearOptions = [currentYear, currentYear + 1];
+
+    return (
+   <section className="mt-4">
+  <article className="rounded-4xl bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,23,42,0.25)] sm:p-5">
+    {/* Header with title and dropdowns on same line */}
+    <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+      <div className="flex-1">
+        <button
+          type="button"
+          onClick={() => setActiveSection("menu")}
+          className="mb-3 inline-flex items-center gap-2  bg-white px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </button>
+        <h2 className="mt-1 text-2xl font-semibold">Payroll</h2>
+        <p className="mt-1 text-sm text-slate-500">Salary details for all teachers.</p>
+      </div>
+      
+      {/* Month and Year Selectors - aligned to the right */}
+      <div className="mt-2 flex gap-2 sm:mt-0">
+        <select
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+          className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-[#16c7bd]"
+        >
+          {AVAILABLE_MONTHS.map((month, index) => (
+            <option key={month} value={index}>{month}</option>
+          ))}
+        </select>
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+          className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-[#16c7bd]"
+        >
+          {yearOptions.map((year) => (
+            <option key={year} value={year}>{year}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+    {/* Info for selected month/year */}
+    <div className="mb-4 rounded-xl bg-slate-50 px-4 py-2 text-center">
+      <p className="text-sm text-slate-600">
+        Showing payroll data for <span className="font-semibold">{AVAILABLE_MONTHS[selectedMonth]} {selectedYear}</span>
+      </p>
+    </div>
+
+    {/* Circle Graph Row */}
+    <div className="mb-6 flex flex-col items-center justify-between gap-4 rounded-2xl bg-slate-50 p-4 sm:flex-row">
+      <div className="flex items-center gap-4">
+        <CircleGraph percent={percentNet} />
+        <div>
+          <p className="text-sm font-medium text-slate-600">Net Pay Percentage</p>
+          <p className="text-xs text-slate-400">{percentNet}% of total gross</p>
+        </div>
+      </div>
+    </div>
+    
+    {/* Summary Cards - 2 rows with 2 cards each on mobile, 4 in a row on desktop */}
+    <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+      <div className="rounded-2xl bg-gradient-to-br from-sky-50 to-cyan-50 p-3 md:p-4">
+        <p className="text-[11px] font-medium text-slate-500 md:text-xs">Total Teachers</p>
+        <p className="text-xl font-bold text-slate-900 md:text-2xl">{teachers.length}</p>
+      </div>
+      <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 p-3 md:p-4">
+        <p className="text-[11px] font-medium text-slate-500 md:text-xs">Total Pay (Gross)</p>
+        <p className="text-sm font-bold text-slate-900 md:text-2xl">₹{totalPay.toLocaleString("en-IN")}</p>
+      </div>
+      <div className="rounded-2xl bg-gradient-to-br from-rose-50 to-pink-50 p-3 md:p-4">
+        <p className="text-[11px] font-medium text-slate-500 md:text-xs">Total Deductions</p>
+        <p className="text-sm font-bold text-rose-600 md:text-2xl">-₹{totalLossOfPay.toLocaleString("en-IN")}</p>
+      </div>
+      <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 p-3 md:p-4">
+        <p className="text-[11px] font-medium text-slate-500 md:text-xs">Net Pay</p>
+        <p className="text-sm font-bold text-emerald-600 md:text-2xl">₹{netPay.toLocaleString("en-IN")}</p>
+      </div>
+    </div>
+
+    {/* Teachers List */}
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <p className="col-span-full font-bold">Teachers</p>
+      {teachers.map((t, idx) => (
+        <div key={idx} className="group rounded-2xl bg-slate-50 p-4 transition-all duration-300 hover:shadow-md">
+          <div className="flex items-start gap-3">
+            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full ring-2 ring-white shadow-sm md:h-14 md:w-14">
+              <Image 
+                src={t.img} 
+                alt={t.name} 
+                width={56} 
+                height={56} 
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-semibold leading-tight text-slate-900 md:text-base">{t.name}</div>
+              <div className="mb-2 text-xs text-slate-500">{t.subject}</div>
+              <div className="flex flex-wrap gap-1.5 text-xs">
+                <span className="rounded-full bg-white px-2 py-0.5 font-medium text-slate-700 shadow-sm">
+                  Base: ₹{t.baseSalary.toLocaleString("en-IN")}
+                </span>
+                <span className="rounded-full bg-white px-2 py-0.5 font-medium text-slate-700 shadow-sm">
+                  Leave: {t.leaveTaken}
+                </span>
               </div>
             </div>
           </div>
-        </article>
-      </section>
+          
+          {/* Bottom row with Loss and Net */}
+          <div className="mt-3 flex items-center justify-between border-t border-slate-200 pt-3">
+            <div>
+              <p className="text-xs text-rose-500">Loss of Pay</p>
+              <p className="text-sm font-semibold text-rose-600">-₹{t.lossOfPay.toLocaleString("en-IN")}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-emerald-500">Net Pay</p>
+              <p className="text-base font-bold text-emerald-600">₹{(t.baseSalary - t.lossOfPay).toLocaleString("en-IN")}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </article>
+</section>
     );
   }
 
