@@ -202,7 +202,7 @@ export default function Admin_login() {
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-slate-950">Quantum Heights</h1>
             <p className="mt-4 text-sm/6 text-slate-600">
-              Primary and Secondary Education Kadapa, Andhra Pradesh
+              Primary and Secondary Education Kadapa, Andhra Pradesh 
             </p>
           </div>
         </div>

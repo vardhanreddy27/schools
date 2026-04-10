@@ -299,7 +299,7 @@ export default function FamilyLogin() {
               </button>
 
               <div className="flex items-center gap-3">
-                <div className="h-px flex-1 bg-slate-300" />
+                <div className="h-px flex-1 bg-slate-300" /> 
                 <span className="text-xs font-semibold tracking-wider text-slate-400">OR</span>
                 <div className="h-px flex-1 bg-slate-300" />
               </div>

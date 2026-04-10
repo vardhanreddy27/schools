@@ -146,7 +146,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
   const [activeRole, setActiveRole] = useState(() => getInitialRole(initialRole));
   const [activeMenu, setActiveMenu] = useState(() => roleConfig[initialRole]?.defaultMenu || "home");
   const [studentProfileSheetOpen, setStudentProfileSheetOpen] = useState(false);
-  const [parentProfileSheetOpen, setParentProfileSheetOpen] = useState(false);
+  const [parentProfileSheetOpen, setParentProfileSheetOpen] = useState(false); 
   const [profileSaving, setProfileSaving] = useState(false);
   const [studentProfileForm, setStudentProfileForm] = useState(getInitialStudentProfile());
   const [parentProfileForm, setParentProfileForm] = useState(getInitialParentProfile());
@@ -399,7 +399,7 @@ export default function FamilyDashboard({ initialRole = "student" }) {
                       className="h-full rounded-full bg-emerald-500 transition-all duration-300"
                       style={{ width: `${attendancePercentage}%` }}
                     />
-                  </div>
+                  </div> 
                 </div>
               ) : null}
             </section>
